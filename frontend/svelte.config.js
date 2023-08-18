@@ -12,7 +12,7 @@ const config = {
     adapter: adapter({
       precompress: true,
       strict: true,
-
+      fallback: 'index.html'
     })
   },
 };
