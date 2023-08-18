@@ -14,8 +14,6 @@
 
 		<hr class="!border-t-4 my-5" />
 
-		
-
 		<label class="label">
 			<span>Username &mdash;</span>
 			<input class="input variant-form-material  w-1/3" type="text" placeholder="Start typing a username here" />
@@ -40,7 +38,8 @@
 		padding: 50px 0
 
 		// we don't need a fallback because this image is cosmetic
-		background-image: -webkit-linear-gradient(left, rgba(255,255,255,.2) 0%, rgba(255,255,255,.7) 20%, rgba(255,255,255,1) 30%, rgba(255,255,255,1) 100%), url(assets/grass.jpg)
+		// background-image: url($lib/images/grass.jpg) 
+		// background-image: linear-gradient(left, rgba(255,255,255,.2) 0%, rgba(255,255,255,.7) 20%, rgba(255,255,255,1) 30%, rgba(255,255,255,1) 100%), url(assets/grass.jpg)
 
 
 		// padding-top: 50px
