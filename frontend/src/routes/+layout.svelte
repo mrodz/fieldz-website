@@ -11,8 +11,6 @@
 	import '../app.postcss';
 
 	import { AppShell, AppBar, Avatar } from '@skeletonlabs/skeleton';
-
-	export const prerender = true;
 </script>
 
 <AppShell class="h-full">
