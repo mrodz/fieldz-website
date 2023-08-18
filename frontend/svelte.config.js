@@ -6,7 +6,7 @@ const config = {
   // for more information about preprocessors
   preprocess: [vitePreprocess({})],
   prerender: {
-    crawl: true,
+    default: true,
   },
   kit: {
     adapter: adapter({
