@@ -1,4 +1,4 @@
-import adapter from '@sveltejs/adapter-static';
+import adapter from '@sveltejs/adapter-vercel';
 import { vitePreprocess } from "@sveltejs/kit/vite";
 
 const config = {
@@ -8,12 +8,7 @@ const config = {
 
   kit: {
     adapter: adapter({
-      // default options are shown. On some platforms
-      // these options are set automatically — see below
-      pages: 'build',
-      assets: 'build',
-      fallback: undefined,
-      precompress: false,
+      precompress: true,
       strict: true
     })
   },
