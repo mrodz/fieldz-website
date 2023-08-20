@@ -13,7 +13,7 @@ const config = {
       precompress: true,
       strict: true,
       fallback: 'index.html'
-    })
+    }),
   },
 };
 

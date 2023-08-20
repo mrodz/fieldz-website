@@ -1,4 +1,8 @@
 <script>
+	import { Amplify, Auth } from 'aws-amplify';
+	import awsconfig from '../aws-exports.js';
+	Amplify.configure(awsconfig);
+
 	import "../app.sass";
 
 	// Your selected Skeleton theme:
@@ -18,16 +22,16 @@
 		<AppBar>
 			<svelte:fragment slot="lead">
 				<nav class="list-nav">
-					<ul style="display: inline-block">
+					<ul class="flex flex-row items-center">
 						<li style="display: inline-block">
-							<a href="/account">
-								<span class="badge bg-primary-500">💀</span>
+							<a href="/products">
+								<span class="badge bg-primary-500 h-10 w-10"><img width="25px" height="25px" src="/assets/services-icon.svg" alt=""></span>
 								<span class="flex-auto">Services</span>
 							</a>
 						</li>
 						<li style="display: inline-block">
-							<a href="/account">
-								<span class="badge bg-primary-500">💀</span>
+							<a href="/about">
+								<span class="badge bg-primary-500 h-10 w-10"><img width="25px" height="25px" src="/assets/about-icon.svg" alt=""></span>
 								<span class="flex-auto">About Us</span>
 							</a>
 						</li>

@@ -1,34 +1,114 @@
+<script>
+	import { slide } from "svelte/transition";
+	import { Auth } from 'aws-amplify';
+
+	// https://aws-amplify.github.io/amplify-js/api/classes/authclass.html#federatedsignin
+	// https://aws-amplify.github.io/amplify-js/api/classes/authclass.html
+
+	let isDisabled = false;
+	let isCreatingAccount = false;
+
+	async function signUp({ username, password, email, phoneNumber }) {
+
+	}
+
+	let titleMessage;
+	$: titleMessage = isCreatingAccount ? "Sign Up" : "Sign In";
+	let buttonSwitchMessage;
+	$: buttonSwitchMessage = isCreatingAccount ? "signing in" : "creating an account";
+	let buttonSwitchLabel;
+	$: buttonSwitchLabel = isCreatingAccount ? "I already have an account!" : "New around these parts?"
+
+	function switchFormType() {
+		isCreatingAccount = !isCreatingAccount;
+	}
+
+	async function submit(event) {
+		event.preventDefault();
+		isDisabled = true;
+
+		const data = new FormData(this);
+		let username = data.get("username");
+		let password = data.get("password");
+
+		if (username.length === 0) username = "didn't answer"
+		if (password.length === 0) password = "didn't answer"
+
+		alert(`username: ${username}, password: ${password}`)
+	}
+</script>
+
 <svelte:head>
-	<title>Sign In To Continue</title>
+	<title>
+		{titleMessage} To Continue
+	</title>
 </svelte:head>
 
-<div id="login-page" class="flex-1">
+<div out:slide in:slide id="login-page" class="flex-1">
 	<div id="logo-desktop">
 		<div id="logo-desktop-pill"></div>
 		<h2 class="h2">Fieldz</h2>
 		<img src="/assets/logo.svg" width="110px" height="110px" alt=""/>
 	</div>
-	<div class="card p-4 mr-10">
-		<img id="logo-mobile" src="/assets/logo.svg" width="100px" height="100px" alt=""/>
-		<h1 class="h1">Sign In <span id="logo-mobile">To Fieldz</span></h1>
+	<div id="login-card" class="card p-4 mr-10 relative" style="min-height: 300px">
+		<h1 class="h1">{titleMessage} <span id="logo-mobile">To Fieldz</span></h1>
 
 		<hr class="!border-t-4 my-5" />
 
-		<label class="label">
-			<span>Username &mdash;</span>
-			<input class="input variant-form-material  w-1/3" type="text" placeholder="Start typing a username here" />
-		</label>
+		{#if isCreatingAccount}
+			<div in:slide out:slide>
+				Lorem Ipsum
+				<br />
 
-		<label class="label">
-			<span>Password &mdash;</span>
-			<input class="input variant-form-material  w-1/3" type="text" placeholder="Start typing your password here" />
-		</label>
+			</div>
+		{:else}
+			<div in:slide out:slide class="grid md:grid-cols-[1fr_30px_1fr] md:grid-rows-1 grid-rows-[1fr_30px_1fr] grid-cols-1">
+				<div id="federated-signin" class="flex flex-col row-start-2 md:row-start-1">
+					<h3 class="mb-5 mt-5 md:mt-0">With A Third Party</h3>
+					<button class="btn mx-auto w-10/12 variant-filled-primary" on:click|preventDefault={(e) => alert(e)}>
+						<span class="min-w-6"><img src="/assets/google.svg" alt="Google Logo" width="35px" height="35px" /></span>
+						<span>Google</span>
+					</button>
+					<button disabled class="btn mt-5 mx-auto w-10/12 variant-filled bg-sky-950" on:click|preventDefault={(e) => alert(e)}>
+						<span class="min-w-6"><img src="/assets/facebook.svg" alt="Facebook Logo" width="35px" height="35px" /></span>
+						<span>Facebook</span>
+					</button>
+				</div>
+
+				<span class="hidden md:inline divider-vertical h-full" />
+					
+				<div class="row-start-1 md:col-start-3">
+					<h3 class="mb-5">With A Fieldz Account</h3>
+					<form on:submit|preventDefault={submit}>
+						<label for="username-input" class="label">
+							Email
+						</label>
+						<input disabled={isDisabled} id="username-input" name="username" class="input variant-form-material" type="text" placeholder="your@email.com" />
+
+						<label for="password-input" class="label">
+							Password
+						</label>
+						<input disabled={isDisabled} id="password-input" name="password" class="input variant-form-material" type="password" placeholder="*******" />
+
+  						<input class="input mt-5" disabled={isDisabled} type="submit" value="Submit">
+					</form>
+				</div>
+			</div>
+		{/if}
+
+		<hr class="md:!hidden hr !border-t-4" />
+
+		<div class="relative md:absolute transform left-1/2 md:left-auto md:mt-14 mt-10 -translate-x-1/2 md:-translate-x-0 text-center md:text-right md:right-4 bottom-4">
+			<span class="hidden md:contents">{buttonSwitchLabel}&nbsp;</span><button on:click|preventDefault={switchFormType} class="btn variant-soft-primary">Switch to {buttonSwitchMessage}</button>
+		</div>
+		
 	</div>
 </div>
 
 <style lang="sass">
 	$yellow: #e3c21e
 	$yellow-transparent: #e3c21e88
+
 	#login-page
 		background-color: #fff
 		box-sizing: border-box
@@ -83,7 +163,6 @@
 
 	h1
 		margin: 0
-		color: $yellow
 
 	#logo-mobile
 		display: none
@@ -100,6 +179,7 @@
 	@media screen and (max-width: 900px)
 		#login-page
 			grid-template-columns: 1fr
+			background-image: linear-gradient(to bottom, rgba(255,255,255,.2) 0%, rgba(255,255,255,.7) 20%, rgba(255,255,255,1) 30%, rgba(255,255,255,1) 100%), url(/assets/grass.jpg)
 		#logo-desktop
 			display: none
 		#logo-mobile
@@ -107,4 +187,6 @@
 			width: 100%
 		#logo-mobile,h1
 			text-align: center
+		#login-card
+			margin-left: 2.5rem
 </style>

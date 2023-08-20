@@ -6,6 +6,14 @@
 		<meta name="viewport" content="width=device-width" />
 		%sveltekit.head%
 	</head>
+	<script>
+		// Fix for the AWS-SDK, which depends on a global `global` variable.
+		// Polyfills and editing `vite.config.ts` introduces seperate issues.
+		//
+		// For more details, see:
+		// https://dev.to/richardbray/how-to-fix-the-referenceerror-global-is-not-defined-error-in-sveltekitvite-2i49
+		if (global === undefined) var global = window;
+	</script>
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents; height: 100%;">%sveltekit.body%</div>
 	</body>
