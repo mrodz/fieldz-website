@@ -1,12 +1,15 @@
 <script>
 	import { slide } from "svelte/transition";
 	import { Auth } from 'aws-amplify';
+	import { validateSignUpParamsCorrectness, SIGN_UP_FIELDS_VALIDATED } from './api.ts'
+	import { FileDropzone } from '@skeletonlabs/skeleton';
+	import { default as LoginErrorList } from './LoginErrorList.svelte';
 
 	// https://aws-amplify.github.io/amplify-js/api/classes/authclass.html#federatedsignin
 	// https://aws-amplify.github.io/amplify-js/api/classes/authclass.html
 
 	let isDisabled = false;
-	let isCreatingAccount = false;
+	let isCreatingAccount = true; // PROD: set to false
 
 	async function signUp({ username, password, email, phoneNumber }) {
 
@@ -19,11 +22,36 @@
 	let buttonSwitchLabel;
 	$: buttonSwitchLabel = isCreatingAccount ? "I already have an account!" : "New around these parts?"
 
+	let firstNameErrors;
+	let lastNameErrors;
+	let emailErrors;
+	let passwordErrors;
+	// TODO!: let pfpErrors; 
+
 	function switchFormType() {
 		isCreatingAccount = !isCreatingAccount;
 	}
 
-	async function submit(event) {
+	async function submitSignUp(event) {
+		event.preventDefault();
+		isDisabled = true;
+
+		const data = new FormData(this);
+
+		const firstName = data.get("first-name");
+		const lastName = data.get("last-name");
+		const email = data.get("email");
+		const password = data.get("password");
+		const picture = null;
+
+		const signUpMessages = validateSignUpParamsCorrectness(firstName, lastName, email, password, picture);
+
+		console.log(signUpMessages);
+
+		[firstNameErrors, lastNameErrors, emailErrors, passwordErrors] = signUpMessages;
+	}
+
+	async function submitSignIn(event) {
 		event.preventDefault();
 		isDisabled = true;
 
@@ -31,8 +59,7 @@
 		let username = data.get("username");
 		let password = data.get("password");
 
-		if (username.length === 0) username = "didn't answer"
-		if (password.length === 0) password = "didn't answer"
+		
 
 		alert(`username: ${username}, password: ${password}`)
 	}
@@ -45,10 +72,12 @@
 </svelte:head>
 
 <div out:slide in:slide id="login-page" class="flex-1">
+	<div>
 	<div id="logo-desktop">
 		<div id="logo-desktop-pill"></div>
 		<h2 class="h2">Fieldz</h2>
 		<img src="/assets/logo.svg" width="110px" height="110px" alt=""/>
+	</div>
 	</div>
 	<div id="login-card" class="card p-4 mr-10 relative" style="min-height: 300px">
 		<h1 class="h1">{titleMessage} <span id="logo-mobile">To Fieldz</span></h1>
@@ -56,15 +85,9 @@
 		<hr class="!border-t-4 my-5" />
 
 		{#if isCreatingAccount}
-			<div in:slide out:slide>
-				Lorem Ipsum
-				<br />
-
-			</div>
-		{:else}
-			<div in:slide out:slide class="grid md:grid-cols-[1fr_30px_1fr] md:grid-rows-1 grid-rows-[1fr_30px_1fr] grid-cols-1">
-				<div id="federated-signin" class="flex flex-col row-start-2 md:row-start-1">
-					<h3 class="mb-5 mt-5 md:mt-0">With A Third Party</h3>
+			<div in:slide out:slide class="grid md:grid-cols-[1fr_30px_1fr] md:grid-rows-1 grid-rows-[2fr_30px_1fr] grid-cols-1">
+				<div class="flex flex-col row-start-2 md:row-start-1">
+					<h3 class="mb-5 mt-5 md:mt-0">With a Third Party</h3>
 					<button class="btn mx-auto w-10/12 variant-filled-primary" on:click|preventDefault={(e) => alert(e)}>
 						<span class="min-w-6"><img src="/assets/google.svg" alt="Google Logo" width="35px" height="35px" /></span>
 						<span>Google</span>
@@ -78,8 +101,65 @@
 				<span class="hidden md:inline divider-vertical h-full" />
 					
 				<div class="row-start-1 md:col-start-3">
-					<h3 class="mb-5">With A Fieldz Account</h3>
-					<form on:submit|preventDefault={submit}>
+					<h3 class="mb-5">Or, Register a New Fieldz Account With Us</h3>
+					<form style="min-height: 300px" on:submit|preventDefault={submitSignUp}>
+						<label for="first-name-input" class="label">
+							First Name
+						</label>
+						<input class:input-error={!!firstNameErrors} disabled={isDisabled} id="first-name-input" name="first-name" class="input variant-form-material" type="text" placeholder="John" />
+						<LoginErrorList list={firstNameErrors} />
+
+						<label for="last-name-input" class="label">
+							Last Name
+						</label>
+						<input class:input-error={!!lastNameErrors} disabled={isDisabled} id="last-name-input" name="last-name" class="input variant-form-material" type="text" placeholder="Doe" />
+						<LoginErrorList list={lastNameErrors} />
+
+						<label for="email-input" class="label">
+							Email
+						</label>
+						<input class:input-error={!!emailErrors} disabled={isDisabled} id="email-input" name="email" class="input variant-form-material" type="text" placeholder="example@email.com" />
+						<LoginErrorList list={emailErrors} />
+
+						<label for="password-input" class="label">
+							Password
+						</label>
+						<input class:input-error={!!passwordErrors} disabled={isDisabled} id="password-input" name="password" class="input variant-form-material" type="password" placeholder="*******" />
+						<LoginErrorList list={passwordErrors} />
+
+						<label for="pfp-input" class="label">
+							Profile Picture &#40;Optional&#41;
+						</label>
+						<FileDropzone id="pfp-input" name="pfp" accept=".jpg,.jpeg,.png">
+							<svelte:fragment slot="message"><b>Upload a file</b> or drag + drop</svelte:fragment>
+							<svelte:fragment slot="meta">.jpg, .jpeg, .png</svelte:fragment>
+						</FileDropzone>
+
+  						<input class="input mt-5" disabled={isDisabled} type="submit" value="Submit">
+					</form>
+				</div>
+			</div>
+			<!-- END Sign Up -->
+		{:else}
+			<!-- START Sign In -->
+			<div in:slide out:slide class="grid md:grid-cols-[1fr_30px_1fr] md:grid-rows-1 grid-rows-[1fr_30px_1fr] grid-cols-1">
+				<div class="flex flex-col row-start-2 md:row-start-1">
+					<h3 class="mb-5 mt-5 md:mt-0">Using a Third Party Account</h3>
+					<button class="btn mx-auto w-10/12 variant-filled-primary" on:click|preventDefault={(e) => alert(e)}>
+						<span class="min-w-6"><img src="/assets/google.svg" alt="Google Logo" width="35px" height="35px" /></span>
+						<span>Google</span>
+					</button>
+					<button disabled class="btn mt-5 mx-auto w-10/12 variant-filled bg-sky-950" on:click|preventDefault={(e) => alert(e)}>
+						<span class="min-w-6"><img src="/assets/facebook.svg" alt="Facebook Logo" width="35px" height="35px" /></span>
+						<span>Facebook</span>
+					</button>
+				</div>
+
+				<span class="hidden md:inline divider-vertical h-full" />
+					
+				<div class="row-start-1 md:col-start-3">
+					<h3 class="mb-5">With a Fieldz Account</h3>
+					<form on:submit|preventDefault={submitSignIn}>
 						<label for="username-input" class="label">
 							Email
 						</label>
@@ -94,14 +174,16 @@
 					</form>
 				</div>
 			</div>
+			<!-- END SIGN IN -->
 		{/if}
+
+		<!-- Login/Signup Switch -->
 
 		<hr class="md:!hidden hr !border-t-4" />
 
-		<div class="relative md:absolute transform left-1/2 md:left-auto md:mt-14 mt-10 -translate-x-1/2 md:-translate-x-0 text-center md:text-right md:right-4 bottom-4">
+		<div class="relative transform left-1/2 md:left-auto md:mt-14 mt-10 -translate-x-1/2 md:-translate-x-0 text-center md:text-right md:right-4 bottom-4">
 			<span class="hidden md:contents">{buttonSwitchLabel}&nbsp;</span><button on:click|preventDefault={switchFormType} class="btn variant-soft-primary">Switch to {buttonSwitchMessage}</button>
 		</div>
-		
 	</div>
 </div>
 
@@ -143,7 +225,11 @@
 		animation: pill-pulse infinite 5s
 
 	#logo-desktop
-		position: relative
+		position: fixed
+		top: 50%
+		left: 7.5%
+		transform: translate(-7.5%, -50%)
+
 		margin: auto
 		text-align: center
 		box-sizing: unset
@@ -172,7 +258,7 @@
 		0%
 			scale: 1
 		50%
-			scale: 1.25
+			scale: 1.18
 		100%
 			scale: 1
 

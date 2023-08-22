@@ -1,3 +1,11 @@
+<script>
+	import { page } from '$app/stores';
+</script>
+
 <b>
-	Error :(
+	Error {$page.status} :(
 </b>
+
+<p>
+	{$page.error.message}
+</p>
