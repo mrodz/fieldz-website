@@ -11,11 +11,16 @@
 	// This contains the bulk of Skeletons required styles:
 	import '@skeletonlabs/skeleton/styles/skeleton.css';
 
+	// Toasts!
+	import { Toast } from '@skeletonlabs/skeleton';
+
 	// Finally, your application's global stylesheet (sometimes labeled 'app.css')
 	import '../app.postcss';
 
 	import { AppShell, AppBar, Avatar } from '@skeletonlabs/skeleton';
 </script>
+
+<Toast />
 
 <AppShell class="h-full">
 	<svelte:fragment slot="header">
@@ -39,52 +44,10 @@
 				</nav>
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
-				<Avatar initials="JD" border="border-4 border-surface-300-600-token hover:!border-primary-900" cursor="cursor-pointer" background="bg-primary-500" rounded="rounded-xl" width="w-16" />
+				<Avatar src="/assets/pfpdefault.png" border="border-4 border-primary-500" cursor="cursor-pointer" background="bg-primary-500" width="w-16" />
 			</svelte:fragment>
 		</AppBar>
-		<!--
-			<ul>
-				<li>
-					
-				</li>
-				<li>
-				</li>
-			</ul>
-		</nav>-->
 	</svelte:fragment>
+
 	<slot />
 </AppShell>
-<!--
-<div id="root">
-	<nav>
-		<button>Home</button>
-		<button>About</button>
-		<button>Pricing</button>
-		<Avatar initials="JD" />
-	</nav>
-  	<main>
-		<slot />
-  </main>
-</div>
--->
-<style lang="sass">
-	// #root
-	// 	display: grid
-	// 	grid-template-rows: auto 1fr
-	// 	min-height: 100vh
-
-	// nav
-	// 	display: flex
-	// 	flex-direction: row
-	// 	background-color: lime
-	// 	position: relative
-
-	// 	&>button:last-child
-	// 		position: absolute
-	// 		right: 0
-
-	// button
-	// 	background-color: transparent
-	// 	border: none
-	// 	padding: 20px
-</style>

@@ -1,26 +1,23 @@
-function validatePicture(picture: unknown) {
-	throw "Not sure how to validate a picture yet";
-}
 
 function validatePassword(password: string) {
 	let messages: Array<string> = [];
 
-	if (password.length < 7) 
+	if (password.length < 7)
 		messages.push("Password must be at least 7 characters");
 
-	if (password.toUpperCase() == password) 
+	if (password.toUpperCase() == password)
 		messages.push("Password must contain a lower case letter");
 
-	if (password.toLowerCase() == password) 
+	if (password.toLowerCase() == password)
 		messages.push("Password must contain an upper case letter");
 
-	if (!/[0-9]/.test(password)) 
+	if (!/[0-9]/.test(password))
 		messages.push("Password must contain a number");
 
-	if (password.trim() != password) 
+	if (password.trim() != password)
 		messages.push("Password must not contain a leading or trailing space");
 
-	if (messages.length != 0) 
+	if (messages.length != 0)
 		throw messages;
 }
 
@@ -49,27 +46,36 @@ function validateLastName(lastName: string) {
 	}
 }
 
-export const SIGN_UP_FIELDS_VALIDATED = 5;
+type SignUpValidation = {
+	messages: string[][];
+	errorCount: number;
+};
 
-export function validateSignUpParamsCorrectness(firstName: string, lastName: string, email: string, password: string, picture: unknown): string[][] {
-	let messages: string[][] = [];
-	
+export function validateSignUpParamsCorrectness(firstName: string, lastName: string, email: string, password: string): SignUpValidation {
+	let result: SignUpValidation = {
+		messages: [],
+		errorCount: 0,
+	};
+
 	try {
 		validateFirstName(firstName);
 	} catch (message) {
-		messages[0] = [message];
+		result.messages[0] = [message as string];
+		result.errorCount++;
 	}
 
 	try {
 		validateLastName(lastName);
 	} catch (message) {
-		messages[1] = [message];
+		result.messages[1] = [message as string];
+		result.errorCount++;
 	}
 
 	try {
 		validateEmail(email);
 	} catch (message) {
-		messages[2] = [message];
+		result.messages[2] = [message as string];
+		result.errorCount++;
 	}
 
 	try {
@@ -79,15 +85,10 @@ export function validateSignUpParamsCorrectness(firstName: string, lastName: str
 		// this is messy, but this validation solution doesn't
 		// need to be outstanding because it's not going to be used
 		// outside of the login form.
-		messages[3] = message;
+		result.messages[3] = message as string[];
+		result.errorCount += message?.length!;
 	}
 
-	try {
-		validatePicture(picture);
-	} catch (message) {
-		messages[4] = [message];
-	}
-
-	return messages;
+	return result;
 }
 

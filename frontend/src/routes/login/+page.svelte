@@ -1,67 +1,89 @@
-<script>
+<script lang="ts">
 	import { slide } from "svelte/transition";
 	import { Auth } from 'aws-amplify';
-	import { validateSignUpParamsCorrectness, SIGN_UP_FIELDS_VALIDATED } from './api.ts'
+	import { validateSignUpParamsCorrectness } from './api'
+	import { toastStore } from '@skeletonlabs/skeleton';
 	import { FileDropzone } from '@skeletonlabs/skeleton';
 	import { default as LoginErrorList } from './LoginErrorList.svelte';
+	import { ProgressRadial } from '@skeletonlabs/skeleton';
 
 	// https://aws-amplify.github.io/amplify-js/api/classes/authclass.html#federatedsignin
 	// https://aws-amplify.github.io/amplify-js/api/classes/authclass.html
 
 	let isDisabled = false;
 	let isCreatingAccount = true; // PROD: set to false
+	let canSubmit = true;
+	let submitLoading = false;
 
-	async function signUp({ username, password, email, phoneNumber }) {
+	// async function signUp({ username, password, email, phoneNumber }) {
+	//
+	// }
 
-	}
-
-	let titleMessage;
+	let titleMessage: string;
 	$: titleMessage = isCreatingAccount ? "Sign Up" : "Sign In";
-	let buttonSwitchMessage;
+	let buttonSwitchMessage: string;
 	$: buttonSwitchMessage = isCreatingAccount ? "signing in" : "creating an account";
-	let buttonSwitchLabel;
+	let buttonSwitchLabel: string;
 	$: buttonSwitchLabel = isCreatingAccount ? "I already have an account!" : "New around these parts?"
 
-	let firstNameErrors;
-	let lastNameErrors;
-	let emailErrors;
-	let passwordErrors;
-	// TODO!: let pfpErrors; 
+	let firstNameErrors: string[];
+	let lastNameErrors: string[];
+	let emailErrors: string[];
+	let passwordErrors: string[];
 
 	function switchFormType() {
 		isCreatingAccount = !isCreatingAccount;
 	}
 
-	async function submitSignUp(event) {
-		event.preventDefault();
+	async function submitSignUp(event: SubmitEvent) {
 		isDisabled = true;
+		canSubmit = false;
+		event.preventDefault();
 
-		const data = new FormData(this);
+		const data = new FormData(event.target! as HTMLFormElement);
 
-		const firstName = data.get("first-name");
-		const lastName = data.get("last-name");
-		const email = data.get("email");
-		const password = data.get("password");
-		const picture = null;
+		const firstName: string = data.get("first-name")!;
+		const lastName: string = data.get("last-name")!;
+		const email: string = data.get("email")!;
+		const password: string = data.get("password")!;
 
-		const signUpMessages = validateSignUpParamsCorrectness(firstName, lastName, email, password, picture);
+		const signUpMessages = validateSignUpParamsCorrectness(firstName, lastName, email, password);
 
-		console.log(signUpMessages);
+		[firstNameErrors, lastNameErrors, emailErrors, passwordErrors] = signUpMessages.messages;
 
-		[firstNameErrors, lastNameErrors, emailErrors, passwordErrors] = signUpMessages;
+		const c = signUpMessages.errorCount;
+		if (c != 0) {
+			toastStore.trigger({
+				message: `Uh Oh! Please fix ${c === 1 ? "this" : "these"} ${c} errors`,
+				background: 'variant-filled-error',
+			})
+
+			isDisabled = false;
+
+			return;
+		}
+
+		submitLoading = true;
+
+		// ...
+
+
 	}
 
-	async function submitSignIn(event) {
-		event.preventDefault();
+	async function submitSignIn(event: SubmitEvent) {
 		isDisabled = true;
+		canSubmit = false;
+		event.preventDefault();
 
-		const data = new FormData(this);
-		let username = data.get("username");
-		let password = data.get("password");
+		const data = new FormData(event.target! as HTMLFormElement);
+		let username: string = data.get("username")!;
+		let password: string = data.get("password")!;
 
 		
 
-		alert(`username: ${username}, password: ${password}`)
+		alert(`username: ${username}, password: ${password}`);
+
+		isDisabled = false;
 	}
 </script>
 
@@ -76,10 +98,10 @@
 	<div id="logo-desktop">
 		<div id="logo-desktop-pill"></div>
 		<h2 class="h2">Fieldz</h2>
-		<img src="/assets/logo.svg" width="110px" height="110px" alt=""/>
+		<img class="pointer-events-none" src="/assets/logo.svg" width="110px" height="110px" alt=""/>
 	</div>
 	</div>
-	<div id="login-card" class="card p-4 mr-10 relative" style="min-height: 300px">
+	<div id="login-card" class="card px-4 pt-4 mr-10 relative" style="min-height: 300px">
 		<h1 class="h1">{titleMessage} <span id="logo-mobile">To Fieldz</span></h1>
 
 		<hr class="!border-t-4 my-5" />
@@ -89,11 +111,11 @@
 				<div class="flex flex-col row-start-2 md:row-start-1">
 					<h3 class="mb-5 mt-5 md:mt-0">With a Third Party</h3>
 					<button class="btn mx-auto w-10/12 variant-filled-primary" on:click|preventDefault={(e) => alert(e)}>
-						<span class="min-w-6"><img src="/assets/google.svg" alt="Google Logo" width="35px" height="35px" /></span>
+						<span class="min-w-6"><img class="pointer-events-none" src="/assets/google.svg" alt="Google Logo" width="35px" height="35px" /></span>
 						<span>Google</span>
 					</button>
 					<button disabled class="btn mt-5 mx-auto w-10/12 variant-filled bg-sky-950" on:click|preventDefault={(e) => alert(e)}>
-						<span class="min-w-6"><img src="/assets/facebook.svg" alt="Facebook Logo" width="35px" height="35px" /></span>
+						<span class="min-w-6"><img class="pointer-events-none" src="/assets/facebook.svg" alt="Facebook Logo" width="35px" height="35px" /></span>
 						<span>Facebook</span>
 					</button>
 				</div>
@@ -101,8 +123,8 @@
 				<span class="hidden md:inline divider-vertical h-full" />
 					
 				<div class="row-start-1 md:col-start-3">
-					<h3 class="mb-5">Or, Register a New Fieldz Account With Us</h3>
-					<form style="min-height: 300px" on:submit|preventDefault={submitSignUp}>
+					<h3 class="mb-5"><span class="hidden md:contents">Or,&nbsp;</span>Register a New Fieldz Account With Us Today!</h3>
+					<form style="min-height: 260px" on:submit|preventDefault={submitSignUp} on:change={() => canSubmit = true}>
 						<label for="first-name-input" class="label">
 							First Name
 						</label>
@@ -127,15 +149,11 @@
 						<input class:input-error={!!passwordErrors} disabled={isDisabled} id="password-input" name="password" class="input variant-form-material" type="password" placeholder="*******" />
 						<LoginErrorList list={passwordErrors} />
 
-						<label for="pfp-input" class="label">
-							Profile Picture &#40;Optional&#41;
-						</label>
-						<FileDropzone id="pfp-input" name="pfp" accept=".jpg,.jpeg,.png">
-							<svelte:fragment slot="message"><b>Upload a file</b> or drag + drop</svelte:fragment>
-							<svelte:fragment slot="meta">.jpg, .jpeg, .png</svelte:fragment>
-						</FileDropzone>
-
-  						<input class="input mt-5" disabled={isDisabled} type="submit" value="Submit">
+						{#if submitLoading}
+							<ProgressRadial class="mt-5 mx-auto" width="w-12" />
+						{:else}
+  							<input class="input mt-5" disabled={isDisabled || !canSubmit} type="submit" value="Submit">
+						{/if}
 					</form>
 				</div>
 			</div>
@@ -146,11 +164,11 @@
 				<div class="flex flex-col row-start-2 md:row-start-1">
 					<h3 class="mb-5 mt-5 md:mt-0">Using a Third Party Account</h3>
 					<button class="btn mx-auto w-10/12 variant-filled-primary" on:click|preventDefault={(e) => alert(e)}>
-						<span class="min-w-6"><img src="/assets/google.svg" alt="Google Logo" width="35px" height="35px" /></span>
+						<span class="min-w-6"><img class="pointer-events-none" src="/assets/google.svg" alt="Google Logo" width="35px" height="35px" /></span>
 						<span>Google</span>
 					</button>
 					<button disabled class="btn mt-5 mx-auto w-10/12 variant-filled bg-sky-950" on:click|preventDefault={(e) => alert(e)}>
-						<span class="min-w-6"><img src="/assets/facebook.svg" alt="Facebook Logo" width="35px" height="35px" /></span>
+						<span class="min-w-6"><img class="pointer-events-none" src="/assets/facebook.svg" alt="Facebook Logo" width="35px" height="35px" /></span>
 						<span>Facebook</span>
 					</button>
 				</div>
@@ -159,7 +177,7 @@
 					
 				<div class="row-start-1 md:col-start-3">
 					<h3 class="mb-5">With a Fieldz Account</h3>
-					<form on:submit|preventDefault={submitSignIn}>
+					<form on:submit|preventDefault={submitSignIn} on:change={() => canSubmit = true}>
 						<label for="username-input" class="label">
 							Email
 						</label>
@@ -170,7 +188,11 @@
 						</label>
 						<input disabled={isDisabled} id="password-input" name="password" class="input variant-form-material" type="password" placeholder="*******" />
 
-  						<input class="input mt-5" disabled={isDisabled} type="submit" value="Submit">
+						{#if submitLoading}
+							<ProgressRadial width="w-12" />
+						{:else}
+  							<input class="input mt-5" disabled={isDisabled || !canSubmit} type="submit" value="Submit">
+						{/if}
 					</form>
 				</div>
 			</div>
@@ -181,7 +203,7 @@
 
 		<hr class="md:!hidden hr !border-t-4" />
 
-		<div class="relative transform left-1/2 md:left-auto md:mt-14 mt-10 -translate-x-1/2 md:-translate-x-0 text-center md:text-right md:right-4 bottom-4">
+		<div class="relative md:absolute transform left-1/2 md:left-auto md:mt-4 mt-10 -translate-x-1/2 md:-translate-x-0 text-center md:text-right md:right-4 bottom-4">
 			<span class="hidden md:contents">{buttonSwitchLabel}&nbsp;</span><button on:click|preventDefault={switchFormType} class="btn variant-soft-primary">Switch to {buttonSwitchMessage}</button>
 		</div>
 	</div>
