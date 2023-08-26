@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { slide } from "svelte/transition";
-	import { Auth } from 'aws-amplify';
+	import { Auth, type ISignUpResult } from 'aws-amplify';
+	import { goto } from '$app/navigation';
 	import { validateSignUpParamsCorrectness } from './api'
 	import { toastStore } from '@skeletonlabs/skeleton';
 	import { FileDropzone } from '@skeletonlabs/skeleton';
@@ -35,6 +36,25 @@
 		isCreatingAccount = !isCreatingAccount;
 	}
 
+	async function awsApiCallSignUp(email: string, password: string, firstName: string, lastName: string): ISignUpResult {
+		const response: ISignUpResult = await Auth.signUp({
+			username: email,
+			password,
+			attributes: {
+				email,
+				name: firstName + " " + lastName,
+				picture: "https://fieldz.app/pfpdefault.png",
+			},
+			autoSignIn: {
+				enabled: true,
+			}
+		});
+
+		console.log(response);			
+
+		return response;
+	}
+
 	async function submitSignUp(event: SubmitEvent) {
 		isDisabled = true;
 		canSubmit = false;
@@ -54,7 +74,7 @@
 		const c = signUpMessages.errorCount;
 		if (c != 0) {
 			toastStore.trigger({
-				message: `Uh Oh! Please fix ${c === 1 ? "this" : "these"} ${c} errors`,
+				message: `Uh Oh! Please fix ${c === 1 ? "this" : "these"} ${c} error${c === 1 ? "" : "s"}`,
 				background: 'variant-filled-error',
 			})
 
@@ -65,9 +85,41 @@
 
 		submitLoading = true;
 
-		// ...
+		let user;
+		let userConfirmed;
+		let codeDeliveryDetails;
 
+		try {
+			const response = await awsApiCallSignUp(email, password, firstName, lastName);
+			user = response.user;
+			userConfirmed = response.userConfirmed;
+			codeDeliveryDetails = response.codeDeliveryDetails;
+		} catch (error) {
+			toastStore.trigger({
+				message: `Error signing up: ${error}`,
+				background: 'variant-filled-error',
+				autohide: false,
+			})
 
+			console.error(error);
+
+			isDisabled = false;
+			submitLoading = false;
+
+			return;
+		}
+
+		if (!userConfirmed) {
+			console.log(user);
+			console.log(userConfirmed);
+			console.log(codeDeliveryDetails);
+
+			const username = window.btoa(user.username);
+
+			goto(`/verify?u=${username}`)
+		}
+
+		
 	}
 
 	async function submitSignIn(event: SubmitEvent) {
@@ -78,7 +130,6 @@
 		const data = new FormData(event.target! as HTMLFormElement);
 		let username: string = data.get("username")!;
 		let password: string = data.get("password")!;
-
 		
 
 		alert(`username: ${username}, password: ${password}`);
@@ -101,15 +152,15 @@
 		<img class="pointer-events-none" src="/assets/logo.svg" width="110px" height="110px" alt=""/>
 	</div>
 	</div>
-	<div id="login-card" class="card px-4 pt-4 mr-10 relative" style="min-height: 300px">
+	<div id="login-card" class="card flex flex-col p-4 mr-10 relative" style="min-height: 300px">
 		<h1 class="h1">{titleMessage} <span id="logo-mobile">To Fieldz</span></h1>
 
 		<hr class="!border-t-4 my-5" />
 
 		{#if isCreatingAccount}
-			<div in:slide out:slide class="grid md:grid-cols-[1fr_30px_1fr] md:grid-rows-1 grid-rows-[2fr_30px_1fr] grid-cols-1">
+			<div in:slide out:slide class="flex flex-col-reverse md:grid md:grid-cols-[1fr_30px_1fr] md:grid-rows-1 grid-rows-[2fr_30px_1fr] grid-cols-1">
 				<div class="flex flex-col row-start-2 md:row-start-1">
-					<h3 class="mb-5 mt-5 md:mt-0">With a Third Party</h3>
+					<h3 class="mb-5 text-center md:text-left mt-5 md:mt-0"><span class="contents md:hidden">Or,&nbsp;</span>Use a Third Party</h3>
 					<button class="btn mx-auto w-10/12 variant-filled-primary" on:click|preventDefault={(e) => alert(e)}>
 						<span class="min-w-6"><img class="pointer-events-none" src="/assets/google.svg" alt="Google Logo" width="35px" height="35px" /></span>
 						<span>Google</span>
@@ -123,7 +174,7 @@
 				<span class="hidden md:inline divider-vertical h-full" />
 					
 				<div class="row-start-1 md:col-start-3">
-					<h3 class="mb-5"><span class="hidden md:contents">Or,&nbsp;</span>Register a New Fieldz Account With Us Today!</h3>
+					<h3 class="mb-5 text-center md:text-left"><span class="hidden md:contents">Or,&nbsp;</span>Register a new Fieldz Account with us today!</h3>
 					<form style="min-height: 260px" on:submit|preventDefault={submitSignUp} on:change={() => canSubmit = true}>
 						<label for="first-name-input" class="label">
 							First Name
@@ -160,9 +211,9 @@
 			<!-- END Sign Up -->
 		{:else}
 			<!-- START Sign In -->
-			<div in:slide out:slide class="grid md:grid-cols-[1fr_30px_1fr] md:grid-rows-1 grid-rows-[1fr_30px_1fr] grid-cols-1">
+			<div in:slide out:slide class="flex flex-col-reverse md:grid md:grid-cols-[1fr_30px_1fr] md:grid-rows-1 grid-rows-[1fr_30px_1fr] grid-cols-1">
 				<div class="flex flex-col row-start-2 md:row-start-1">
-					<h3 class="mb-5 mt-5 md:mt-0">Using a Third Party Account</h3>
+					<h3 class="mb-5 mt-5 text-center md:text-left md:mt-0"><span class="contents md:hidden">Or,&nbsp;</span>Use a Third Party Account</h3>
 					<button class="btn mx-auto w-10/12 variant-filled-primary" on:click|preventDefault={(e) => alert(e)}>
 						<span class="min-w-6"><img class="pointer-events-none" src="/assets/google.svg" alt="Google Logo" width="35px" height="35px" /></span>
 						<span>Google</span>
@@ -176,7 +227,7 @@
 				<span class="hidden md:inline divider-vertical h-full" />
 					
 				<div class="row-start-1 md:col-start-3">
-					<h3 class="mb-5">With a Fieldz Account</h3>
+					<h3 class="mb-5 text-center md:text-left">With a Fieldz Account</h3>
 					<form on:submit|preventDefault={submitSignIn} on:change={() => canSubmit = true}>
 						<label for="username-input" class="label">
 							Email
@@ -201,11 +252,16 @@
 
 		<!-- Login/Signup Switch -->
 
-		<hr class="md:!hidden hr !border-t-4" />
+		<hr class="md:!hidden my-5 hr !border-t-4" />
 
-		<div class="relative md:absolute transform left-1/2 md:left-auto md:mt-4 mt-10 -translate-x-1/2 md:-translate-x-0 text-center md:text-right md:right-4 bottom-4">
-			<span class="hidden md:contents">{buttonSwitchLabel}&nbsp;</span><button on:click|preventDefault={switchFormType} class="btn variant-soft-primary">Switch to {buttonSwitchMessage}</button>
+		<div class="ml-auto mr-auto md:mr-0 mt-auto">
+			<span class="hidden md:contents">{buttonSwitchLabel}&nbsp;</span>
+			<button on:click|preventDefault={switchFormType} class="btn variant-soft-primary">Switch to {buttonSwitchMessage}</button>
 		</div>
+
+		<!-- <div class="relative md:absolute transform left-1/2 md:left-auto md:mt-4 mt-10 -translate-x-1/2 md:-translate-x-0 text-center md:text-right md:right-4 bottom-4">
+			<span class="hidden md:contents">{buttonSwitchLabel}&nbsp;</span><button on:click|preventDefault={switchFormType} class="btn variant-soft-primary">Switch to {buttonSwitchMessage}</button>
+		</div> -->
 	</div>
 </div>
 

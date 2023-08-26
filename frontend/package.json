@@ -27,6 +27,7 @@
   },
   "type": "module",
   "dependencies": {
-    "aws-amplify": "^5.3.8"
+    "aws-amplify": "^5.3.8",
+    "lodash": "^4.17.21"
   }
 }
