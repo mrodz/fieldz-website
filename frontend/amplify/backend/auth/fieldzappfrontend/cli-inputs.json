@@ -51,9 +51,10 @@
     "hostedUI": true,
     "hostedUIDomainName": "8yf2f6zagca7",
     "authProvidersUserPool": [
+      "Facebook",
       "Google"
     ],
-    "hostedUIProviderMeta": "[{\"ProviderName\":\"Google\",\"authorize_scopes\":\"openid profile email\",\"AttributeMapping\":{\"name\":\"name\",\"picture\":\"picture\",\"email\":\"email\",\"username\":\"sub\"}}]",
+    "hostedUIProviderMeta": "[{\"ProviderName\":\"Facebook\",\"authorize_scopes\":\"public_profile,email\",\"AttributeMapping\":{\"name\":\"name\",\"picture\":\"picture\",\"email\":\"email\",\"username\":\"id\"}},{\"ProviderName\":\"Google\",\"authorize_scopes\":\"openid profile email\",\"AttributeMapping\":{\"name\":\"name\",\"picture\":\"picture\",\"email\":\"email\",\"username\":\"sub\"}}]",
     "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"https://fieldz.app/profile\"],\"LogoutURLs\":[\"https://fieldz.app/\"]}",
     "usernameCaseSensitive": false,
     "useEnabledMfas": true,

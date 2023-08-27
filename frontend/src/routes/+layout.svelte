@@ -13,11 +13,30 @@
 
 	// Toasts!
 	import { Toast } from '@skeletonlabs/skeleton';
+	import { toastStore } from '@skeletonlabs/skeleton';
 
 	// Finally, your application's global stylesheet (sometimes labeled 'app.css')
 	import '../app.postcss';
 
 	import { AppShell, AppBar, Avatar } from '@skeletonlabs/skeleton';
+
+	import { goto } from '$app/navigation';
+
+	const logOut = async () => {
+		try {
+			await Auth.signOut();
+			toastStore.trigger({
+				message: "You signed out! See you later",
+				background: 'variant-filled-success',
+			});
+			goto("/")
+		} catch (error) {
+			toastStore.trigger({
+				message: `Error signing out: ${error}`,
+				background: 'variant-filled-error',
+			})
+		}
+	}
 </script>
 
 <Toast />
@@ -44,6 +63,9 @@
 				</nav>
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
+				<button class="btn variant-filled" on:click={logOut}>
+					Log Out
+				</button>
 				<Avatar src="/assets/pfpdefault.png" border="border-4 border-primary-500" cursor="cursor-pointer" background="bg-primary-500" width="w-16" />
 			</svelte:fragment>
 		</AppBar>

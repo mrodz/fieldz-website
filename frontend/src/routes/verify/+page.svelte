@@ -1,11 +1,31 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import { error } from '@sveltejs/kit';
 	import { toastStore } from '@skeletonlabs/skeleton';
 	import { Auth } from 'aws-amplify';
+	import { validateEmail } from '$lib';
 	import { ProgressRadial } from '@skeletonlabs/skeleton';
-	import { throttle } from 'lodash'
-    
-    const email = window.atob($page.url.searchParams.get('u'));
+	import { throttle } from 'lodash';
+	import { goto } from '$app/navigation';
+	import { onDestroy } from 'svelte';
+
+    const encoded = $page.url.searchParams.get('u');
+
+	if (encoded === null || encoded.length === 0) {
+		throw error(400, {
+			message: "Missing user parameter"
+		})
+	}
+
+    const email = atob(encoded);
+
+	try {
+		validateEmail(email);
+	} catch (message) {
+		throw error(400, {
+			message: `We won't be able to contact this email: ${message}.`
+		});
+	}
 
 	let isDisabled = false;
 
@@ -23,6 +43,8 @@
 			});
 		}
 	}, 60_000);
+
+	let timeout;
 	
 	async function verifySubmit(event: SubmitEvent) {
 		event.preventDefault();
@@ -53,11 +75,21 @@
 		}
 
 		if (response === "SUCCESS") {
+			toastStore.trigger({
+				message: `Success! Your account is verified`,
+				background: 'variant-filled-success',
+			});
+
+			timeout = setTimeout(() => goto("/profile"), 1_000);
 
 		}
 
 		isDisabled = false;
 	}
+
+	onDestroy(() => {
+		clearTimeout(timeout)
+	})
 </script>
 
 <div class="flex h-full align-center justify-center">

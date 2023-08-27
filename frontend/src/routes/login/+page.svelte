@@ -1,12 +1,15 @@
 <script lang="ts">
 	import { slide } from "svelte/transition";
 	import { Auth, type ISignUpResult } from 'aws-amplify';
+	import { CognitoHostedUIIdentityProvider } from '@aws-amplify/auth';
 	import { goto } from '$app/navigation';
-	import { validateSignUpParamsCorrectness } from './api'
+	import { validateSignUpParamsCorrectness, validateEmail, validatePassword } from '$lib';
 	import { toastStore } from '@skeletonlabs/skeleton';
 	import { FileDropzone } from '@skeletonlabs/skeleton';
 	import { default as LoginErrorList } from './LoginErrorList.svelte';
 	import { ProgressRadial } from '@skeletonlabs/skeleton';
+	import { throttle } from 'lodash';
+	import { onMount } from 'svelte';
 
 	// https://aws-amplify.github.io/amplify-js/api/classes/authclass.html#federatedsignin
 	// https://aws-amplify.github.io/amplify-js/api/classes/authclass.html
@@ -16,9 +19,13 @@
 	let canSubmit = true;
 	let submitLoading = false;
 
-	// async function signUp({ username, password, email, phoneNumber }) {
-	//
-	// }
+	const GOOGLE_LOGIN = throttle(() => {
+		Auth.federatedSignIn({ provider: CognitoHostedUIIdentityProvider.Google });
+	}, 3_000);
+
+	const FACEBOOK_LOGIN = throttle(() => {
+		Auth.federatedSignIn({ provider: CognitoHostedUIIdentityProvider.Facebook });
+	}, 3_000);
 
 	let titleMessage: string;
 	$: titleMessage = isCreatingAccount ? "Sign Up" : "Sign In";
@@ -35,6 +42,20 @@
 	function switchFormType() {
 		isCreatingAccount = !isCreatingAccount;
 	}
+
+	onMount(async () => {
+		try {
+			const user = await Auth.currentAuthenticatedUser();
+			console.log(user);
+			if (!!user) {
+				toastStore.trigger({
+					message: "You're already signed in!",
+					background: 'variant-filled-success',
+				});
+				goto("/profile");
+			}
+		} catch (_) {}
+	});
 
 	async function awsApiCallSignUp(email: string, password: string, firstName: string, lastName: string): ISignUpResult {
 		const response: ISignUpResult = await Auth.signUp({
@@ -114,27 +135,48 @@
 			console.log(userConfirmed);
 			console.log(codeDeliveryDetails);
 
-			const username = window.btoa(user.username);
+			const username = btoa(user.username);
 
 			goto(`/verify?u=${username}`)
 		}
+	}
 
-		
+	async function awsApiCallSignIn(email: string, password: string): ISignUpResult {
+		const response = await Auth.signIn(email, password);
+
+		console.log(response);			
+
+		return response;
 	}
 
 	async function submitSignIn(event: SubmitEvent) {
 		isDisabled = true;
 		canSubmit = false;
+		submitLoading = true;
+
 		event.preventDefault();
 
 		const data = new FormData(event.target! as HTMLFormElement);
-		let username: string = data.get("username")!;
+		let email: string = data.get("email")!;
 		let password: string = data.get("password")!;
 		
+		try {
+			validateEmail(email);
+			validatePassword(password);
 
-		alert(`username: ${username}, password: ${password}`);
+			await awsApiCallSignIn(email, password);
 
-		isDisabled = false;
+			goto("/profile");
+		} catch (error) {
+			toastStore.trigger({
+				message: `Bad credentials`,
+				background: 'variant-filled-error',
+			});
+
+			isDisabled = false;
+			canSubmit = true;
+			submitLoading = false;
+		}
 	}
 </script>
 
@@ -161,11 +203,11 @@
 			<div in:slide out:slide class="flex flex-col-reverse md:grid md:grid-cols-[1fr_30px_1fr] md:grid-rows-1 grid-rows-[2fr_30px_1fr] grid-cols-1">
 				<div class="flex flex-col row-start-2 md:row-start-1">
 					<h3 class="mb-5 text-center md:text-left mt-5 md:mt-0"><span class="contents md:hidden">Or,&nbsp;</span>Use a Third Party</h3>
-					<button class="btn mx-auto w-10/12 variant-filled-primary" on:click|preventDefault={(e) => alert(e)}>
+					<button class="btn mx-auto w-10/12 variant-filled-primary" on:click|preventDefault={GOOGLE_LOGIN}>
 						<span class="min-w-6"><img class="pointer-events-none" src="/assets/google.svg" alt="Google Logo" width="35px" height="35px" /></span>
 						<span>Google</span>
 					</button>
-					<button disabled class="btn mt-5 mx-auto w-10/12 variant-filled bg-sky-950" on:click|preventDefault={(e) => alert(e)}>
+					<button class="btn mt-5 mx-auto w-10/12 variant-filled bg-sky-950" on:click|preventDefault={FACEBOOK_LOGIN}>
 						<span class="min-w-6"><img class="pointer-events-none" src="/assets/facebook.svg" alt="Facebook Logo" width="35px" height="35px" /></span>
 						<span>Facebook</span>
 					</button>
@@ -214,11 +256,11 @@
 			<div in:slide out:slide class="flex flex-col-reverse md:grid md:grid-cols-[1fr_30px_1fr] md:grid-rows-1 grid-rows-[1fr_30px_1fr] grid-cols-1">
 				<div class="flex flex-col row-start-2 md:row-start-1">
 					<h3 class="mb-5 mt-5 text-center md:text-left md:mt-0"><span class="contents md:hidden">Or,&nbsp;</span>Use a Third Party Account</h3>
-					<button class="btn mx-auto w-10/12 variant-filled-primary" on:click|preventDefault={(e) => alert(e)}>
+					<button class="btn mx-auto w-10/12 variant-filled-primary" on:click|preventDefault={GOOGLE_LOGIN}>
 						<span class="min-w-6"><img class="pointer-events-none" src="/assets/google.svg" alt="Google Logo" width="35px" height="35px" /></span>
 						<span>Google</span>
 					</button>
-					<button disabled class="btn mt-5 mx-auto w-10/12 variant-filled bg-sky-950" on:click|preventDefault={(e) => alert(e)}>
+					<button class="btn mt-5 mx-auto w-10/12 variant-filled bg-sky-950" on:click|preventDefault={FACEBOOK_LOGIN}>
 						<span class="min-w-6"><img class="pointer-events-none" src="/assets/facebook.svg" alt="Facebook Logo" width="35px" height="35px" /></span>
 						<span>Facebook</span>
 					</button>
@@ -229,10 +271,10 @@
 				<div class="row-start-1 md:col-start-3">
 					<h3 class="mb-5 text-center md:text-left">With a Fieldz Account</h3>
 					<form on:submit|preventDefault={submitSignIn} on:change={() => canSubmit = true}>
-						<label for="username-input" class="label">
+						<label for="email-input" class="label">
 							Email
 						</label>
-						<input disabled={isDisabled} id="username-input" name="username" class="input variant-form-material" type="text" placeholder="your@email.com" />
+						<input disabled={isDisabled} id="email-input" name="email" class="input variant-form-material" type="text" placeholder="your@email.com" />
 
 						<label for="password-input" class="label">
 							Password
