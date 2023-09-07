@@ -10,6 +10,7 @@
 	import { ProgressRadial } from '@skeletonlabs/skeleton';
 	import { throttle } from 'lodash';
 	import { onMount } from 'svelte';
+	import { currentUser } from '$lib'
 
 	// https://aws-amplify.github.io/amplify-js/api/classes/authclass.html#federatedsignin
 	// https://aws-amplify.github.io/amplify-js/api/classes/authclass.html
@@ -45,7 +46,7 @@
 
 	onMount(async () => {
 		try {
-			const user = await Auth.currentAuthenticatedUser();
+			const user = await $currentUser;
 			console.log(user);
 			if (!!user) {
 				toastStore.trigger({
@@ -72,7 +73,6 @@
 		});
 
 		console.log(response);			
-
 		return response;
 	}
 
@@ -112,6 +112,7 @@
 
 		try {
 			const response = await awsApiCallSignUp(email, password, firstName, lastName);
+
 			user = response.user;
 			userConfirmed = response.userConfirmed;
 			codeDeliveryDetails = response.codeDeliveryDetails;
@@ -172,6 +173,8 @@
 				message: `Bad credentials`,
 				background: 'variant-filled-error',
 			});
+
+			console.error(error);
 
 			isDisabled = false;
 			canSubmit = true;

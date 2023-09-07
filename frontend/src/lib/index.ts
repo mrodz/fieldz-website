@@ -1,5 +1,26 @@
-// place files you want to import through the `$lib` alias in this folder.
+import { Auth } from 'aws-amplify';
+import { writable } from "svelte/store";
+import { toastStore } from '@skeletonlabs/skeleton';
 
+export const currentUser = writable(undefined);
+
+export const removeUser = () => {
+	currentUser.set(undefined);
+}
+
+export const pollUser = async () => {
+	try {
+		const user = Auth.currentAuthenticatedUser();
+
+		currentUser.set(user);
+
+		// await Auth.rememberDevice()
+
+	} catch (error) {
+		console.log(error);
+		currentUser.set(undefined);
+	}
+} 
 
 export function validatePassword(password: string) {
 	let messages: Array<string> = [];

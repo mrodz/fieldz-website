@@ -1,7 +1,51 @@
 <script>
-	import { Amplify, Auth } from 'aws-amplify';
+	import { onMount } from 'svelte';
+	import { dev } from '$app/environment';
+	import { removeUser, pollUser } from '$lib';
+
+
+	import { Amplify, Auth, Hub } from 'aws-amplify';
 	import awsconfig from '../aws-exports.js';
-	Amplify.configure(awsconfig);
+
+	const [
+		localRedirectSignIn,
+		productionRedirectSignIn,
+	] = awsconfig.oauth.redirectSignIn.split(',');
+
+	const [
+		localRedirectSignOut,
+		productionRedirectSignOut,
+	] = awsconfig.oauth.redirectSignOut.split(',');
+
+	const updatedAwsConfig = {
+		...awsconfig,
+		oauth: {
+			...awsconfig.oauth,
+			redirectSignIn: dev ? localRedirectSignIn : productionRedirectSignIn,
+			redirectSignOut: dev ? localRedirectSignOut : productionRedirectSignOut,
+		}
+	}
+
+	Amplify.configure(updatedAwsConfig);
+
+	onMount(async () => {
+		Hub.listen('auth', ({ payload: { event, data }}) => {
+			switch (event) {
+		        case 'signIn':
+    		    case 'cognitoHostedUI':
+					pollUser();
+          			break;
+	        	case 'signOut':
+					removeUser();
+					break;
+				case 'signIn_failure':
+				case 'cognitoHostedUI_failure':
+					break;
+			}
+
+			pollUser();
+		});
+	});
 
 	import "../app.sass";
 
