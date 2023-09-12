@@ -16,7 +16,7 @@
 	// https://aws-amplify.github.io/amplify-js/api/classes/authclass.html
 
 	let isDisabled = false;
-	let isCreatingAccount = true; // PROD: set to false
+	let isCreatingAccount = false;
 	let canSubmit = true;
 	let submitLoading = false;
 

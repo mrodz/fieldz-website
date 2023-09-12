@@ -12,13 +12,12 @@ export const pollUser = async () => {
 	try {
 		const user = Auth.currentAuthenticatedUser();
 
+		console.log(`$$$ ${user}`);
+
 		currentUser.set(user);
-
-		// await Auth.rememberDevice()
-
 	} catch (error) {
 		console.log(error);
-		currentUser.set(undefined);
+		removeUser();
 	}
 } 
 

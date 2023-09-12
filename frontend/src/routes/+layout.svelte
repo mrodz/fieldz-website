@@ -1,8 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 	import { dev } from '$app/environment';
-	import { removeUser, pollUser } from '$lib';
-
+	import { currentUser, removeUser, pollUser } from '$lib';
 
 	import { Amplify, Auth, Hub } from 'aws-amplify';
 	import awsconfig from '../aws-exports.js';
@@ -31,16 +30,15 @@
 	onMount(async () => {
 		Hub.listen('auth', ({ payload: { event, data }}) => {
 			switch (event) {
-		        case 'signIn':
-    		    case 'cognitoHostedUI':
-					pollUser();
-          			break;
 	        	case 'signOut':
 					removeUser();
-					break;
 				case 'signIn_failure':
 				case 'cognitoHostedUI_failure':
-					break;
+					console.info(payload ?? "no payload for auth event");
+					return; // EXIT early
+					
+				// case 'signIn':
+    		    // case 'cognitoHostedUI':		
 			}
 
 			pollUser();
@@ -67,13 +65,26 @@
 	import { goto } from '$app/navigation';
 
 	const logOut = async () => {
+		if ($currentUser === undefined) {
+			toastStore.trigger({
+				message: "You're not signed in!",
+				background: 'variant-filled-error',
+			});
+
+			// still try to sign out, just in case.
+			await Auth.signOut();
+			goto("/");
+
+			return;
+		}
+
 		try {
 			await Auth.signOut();
 			toastStore.trigger({
 				message: "You signed out! See you later",
 				background: 'variant-filled-success',
 			});
-			goto("/")
+			goto("/");
 		} catch (error) {
 			toastStore.trigger({
 				message: `Error signing out: ${error}`,
