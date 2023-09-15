@@ -27,6 +27,8 @@
 
 			goto("/");
 		});
+	} else {
+		console.log("$currentUser is undefined when testing for auth");
 	}
 </script>
 

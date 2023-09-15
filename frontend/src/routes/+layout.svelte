@@ -28,19 +28,23 @@
 	Amplify.configure(updatedAwsConfig);
 
 	onMount(async () => {
-		Hub.listen('auth', ({ payload: { event, data }}) => {
+		Hub.listen('auth', (param) => {
+			const { payload: { event, data }} = param;
+
 			switch (event) {
 	        	case 'signOut':
 					removeUser();
 				case 'signIn_failure':
 				case 'cognitoHostedUI_failure':
-					console.info(payload ?? "no payload for auth event");
+					console.info("sign out or error!");
+					console.info(param ?? "no payload for auth event");
 					return; // EXIT early
-					
+				
 				// case 'signIn':
     		    // case 'cognitoHostedUI':		
 			}
 
+			console.log("Polling user...");
 			pollUser();
 		});
 	});
@@ -65,11 +69,14 @@
 	import { goto } from '$app/navigation';
 
 	const logOut = async () => {
+		console.log("START logout")
 		if ($currentUser === undefined) {
 			toastStore.trigger({
 				message: "You're not signed in!",
 				background: 'variant-filled-error',
 			});
+
+			console.log("not a promise, undefined logout")
 
 			// still try to sign out, just in case.
 			await Auth.signOut();
