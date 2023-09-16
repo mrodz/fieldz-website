@@ -5,7 +5,7 @@
 	import { Auth } from 'aws-amplify';
 	import { validateEmail } from '$lib';
 	import { ProgressRadial } from '@skeletonlabs/skeleton';
-	import { throttle } from 'lodash';
+	import lodash from 'lodash';
 	import { goto } from '$app/navigation';
 	import { onDestroy } from 'svelte';
 
@@ -29,7 +29,7 @@
 
 	let isDisabled = false;
 
-	const resendCode = throttle(async () => {
+	const resendCode = lodash.throttle(async () => {
 		try {
 			await Auth.resendSignUp(email);
 			toastStore.trigger({

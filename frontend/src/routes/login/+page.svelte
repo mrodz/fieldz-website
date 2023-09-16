@@ -7,7 +7,7 @@
 	import { toastStore } from '@skeletonlabs/skeleton';
 	import { default as LoginErrorList } from './LoginErrorList.svelte';
 	import { ProgressRadial } from '@skeletonlabs/skeleton';
-	import { throttle } from 'lodash';
+	import lodash from 'lodash';
 	import { onMount } from 'svelte';
 	import { currentUser } from '$lib'
 
@@ -19,11 +19,11 @@
 	let canSubmit = true;
 	let submitLoading = false;
 
-	const GOOGLE_LOGIN = throttle(() => {
+	const GOOGLE_LOGIN = lodash.throttle(() => {
 		Auth.federatedSignIn({ provider: CognitoHostedUIIdentityProvider.Google });
 	}, 3_000);
 
-	const FACEBOOK_LOGIN = throttle(() => {
+	const FACEBOOK_LOGIN = lodash.throttle(() => {
 		Auth.federatedSignIn({ provider: CognitoHostedUIIdentityProvider.Facebook });
 	}, 3_000);
 
