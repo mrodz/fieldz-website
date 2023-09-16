@@ -7,5 +7,5 @@
 </b>
 
 <p>
-	{$page.error.message}
+	{$page.error?.message ?? "message is undefined"}
 </p>

@@ -1,11 +1,10 @@
 <script lang="ts">
 	import { slide } from "svelte/transition";
-	import { Auth, type ISignUpResult } from 'aws-amplify';
+	import { Auth } from 'aws-amplify';
 	import { CognitoHostedUIIdentityProvider } from '@aws-amplify/auth';
 	import { goto } from '$app/navigation';
 	import { validateSignUpParamsCorrectness, validateEmail, validatePassword } from '$lib';
 	import { toastStore } from '@skeletonlabs/skeleton';
-	import { FileDropzone } from '@skeletonlabs/skeleton';
 	import { default as LoginErrorList } from './LoginErrorList.svelte';
 	import { ProgressRadial } from '@skeletonlabs/skeleton';
 	import { throttle } from 'lodash';
@@ -58,8 +57,8 @@
 		} catch (_) {}
 	});
 
-	async function awsApiCallSignUp(email: string, password: string, firstName: string, lastName: string): ISignUpResult {
-		const response: ISignUpResult = await Auth.signUp({
+	async function awsApiCallSignUp(email: string, password: string, firstName: string, lastName: string) {
+		const response = await Auth.signUp({
 			username: email,
 			password,
 			attributes: {
@@ -83,10 +82,10 @@
 
 		const data = new FormData(event.target! as HTMLFormElement);
 
-		const firstName: string = data.get("first-name")!;
-		const lastName: string = data.get("last-name")!;
-		const email: string = data.get("email")!;
-		const password: string = data.get("password")!;
+		const firstName: string = data.get("first-name")! as string;
+		const lastName: string = data.get("last-name")! as string;
+		const email: string = data.get("email")! as string;
+		const password: string = data.get("password")! as string;
 
 		const signUpMessages = validateSignUpParamsCorrectness(firstName, lastName, email, password);
 
@@ -136,13 +135,13 @@
 			console.log(userConfirmed);
 			console.log(codeDeliveryDetails);
 
-			const username = btoa(user.username);
+			const username = btoa(user.getUsername());
 
 			goto(`/verify?u=${username}`)
 		}
 	}
 
-	async function awsApiCallSignIn(email: string, password: string): ISignUpResult {
+	async function awsApiCallSignIn(email: string, password: string) {
 		const response = await Auth.signIn(email, password);
 
 		console.log(response);			
@@ -158,11 +157,11 @@
 		event.preventDefault();
 
 		const data = new FormData(event.target! as HTMLFormElement);
-		let email: string = data.get("email")!;
-		let password: string = data.get("password")!;
+		let email = data.get("email")! as string;
+		let password = data.get("password")! as string;
 		
 		try {
-			validateEmail(email);
+			validateEmail(email.toString());
 			validatePassword(password);
 
 			await awsApiCallSignIn(email, password);

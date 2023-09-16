@@ -44,14 +44,14 @@
 		}
 	}, 60_000);
 
-	let timeout;
-	
+	let timeout: NodeJS.Timeout;
+
 	async function verifySubmit(event: SubmitEvent) {
 		event.preventDefault();
 		isDisabled = true;
 
 		const data = new FormData(event.target! as HTMLFormElement);
-		const code: string = data.get("code")!;
+		const code: string = data.get("code")! as string;
 
 		if (code.length === 0) {
 			isDisabled = false;

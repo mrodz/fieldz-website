@@ -1,8 +1,9 @@
 import { Auth } from 'aws-amplify';
 import { writable } from "svelte/store";
 import { toastStore } from '@skeletonlabs/skeleton';
+import type { CognitoUser } from '@aws-amplify/auth';
 
-export const currentUser = writable(undefined);
+export const currentUser = writable<Promise<CognitoUser> | undefined>(undefined);
 
 export const removeUser = () => {
 	currentUser.set(undefined);
@@ -108,7 +109,7 @@ export function validateSignUpParamsCorrectness(firstName: string, lastName: str
 		// need to be outstanding because it's not going to be used
 		// outside of the login form.
 		result.messages[3] = message as string[];
-		result.errorCount += message?.length!;
+		result.errorCount += (message as string[])?.length!;
 	}
 
 	return result;

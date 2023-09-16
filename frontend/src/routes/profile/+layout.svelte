@@ -1,12 +1,12 @@
 <script lang="ts">
-	import { Auth } from 'aws-amplify';
+	// import { Auth } from 'aws-amplify';
 	import { toastStore } from '@skeletonlabs/skeleton';
 	import { goto } from '$app/navigation';
 	import { currentUser } from '$lib';
-	import { setContext} from 'svelte';
+	// import { setContext} from 'svelte';
 	import { ProgressRadial } from '@skeletonlabs/skeleton';
 
-	const err = (message) => {
+	const err = (message: string) => {
 		toastStore.trigger({
 			message,
 			background: 'variant-filled-error',

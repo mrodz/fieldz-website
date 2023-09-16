@@ -1,5 +1,5 @@
-<script>
-	export let list;
+<script lang="ts">
+	export let list: Array<unknown>;
 </script>
 
 {#if list !== undefined}
