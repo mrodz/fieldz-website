@@ -16,8 +16,8 @@ const awsmobile = {
             "profile",
             "aws.cognito.signin.user.admin"
         ],
-        "redirectSignIn": "http://localhost:5173/profile,https://fieldz.app/profile",
-        "redirectSignOut": "http://localhost:5173/,https://fieldz.app/",
+        "redirectSignIn": "http://localhost:5173/profile,https://www.fieldz.app/profile",
+        "redirectSignOut": "http://localhost:5173/,https://www.fieldz.app/",
         "responseType": "code"
     },
     "federationTarget": "COGNITO_USER_POOLS",
