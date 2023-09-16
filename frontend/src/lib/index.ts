@@ -1,9 +1,21 @@
 import { Auth } from 'aws-amplify';
 import { writable } from "svelte/store";
-import { toastStore } from '@skeletonlabs/skeleton';
+
 import type { CognitoUser } from '@aws-amplify/auth';
 
-export const currentUser = writable<Promise<CognitoUser> | undefined>(undefined);
+export type User = CognitoUser & {
+	attributes: {
+		email: string,
+		email_verified: string,
+		name: string,
+		picture: string,
+		sub: string,
+	},
+};
+
+// import { toastStore } from '@skeletonlabs/skeleton';
+
+export const currentUser = writable<Promise<User> | undefined>(undefined);
 
 export const removeUser = () => {
 	currentUser.set(undefined);

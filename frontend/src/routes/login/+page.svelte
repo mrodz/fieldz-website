@@ -64,7 +64,7 @@
 			attributes: {
 				email,
 				name: firstName + " " + lastName,
-				picture: "https://fieldz.app/pfpdefault.png",
+				picture: "https://fieldz.app/assets/pfpdefault.png",
 			},
 			autoSignIn: {
 				enabled: true,

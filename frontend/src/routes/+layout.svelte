@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { onMount } from 'svelte';
 	import { dev } from '$app/environment';
 	import { currentUser, removeUser, pollUser } from '$lib';
@@ -99,6 +99,16 @@
 			})
 		}
 	}
+
+	let photoURL = "/assets/pfpdefault.png";
+
+	$: if ($currentUser !== undefined) {
+		$currentUser.then(user => {
+			console.info(user);
+			photoURL = user.attributes.picture;
+		});
+	}
+
 </script>
 
 <Toast />
@@ -128,7 +138,7 @@
 				<button class="btn variant-filled" on:click={logOut}>
 					Log Out
 				</button>
-				<Avatar src="/assets/pfpdefault.png" border="border-4 border-primary-500" cursor="cursor-pointer" background="bg-primary-500" width="w-16" />
+				<Avatar src={photoURL} border="border-4 border-primary-500" cursor="cursor-pointer" background="bg-primary-500" width="w-16" />
 			</svelte:fragment>
 		</AppBar>
 	</svelte:fragment>
