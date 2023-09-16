@@ -24,15 +24,12 @@ export const removeUser = () => {
 export const pollUser = async () => {
 	try {
 		const user = Auth.currentAuthenticatedUser();
-
-		console.log(`$$$ ${user}`);
-
 		currentUser.set(user);
 	} catch (error) {
-		console.log(error);
+		console.error(error);
 		removeUser();
 	}
-} 
+}
 
 export function validatePassword(password: string) {
 	let messages: Array<string> = [];

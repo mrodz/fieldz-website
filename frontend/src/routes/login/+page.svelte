@@ -54,7 +54,9 @@
 				});
 				goto("/profile");
 			}
-		} catch (_) {}
+		} catch (error) {
+			console.log(error);
+		}
 	});
 
 	async function awsApiCallSignUp(email: string, password: string, firstName: string, lastName: string) {

@@ -37,6 +37,7 @@
 				background: 'variant-filled-success',
 			});
 		} catch (error) {
+			console.error(error);
 			toastStore.trigger({
 				message: `${error}`,
 				background: 'variant-filled-error',
@@ -66,7 +67,11 @@
 		try {
 			response = await Auth.confirmSignUp(email, code);
 		} catch (error) {
+			
 			isDisabled = false;
+
+			console.error(error);
+
 			toastStore.trigger({
 				message: `Could not verify: ${error}`,
 				background: 'variant-filled-error',

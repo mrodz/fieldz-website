@@ -5,6 +5,7 @@
 	import { currentUser } from '$lib';
 	// import { setContext} from 'svelte';
 	import { ProgressRadial } from '@skeletonlabs/skeleton';
+    import { redirect } from '@sveltejs/kit';
 
 	const err = (message: string) => {
 		toastStore.trigger({
@@ -14,21 +15,44 @@
 		goto("/login");
 	}
 
+	let toastId: string | undefined;
+
 	$: if ($currentUser !== undefined) {
 		$currentUser.then(user => {
 			if (user === undefined) {
 				err("You're not signed in!");
 			}
-		}).catch((e) => {
+
+			if (toastId !== undefined) {
+				toastStore.close(toastId);
+				toastId = undefined;
+
+				toastStore.trigger({
+					message: "Success!",
+					background: "variant-filled-success",
+				})
+			}
+		}).catch(error => {
 			// this message is handled separately
-			if (e !== "The user is not authenticated") {
-				err(e);
+			if (error !== "The user is not authenticated") {
+				err(error);
 			}
 
-			goto("/");
+			console.error(error);
 		});
 	} else {
-		console.log("$currentUser is undefined when testing for auth");
+		/*
+		Server Side
+		*/
+		
+		toastId = toastStore.trigger({
+			message: "Please sign in to continue",
+			background: 'variant-filled-error',
+			hideDismiss: true,
+			timeout: 7_000,
+		});
+
+		console.log(`$currentUser is ${$currentUser} when testing for auth`);
 	}
 </script>
 
@@ -70,15 +94,3 @@
 		</div>
 	{/await}
 {/if}
-
-<!-- {#await getCurrentUserProcess()}
-	<ProgressRadial />
-{:then user}
-	{#if user === undefined}
-		You're not signed in! Redirecting...
-	{:else}
-		<slot />
-	{/if}
-{:catch error}
-	<p>{error.message}</p>
-{/await} -->

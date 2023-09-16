@@ -29,6 +29,7 @@
   },
   "type": "module",
   "dependencies": {
+    "@floating-ui/dom": "^1.5.3",
     "aws-amplify": "^5.3.8",
     "lodash": "^4.17.21"
   }
