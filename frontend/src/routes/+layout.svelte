@@ -6,6 +6,12 @@
 	import { Amplify, Auth, Hub } from "aws-amplify";
 	import awsconfig from "../aws-exports.js";
 
+	/*
+	DO NOT DELETE THIS LINE; otherwise, it will use the Cognito-issued URL
+	instead of our own auth domain.
+	*/
+	awsconfig.oauth.domain = "login.fieldz.app";
+
 	const [localRedirectSignIn, productionRedirectSignIn] =
 		awsconfig.oauth.redirectSignIn.split(",");
 
