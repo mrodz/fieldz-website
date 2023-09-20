@@ -1,4 +1,4 @@
-import { Auth } from 'aws-amplify';
+import { Auth, Storage } from 'aws-amplify';
 import { writable } from "svelte/store";
 
 import type { CognitoUser } from '@aws-amplify/auth';
@@ -16,6 +16,22 @@ export type User = CognitoUser & {
 // import { toastStore } from '@skeletonlabs/skeleton';
 
 export const currentUser = writable<Promise<User> | undefined>(undefined);
+export const pfp = writable<string>("/assets/pfpdefault.png");
+
+export const pollPFP = (user: User) => {
+	const FILE_KEY = `pfp-${user.attributes.sub}`;
+
+	Storage.get(FILE_KEY, {
+		level: 'public',
+		validateObjectExistence: true,
+	}).then(url => {
+		console.warn(url);
+		pfp.set(url);
+	}).catch(error => {
+		console.error(error);
+		pfp.set(user.attributes.picture);
+	})
+}
 
 export const removeUser = () => {
 	currentUser.set(undefined);

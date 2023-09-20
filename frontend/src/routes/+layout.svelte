@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { onMount } from "svelte";
 	import { dev } from "$app/environment";
-	import { currentUser, removeUser, pollUser } from "$lib";
+	import { currentUser, removeUser, pollUser, pfp, pollPFP } from "$lib";
 
-	import { Amplify, Auth, Hub } from "aws-amplify";
+	import { Amplify, Auth, Hub, Storage } from "aws-amplify";
 	import awsconfig from "../aws-exports.js";
 
 	/*
@@ -125,13 +125,8 @@
 		}
 	};
 
-	let photoURL = "/assets/pfpdefault.png";
-
 	$: if ($currentUser !== undefined) {
-		$currentUser.then((user) => {
-			console.info(user);
-			photoURL = user.attributes.picture;
-		});
+		$currentUser.then(pollPFP);
 	}
 
 	const openHamburger = () => {
@@ -319,7 +314,7 @@
 			<svelte:fragment slot="trail">
 				<span use:popup={popupFeatured}>
 					<Avatar
-						src={photoURL}
+						src={$pfp}
 						border="border-4 border-primary-500"
 						cursor="cursor-pointer"
 						background="bg-primary-500"

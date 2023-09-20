@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { currentUser, type User } from "$lib";
+	import { currentUser, pfp, pollPFP, type User } from "$lib";
 	import {
 		Avatar,
 		FileDropzone,
@@ -8,17 +8,22 @@
 		toastStore,
 	} from "@skeletonlabs/skeleton";
 	import { Storage } from "aws-amplify";
+	import { onDestroy } from "svelte";
 
 	let welcomeMessage: string;
+	let welcomeEmoji: string;
 
 	let hours = new Date().getHours();
 
 	if (hours >= 19 || hours < 6) {
 		welcomeMessage = "Good Evening";
+		welcomeEmoji = '🌘';
 	} else if (hours >= 12) {
 		welcomeMessage = "Good Afternoon";
+		welcomeEmoji = '☀️';
 	} else {
 		welcomeMessage = "Good Morning";
+		welcomeEmoji = '🌅'
 	}
 
 	const MAX_IMG_DIM = 256;
@@ -30,8 +35,14 @@
 		$currentUser.then((u) => (user = u)).catch((e) => console.error(e));
 	}
 
-	let customProfileURL: string | undefined;
+	// let customProfileURL: string | undefined;
 	let uploadPercent: number | undefined;
+
+	let timeout: NodeJS.Timeout | undefined;
+
+	onDestroy(() => {
+		clearTimeout(timeout);
+	});
 
 	function onChangeHandler(e: Event) {
 		const files: FileList = (e.target! as HTMLInputElement).files!;
@@ -53,16 +64,11 @@
 		img.onload = function () {
 			URL.revokeObjectURL(img.src);
 
-			// const [newWidth, newHeight] = calculateSize(img, MAX_IMG_DIM, MAX_IMG_DIM);
-
 			const canvas = document.createElement("canvas");
 			canvas.width = MAX_IMG_DIM;
 			canvas.height = MAX_IMG_DIM;
 
 			const ctx: CanvasRenderingContext2D = canvas.getContext("2d")!;
-
-			// alert(newWidth);
-			// alert(newHeight);
 
 			ctx.drawImage(img, 0, 0, MAX_IMG_DIM, MAX_IMG_DIM);
 
@@ -85,32 +91,37 @@
 								);
 							}
 
+							const FILE_KEY = `pfp-${user.attributes.sub}`;
+
 							try {
-								Storage.put(
-									`pfp-${user.attributes.sub}`,
-									blob!,
-									{
-										resumable: true,
-										level: "protected",
-										contentType: MIME,
-										progressCallback(progress) {
-											uploadPercent =
-												(progress.loaded /
-													progress.total) *
-												100;
+								Storage.put(FILE_KEY, blob!, {
+									resumable: true,
+									level: "public",
+									contentType: MIME,
+									progressCallback(progress) {
+										uploadPercent =
+											(progress.loaded / progress.total) *
+											100;
+									},
+									completeCallback(event) {
+										uploadPercent = undefined;
 
-											if (uploadPercent >= 100) {
-												toastStore.trigger({
-													message: "You've updated your profile picture!",
-													background: "variant-filled-success",
-												})
-											}
-										},
-									}
-								);
+										console.log(
+											`Successfully uploaded ${event.key}`
+										);
 
-								user.attributes.picture = finalImage;
-								customProfileURL = finalImage;
+										toastStore.trigger({
+											message:
+												"You've updated your profile picture!",
+											background:
+												"variant-filled-success",
+										});
+									},
+								});
+
+								timeout = setTimeout(() => {
+									pollPFP(user!);
+								}, 1_000);
 							} catch (error) {
 								toastStore.trigger({
 									message: `Could not upload profile picture: ${error}`,
@@ -121,55 +132,6 @@
 					},
 				});
 			});
-
-			// canvas.toBlob(
-			// 	(blob) => {
-			// 		// const finalImage = URL.createObjectURL(blob!);
-			// 		// modalStore.trigger({
-			// 		// 	type: "confirm",
-			// 		// 	title: "Upload Image?",
-			// 		// 	body: "This cropped photo will be set as your profile picture:",
-			// 		// 	image: finalImage,
-			// 		// 	response(r) {
-			// 		// 		if (!!r) {
-			// 		// 			if (user === undefined) {
-			// 		// 				throw new Error(
-			// 		// 					"user is undefined, cannot upload pfp"
-			// 		// 				);
-			// 		// 			}
-
-			// 		// 			try {
-			// 		// 				Storage.put(
-			// 		// 					`pfp-${user.attributes.sub}`,
-			// 		// 					blob!,
-			// 		// 					{
-			// 		// 						resumable: true,
-			// 		// 						level: "protected",
-			// 		// 						contentType: MIME,
-			// 		// 						progressCallback(progress) {
-			// 		// 							uploadPercent =
-			// 		// 								(progress.loaded /
-			// 		// 									progress.total) *
-			// 		// 								100;
-			// 		// 						},
-			// 		// 					}
-			// 		// 				);
-
-			// 		// 				user.attributes.picture = finalImage;
-			// 		// 				customProfileURL = finalImage;
-			// 		// 			} catch (error) {
-			// 		// 				toastStore.trigger({
-			// 		// 					message: `Could not upload profile picture: ${error}`,
-			// 		// 					background: "variant-error",
-			// 		// 				});
-			// 		// 			}
-			// 		// 		}
-			// 		// 	},
-			// 		// });
-			// 	},
-			// 	MIME,
-			// 	0.7
-			// );
 		};
 	}
 </script>
@@ -178,29 +140,57 @@
 	<ProgressRadial />
 {:then user}
 	<div class="w-11/12 mx-auto">
-		<h1 class="h1 my-10">{welcomeMessage}, {user?.attributes.name}</h1>
+		<h1 class="h1 my-10">{welcomeMessage}, {user?.attributes.name} {welcomeEmoji}</h1>
 
 		<div class="card p-4">
 			<h2 class="h2">Account Information</h2>
 
-			<p class="my-8">
-				You're using <span class="chip variant-filled bg-primary-500">
-					{user?.attributes.email}
-				</span> as your email for Fieldz.
-			</p>
+			<div class="grid grid-cols-[1fr_20px_1fr] my-4">
+				<section>
+					<h3 class="h3 mt-8">Name</h3>
+					<p class="my-4">
+						When you signed up, you told us your name was <span
+							class="chip variant-filled bg-primary-500"
+						>
+							{user?.attributes.name}
+						</span>. If you would like to request a name-change,
+						please email <a class="underline" href="mailto:admin@fieldz.app">admin@fieldz.app</a>.
+					</p>
+				</section>
+				<span class="hidden md:inline divider-vertical h-full" />
+				<section>
+					<h3 class="h3 mt-8">Email</h3>
+					<p class="my-4">
+						You're using <span
+							class="chip variant-filled bg-primary-500"
+						>
+							{user?.attributes.email}
+						</span> as your email for Fieldz. This is how we
+						will contact you if special circumstances arise.
+					</p>
+				</section>
+			</div>
 
-			<div class="py-4 my-8">
-				<div class="grid grid-cols-[200px_1fr_3fr]">
+			<section>
+				<h3 class="h3">Profile Picture</h3>
+				<div class="grid grid-cols-[1fr_1fr_3fr] my-4">
 					<Avatar
-						class="m-auto grow "
-						width="w-16"
-						rounded="rounded"
-						src={customProfileURL ?? user?.attributes.picture}
+						class="m-auto grow"
+						width="w-18"
+						rounded="rounded-xl"
+						src={$pfp}
 					/>
-					<div class="grow">
-						<p>... is your current profile picture.</p>
+					<div class="grow my-auto px-2">
+						<p>... is your <b>current</b> profile picture.</p>
 						<br />
 						<p>You can upload a new profile picture here!</p>
+						<br />
+						<p>
+							<i
+								>Note: Please make sure you have the rights to upload
+								the image. We are not liable for any misuse.</i
+							>
+						</p>
 					</div>
 					<FileDropzone
 						name="pfp-input"
@@ -221,7 +211,7 @@
 						<span class="text-green-500">{uploadPercent}%</span>
 					</div>
 				{/if}
-			</div>
+			</section>
 		</div>
 	</div>
 {:catch}
