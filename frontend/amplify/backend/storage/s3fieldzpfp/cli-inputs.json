@@ -1,0 +1,14 @@
+{
+  "resourceName": "s3fieldzpfp",
+  "bucketName": "fieldz-pfp",
+  "policyUUID": "e3e2113b",
+  "storageAccess": "authAndGuest",
+  "guestAccess": [
+    "READ"
+  ],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ]
+}

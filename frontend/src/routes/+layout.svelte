@@ -259,6 +259,8 @@
 	</div>
 </Drawer>
 
+<Modal />
+
 <AppShell class="h-full">
 	<svelte:fragment slot="header">
 		<AppBar>

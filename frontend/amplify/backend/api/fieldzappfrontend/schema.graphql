@@ -1,0 +1,22 @@
+type Reservation @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  userId: String
+  dateStart: AWSDateTime
+  dateEnd: AWSDateTime
+  Field: Field @hasOne
+}
+
+type Field @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String
+  address: String
+  regionID: ID! @index(name: "byRegion")
+}
+
+type Region @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String!
+  banner: AWSURL
+  bio: String
+  Fields: [Field] @hasMany(indexName: "byRegion", fields: ["id"])
+}
