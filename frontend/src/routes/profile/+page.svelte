@@ -140,14 +140,16 @@
 	<ProgressRadial />
 {:then user}
 	<div class="w-11/12 mx-auto">
-		<h1 class="h1 my-10">{welcomeMessage}, {user?.attributes.name} {welcomeEmoji}</h1>
+		<h1 class="text-center sm:text-start text-2xl sm:h1 my-10">{welcomeMessage}, {user?.attributes.name} {welcomeEmoji}</h1>
 
 		<div class="card p-4">
-			<h2 class="h2">Account Information</h2>
+			<h2 class="h2 text-center sm:text-start">Account Information</h2>
 
-			<div class="grid grid-cols-[1fr_20px_1fr] my-4">
+			<hr class="hr sm:!hidden my-4" />
+
+			<div class="grid grid-rows-2 sm:grid-rows-1 sm:grid-cols-[1fr_20px_1fr] mb-4 sm:my-4">
 				<section>
-					<h3 class="h3 mt-8">Name</h3>
+					<h3 class="h3 sm:mt-8 text-center sm:text-start">Name</h3>
 					<p class="my-4">
 						When you signed up, you told us your name was <span
 							class="chip variant-filled bg-primary-500"
@@ -157,9 +159,9 @@
 						please email <a class="underline" href="mailto:admin@fieldz.app">admin@fieldz.app</a>.
 					</p>
 				</section>
-				<span class="hidden md:inline divider-vertical h-full" />
+				<span class="hidden sm:inline divider-vertical h-full" />
 				<section>
-					<h3 class="h3 mt-8">Email</h3>
+					<h3 class="h3 sm:mt-8 text-center sm:text-start">Email</h3>
 					<p class="my-4">
 						You're using <span
 							class="chip variant-filled bg-primary-500"
@@ -171,16 +173,18 @@
 				</section>
 			</div>
 
+			<hr class="hr sm:!hidden my-4" />
+
 			<section>
-				<h3 class="h3">Profile Picture</h3>
-				<div class="grid grid-cols-[1fr_1fr_3fr] my-4">
+				<h3 class="h3 text-center sm:text-start">Profile Picture</h3>
+				<div class="grid grid-rows-[1fr_1fr_100px] sm:grid-rows-1 sm:grid-cols-[2fr_2fr_3fr] lg:grid-cols-[1fr_1fr_3fr] my-4">
 					<Avatar
 						class="m-auto grow"
 						width="w-18"
 						rounded="rounded-xl"
 						src={$pfp}
 					/>
-					<div class="grow my-auto px-2">
+					<div class="grow my-auto px-2 text-center sm:text-start">
 						<p>... is your <b>current</b> profile picture.</p>
 						<br />
 						<p>You can upload a new profile picture here!</p>
@@ -198,7 +202,7 @@
 						on:change={onChangeHandler}
 					>
 						<svelte:fragment slot="message"
-							><b>Upload a photo</b> or drag and drop</svelte:fragment
+							><b>Upload a photo</b><span class="hidden sm:inline">&nbsp;or drag and drop</span></svelte:fragment
 						>
 						<svelte:fragment slot="meta"
 							>PNG and JPG Only</svelte:fragment
