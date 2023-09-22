@@ -31,7 +31,6 @@
   "dependencies": {
     "@floating-ui/dom": "^1.5.3",
     "aws-amplify": "^5.3.8",
-    "aws-sdk": "^2.1462.0",
     "lodash": "^4.17.21"
   }
 }

@@ -4,12 +4,7 @@
 	import { currentUser, removeUser, pollUser, pfp, pollPFP } from "$lib";
 
 	import { Amplify, Auth, Hub } from "aws-amplify";
-	import { config as awssdkconfig } from "aws-sdk";
 	import awsconfig from "../aws-exports.js";
-
-	awssdkconfig.update({
-		region: "us-west-1"
-	});
 
 	/*
 	DO NOT DELETE THIS LINE; otherwise, it will use the Cognito-issued URL

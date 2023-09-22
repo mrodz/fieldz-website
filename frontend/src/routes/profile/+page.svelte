@@ -9,7 +9,6 @@
 	} from "@skeletonlabs/skeleton";
 	import { Storage } from "aws-amplify";
 	import { onDestroy } from "svelte";
-	import { DynamoDB } from "aws-sdk";
 
 	let welcomeMessage: string;
 	let welcomeEmoji: string;
@@ -27,8 +26,6 @@
 		welcomeEmoji = "🌅";
 	}
 
-	const db = new DynamoDB();
-
 	const MAX_IMG_DIM = 256;
 	const MIME = "image/jpeg";
 
@@ -36,27 +33,9 @@
 	let accountType: string | undefined;
 
 	if ($currentUser !== undefined) {
-		$currentUser
-			.then((u) => {
-				user = u;
-
-				const type = db.getItem({
-					TableName: "fieldz-account-type",
-					Key: {
-						user: {
-							S: u.attributes.sub,
-						},
-					},
-				}).promise().then((output) => {
-					console.log(output);
-					alert(JSON.stringify(output));
-				}).catch((error) => {
-					console.error(error);
-				});
-			})
-			.catch((e) => console.error(e));
+		$currentUser.then((u) => (user = u)).catch((e) => console.error(e));
 	}
-
+	
 	// let customProfileURL: string | undefined;
 	let uploadPercent: number | undefined;
 
