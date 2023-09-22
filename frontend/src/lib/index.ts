@@ -24,10 +24,10 @@ export const pollPFP = (user: User) => {
 	Storage.get(FILE_KEY, {
 		level: 'public',
 		validateObjectExistence: true,
-	}).then(url => {
+	}).then((url: string) => {
 		console.warn(url);
 		pfp.set(url);
-	}).catch(error => {
+	}).catch((error: unknown) => {
 		console.error(error);
 		pfp.set(user.attributes.picture);
 	})

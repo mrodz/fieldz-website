@@ -9,6 +9,7 @@
 	} from "@skeletonlabs/skeleton";
 	import { Storage } from "aws-amplify";
 	import { onDestroy } from "svelte";
+	import { DynamoDB } from "aws-sdk";
 
 	let welcomeMessage: string;
 	let welcomeEmoji: string;
@@ -17,22 +18,43 @@
 
 	if (hours >= 19 || hours < 6) {
 		welcomeMessage = "Good Evening";
-		welcomeEmoji = '🌘';
+		welcomeEmoji = "🌘";
 	} else if (hours >= 12) {
 		welcomeMessage = "Good Afternoon";
-		welcomeEmoji = '☀️';
+		welcomeEmoji = "☀️";
 	} else {
 		welcomeMessage = "Good Morning";
-		welcomeEmoji = '🌅'
+		welcomeEmoji = "🌅";
 	}
+
+	const db = new DynamoDB();
 
 	const MAX_IMG_DIM = 256;
 	const MIME = "image/jpeg";
 
 	let user: User | undefined;
+	let accountType: string | undefined;
 
 	if ($currentUser !== undefined) {
-		$currentUser.then((u) => (user = u)).catch((e) => console.error(e));
+		$currentUser
+			.then((u) => {
+				user = u;
+
+				const type = db.getItem({
+					TableName: "fieldz-account-type",
+					Key: {
+						user: {
+							S: u.attributes.sub,
+						},
+					},
+				}).promise().then((output) => {
+					console.log(output);
+					alert(JSON.stringify(output));
+				}).catch((error) => {
+					console.error(error);
+				});
+			})
+			.catch((e) => console.error(e));
 	}
 
 	// let customProfileURL: string | undefined;
@@ -140,14 +162,19 @@
 	<ProgressRadial />
 {:then user}
 	<div class="w-11/12 mx-auto">
-		<h1 class="text-center sm:text-start text-2xl sm:h1 my-10">{welcomeMessage}, {user?.attributes.name} {welcomeEmoji}</h1>
+		<h1 class="text-center sm:text-start text-2xl sm:h1 my-10">
+			{welcomeMessage}, {user?.attributes.name}
+			{welcomeEmoji}
+		</h1>
 
 		<div class="card p-4">
 			<h2 class="h2 text-center sm:text-start">Account Information</h2>
 
 			<hr class="hr sm:!hidden my-4" />
 
-			<div class="grid grid-rows-2 sm:grid-rows-1 sm:grid-cols-[1fr_20px_1fr] mb-4 sm:my-4">
+			<div
+				class="grid grid-rows-2 sm:grid-rows-1 sm:grid-cols-[1fr_20px_1fr] mb-4 sm:my-4"
+			>
 				<section>
 					<h3 class="h3 sm:mt-8 text-center sm:text-start">Name</h3>
 					<p class="my-4">
@@ -156,7 +183,10 @@
 						>
 							{user?.attributes.name}
 						</span>. If you would like to request a name-change,
-						please email <a class="underline" href="mailto:admin@fieldz.app">admin@fieldz.app</a>.
+						please email
+						<a class="underline" href="mailto:admin@fieldz.app"
+							>admin@fieldz.app</a
+						>.
 					</p>
 				</section>
 				<span class="hidden sm:inline divider-vertical h-full" />
@@ -167,8 +197,8 @@
 							class="chip variant-filled bg-primary-500"
 						>
 							{user?.attributes.email}
-						</span> as your email for Fieldz. This is how we
-						will contact you if special circumstances arise.
+						</span> as your email for Fieldz. This is how we will contact
+						you if special circumstances arise.
 					</p>
 				</section>
 			</div>
@@ -177,7 +207,9 @@
 
 			<section>
 				<h3 class="h3 text-center sm:text-start">Profile Picture</h3>
-				<div class="grid grid-rows-[1fr_1fr_100px] sm:grid-rows-1 sm:grid-cols-[2fr_2fr_3fr] lg:grid-cols-[1fr_1fr_3fr] my-4">
+				<div
+					class="grid grid-rows-[1fr_1fr_100px] sm:grid-rows-1 sm:grid-cols-[2fr_2fr_3fr] lg:grid-cols-[1fr_1fr_3fr] my-4"
+				>
 					<Avatar
 						class="m-auto grow"
 						width="w-18"
@@ -191,8 +223,9 @@
 						<br />
 						<p>
 							<i
-								>Note: Please make sure you have the rights to upload
-								the image. We are not liable for any misuse.</i
+								>Note: Please make sure you have the rights to
+								upload the image. We are not liable for any
+								misuse.</i
 							>
 						</p>
 					</div>
@@ -202,7 +235,9 @@
 						on:change={onChangeHandler}
 					>
 						<svelte:fragment slot="message"
-							><b>Upload a photo</b><span class="hidden sm:inline">&nbsp;or drag and drop</span></svelte:fragment
+							><b>Upload a photo</b><span class="hidden sm:inline"
+								>&nbsp;or drag and drop</span
+							></svelte:fragment
 						>
 						<svelte:fragment slot="meta"
 							>PNG and JPG Only</svelte:fragment

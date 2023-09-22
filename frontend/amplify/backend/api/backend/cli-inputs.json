@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "paths": {
+    "/profile-type/{sub}": {
+      "name": "/profile-type/{sub}",
+      "lambdaFunction": "getProfileType",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "read",
+          "update",
+          "delete"
+        ]
+      }
+    }
+  }
+}

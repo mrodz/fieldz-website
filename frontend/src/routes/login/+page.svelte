@@ -11,6 +11,8 @@
 	import { onMount } from 'svelte';
 	import { currentUser } from '$lib'
 
+	
+
 	// https://aws-amplify.github.io/amplify-js/api/classes/authclass.html#federatedsignin
 	// https://aws-amplify.github.io/amplify-js/api/classes/authclass.html
 
@@ -225,25 +227,25 @@
 						<label for="first-name-input" class="label">
 							First Name
 						</label>
-						<input class:input-error={!!firstNameErrors} disabled={isDisabled} id="first-name-input" name="first-name" class="input variant-form-material" type="text" placeholder="John" />
+						<input autocomplete="given-name" class:input-error={!!firstNameErrors} disabled={isDisabled} id="first-name-input" name="first-name" class="input variant-form-material" type="text" placeholder="John" />
 						<LoginErrorList list={firstNameErrors} />
 
 						<label for="last-name-input" class="label">
 							Last Name
 						</label>
-						<input class:input-error={!!lastNameErrors} disabled={isDisabled} id="last-name-input" name="last-name" class="input variant-form-material" type="text" placeholder="Doe" />
+						<input autocomplete="family-name" class:input-error={!!lastNameErrors} disabled={isDisabled} id="last-name-input" name="last-name" class="input variant-form-material" type="text" placeholder="Doe" />
 						<LoginErrorList list={lastNameErrors} />
 
 						<label for="email-input" class="label">
 							Email
 						</label>
-						<input class:input-error={!!emailErrors} disabled={isDisabled} id="email-input" name="email" class="input variant-form-material" type="text" placeholder="example@email.com" />
+						<input autocomplete="email" class:input-error={!!emailErrors} disabled={isDisabled} id="email-input" name="email" class="input variant-form-material" type="text" placeholder="example@email.com" />
 						<LoginErrorList list={emailErrors} />
 
 						<label for="password-input" class="label">
 							Password
 						</label>
-						<input class:input-error={!!passwordErrors} disabled={isDisabled} id="password-input" name="password" class="input variant-form-material" type="password" placeholder="*******" />
+						<input autocomplete="new-password" class:input-error={!!passwordErrors} disabled={isDisabled} id="password-input" name="password" class="input variant-form-material" type="password" placeholder="*******" />
 						<LoginErrorList list={passwordErrors} />
 
 						{#if submitLoading}
@@ -278,12 +280,12 @@
 						<label for="email-input" class="label">
 							Email
 						</label>
-						<input disabled={isDisabled} id="email-input" name="email" class="input variant-form-material" type="text" placeholder="your@email.com" />
+						<input autocomplete="email" disabled={isDisabled} id="email-input" name="email" class="input variant-form-material" type="text" placeholder="your@email.com" />
 
 						<label for="password-input" class="label">
 							Password
 						</label>
-						<input disabled={isDisabled} id="password-input" name="password" class="input variant-form-material" type="password" placeholder="*******" />
+						<input autocomplete="current-password" disabled={isDisabled} id="password-input" name="password" class="input variant-form-material" type="password" placeholder="*******" />
 
 						{#if submitLoading}
 							<ProgressRadial width="w-12" />
