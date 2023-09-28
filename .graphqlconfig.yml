@@ -1,0 +1,15 @@
+projects:
+  fieldzappfrontend:
+    schemaPath: amplify/backend/api/fieldzappfrontend/build/schema.graphql
+    includes:
+      - frontend/src/graphql/**/*.ts
+    excludes:
+      - ./amplify/**
+    extensions:
+      amplify:
+        codeGenTarget: typescript
+        generatedFileName: frontend/src/API.ts
+        docsFilePath: frontend/src/graphql
+        region: us-west-1
+        apiId: null
+        maxDepth: 3

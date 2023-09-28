@@ -28,21 +28,22 @@
         "authConfig": {
           "additionalAuthenticationProviders": [
             {
-              "authenticationType": "AWS_IAM"
+              "apiKeyConfig": {
+                "apiKeyExpirationDate": "2024-09-27T18:30:20.813Z",
+                "apiKeyExpirationDays": 365,
+                "description": "GraphQL Api Key"
+              },
+              "authenticationType": "API_KEY"
             },
             {
-              "authenticationType": "AMAZON_COGNITO_USER_POOLS",
-              "userPoolConfig": {
-                "userPoolId": "authfieldzappfrontend"
-              }
+              "authenticationType": "AWS_IAM"
             }
           ],
           "defaultAuthentication": {
-            "apiKeyConfig": {
-              "apiKeyExpirationDays": 30,
-              "description": "api key description"
-            },
-            "authenticationType": "API_KEY"
+            "authenticationType": "AMAZON_COGNITO_USER_POOLS",
+            "userPoolConfig": {
+              "userPoolId": "authfieldzappfrontend"
+            }
           }
         }
       },

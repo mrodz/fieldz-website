@@ -9,6 +9,10 @@
 	} from "@skeletonlabs/skeleton";
 	import { Storage } from "aws-amplify";
 	import { onDestroy } from "svelte";
+	import { API, graphqlOperation } from "aws-amplify";
+	import { type GraphQLQuery } from "@aws-amplify/api";
+	import { getUser } from "../../graphql/queries";
+    import { stringify } from "postcss";
 
 	let welcomeMessage: string;
 	let welcomeEmoji: string;
@@ -35,7 +39,9 @@
 	if ($currentUser !== undefined) {
 		$currentUser.then((u) => (user = u)).catch((e) => console.error(e));
 	}
-	
+
+	let graphQLUser = API.graphql(graphqlOperation(getUser))
+
 	// let customProfileURL: string | undefined;
 	let uploadPercent: number | undefined;
 
@@ -150,6 +156,19 @@
 			<h2 class="h2 text-center sm:text-start">Account Information</h2>
 
 			<hr class="hr sm:!hidden my-4" />
+
+			<div>
+				You are a
+				<span class="chip variant-filled">
+					{#await graphQLUser}
+						Loading...
+					{:then user}
+						{JSON.stringify(user)}
+					{:catch error}
+						{JSON.stringify(error)}
+					{/await}
+				</span>
+			</div>
 
 			<div
 				class="grid grid-rows-2 sm:grid-rows-1 sm:grid-cols-[1fr_20px_1fr] mb-4 sm:my-4"
