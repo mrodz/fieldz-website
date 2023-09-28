@@ -16,27 +16,14 @@
       "auth": {
         "fieldzappfrontend": {}
       },
-      "storage": {
-        "s3fieldzpfp": {},
-        "fieldzaccounttype": {
-          "tableName": "fieldz-account-type",
-          "region": "us-west-1",
-          "arn": "arn:aws:dynamodb:us-west-1:027441134867:table/fieldz-account-type",
-          "partitionKeyName": "pk",
-          "partitionKeyType": "S",
-          "sortKeyName": "sk",
-          "sortKeyType": "S"
-        }
-      },
       "function": {
         "getProfileType": {
           "deploymentBucketName": "amplify-amplifyf62ce985cf9d4-staging-05321-deployment",
           "s3Key": "amplify-builds/getProfileType-71596c4d596133756d58-build.zip"
         }
       },
-      "api": {
-        "fieldzappfrontend": {},
-        "backend": {}
+      "storage": {
+        "s3fieldzpfp": {}
       }
     }
   }

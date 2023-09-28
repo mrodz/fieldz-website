@@ -1,9 +1,24 @@
+enum AccountType {
+  GUEST
+  COACH
+  ADMIN
+}
+
+type User @model @auth(rules: [{allow: public}, {allow: owner}, {allow: private}]) {
+  id: ID!
+  sub: String!
+  type: AccountType
+  Regions: [Region] @manyToMany(relationName: "UserRegion")
+  Reservation: Reservation @hasOne
+  bio: String
+}
+
 type Reservation @model @auth(rules: [{allow: public}]) {
   id: ID!
-  userId: String
   dateStart: AWSDateTime
   dateEnd: AWSDateTime
   Field: Field @hasOne
+  User: User @belongsTo
 }
 
 type Field @model @auth(rules: [{allow: public}]) {
@@ -19,4 +34,6 @@ type Region @model @auth(rules: [{allow: public}]) {
   banner: AWSURL
   bio: String
   Fields: [Field] @hasMany(indexName: "byRegion", fields: ["id"])
+  users: [User] @manyToMany(relationName: "UserRegion")
 }
+ 

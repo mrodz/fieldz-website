@@ -15,12 +15,26 @@
       "service": "API Gateway"
     },
     "fieldzappfrontend": {
-      "dependsOn": [],
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "fieldzappfrontend"
+        }
+      ],
       "output": {
         "authConfig": {
           "additionalAuthenticationProviders": [
             {
               "authenticationType": "AWS_IAM"
+            },
+            {
+              "authenticationType": "AMAZON_COGNITO_USER_POOLS",
+              "userPoolConfig": {
+                "userPoolId": "authfieldzappfrontend"
+              }
             }
           ],
           "defaultAuthentication": {
@@ -96,71 +110,9 @@
           "resourceName": "getProfileType"
         }
       ]
-    },
-    "AMPLIFY_storage_fieldzaccounttype_arn": {
-      "usedBy": [
-        {
-          "category": "storage",
-          "resourceName": "fieldzaccounttype"
-        }
-      ]
-    },
-    "AMPLIFY_storage_fieldzaccounttype_partitionKeyName": {
-      "usedBy": [
-        {
-          "category": "storage",
-          "resourceName": "fieldzaccounttype"
-        }
-      ]
-    },
-    "AMPLIFY_storage_fieldzaccounttype_partitionKeyType": {
-      "usedBy": [
-        {
-          "category": "storage",
-          "resourceName": "fieldzaccounttype"
-        }
-      ]
-    },
-    "AMPLIFY_storage_fieldzaccounttype_region": {
-      "usedBy": [
-        {
-          "category": "storage",
-          "resourceName": "fieldzaccounttype"
-        }
-      ]
-    },
-    "AMPLIFY_storage_fieldzaccounttype_sortKeyName": {
-      "usedBy": [
-        {
-          "category": "storage",
-          "resourceName": "fieldzaccounttype"
-        }
-      ]
-    },
-    "AMPLIFY_storage_fieldzaccounttype_sortKeyType": {
-      "usedBy": [
-        {
-          "category": "storage",
-          "resourceName": "fieldzaccounttype"
-        }
-      ]
-    },
-    "AMPLIFY_storage_fieldzaccounttype_tableName": {
-      "usedBy": [
-        {
-          "category": "storage",
-          "resourceName": "fieldzaccounttype"
-        }
-      ]
     }
   },
   "storage": {
-    "fieldzaccounttype": {
-      "dependsOn": [],
-      "providerPlugin": "awscloudformation",
-      "service": "DynamoDB",
-      "serviceType": "imported"
-    },
     "s3fieldzpfp": {
       "dependsOn": [],
       "providerPlugin": "awscloudformation",

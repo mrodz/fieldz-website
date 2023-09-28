@@ -3,6 +3,17 @@
 
 const awsmobile = {
     "aws_project_region": "us-west-1",
+    "aws_cloud_logic_custom": [
+        {
+            "name": "backend",
+            "endpoint": "https://4a70f7pvp9.execute-api.us-west-1.amazonaws.com/staging",
+            "region": "us-west-1"
+        }
+    ],
+    "aws_appsync_graphqlEndpoint": "https://r2mzfwifizcbvps3m4w6wdbrra.appsync-api.us-west-1.amazonaws.com/graphql",
+    "aws_appsync_region": "us-west-1",
+    "aws_appsync_authenticationType": "API_KEY",
+    "aws_appsync_apiKey": "da2-nswef5k4fndttcwazoazxbsvte",
     "aws_cognito_identity_pool_id": "us-west-1:332437de-380d-4b19-9f81-d1df42cda9bf",
     "aws_cognito_region": "us-west-1",
     "aws_user_pools_id": "us-west-1_PMrni2xRr",
@@ -49,18 +60,7 @@ const awsmobile = {
         "EMAIL"
     ],
     "aws_user_files_s3_bucket": "fieldz-pfp05321-staging",
-    "aws_user_files_s3_bucket_region": "us-west-1",
-    "aws_appsync_graphqlEndpoint": "https://r2mzfwifizcbvps3m4w6wdbrra.appsync-api.us-west-1.amazonaws.com/graphql",
-    "aws_appsync_region": "us-west-1",
-    "aws_appsync_authenticationType": "API_KEY",
-    "aws_appsync_apiKey": "da2-nswef5k4fndttcwazoazxbsvte",
-    "aws_cloud_logic_custom": [
-        {
-            "name": "backend",
-            "endpoint": "https://4a70f7pvp9.execute-api.us-west-1.amazonaws.com/staging",
-            "region": "us-west-1"
-        }
-    ]
+    "aws_user_files_s3_bucket_region": "us-west-1"
 };
 
 
