@@ -7,12 +7,12 @@
 		modalStore,
 		toastStore,
 	} from "@skeletonlabs/skeleton";
-	import { Storage } from "aws-amplify";
 	import { onDestroy } from "svelte";
-	import { API, graphqlOperation } from "aws-amplify";
-	import { type GraphQLQuery } from "@aws-amplify/api";
-	import { getUser } from "../../graphql/queries";
-    import { stringify } from "postcss";
+	import { API, Storage, graphqlOperation } from "aws-amplify";
+	import type { GraphQLResult } from "@aws-amplify/api";
+	// import type { GetUserQuery } from "../../API";
+	import { getUser, listUsers } from "../../graphql/queries";
+	import type { ListUsersQuery, ListUsersQueryVariables } from "../../API";
 
 	let welcomeMessage: string;
 	let welcomeEmoji: string;
@@ -34,13 +34,39 @@
 	const MIME = "image/jpeg";
 
 	let user: User | undefined;
-	let accountType: string | undefined;
+	let graphQLUser: Promise<ListUsersQuery> | undefined;
 
 	if ($currentUser !== undefined) {
-		$currentUser.then((u) => (user = u)).catch((e) => console.error(e));
-	}
+		$currentUser
+			.then((u) => {
+				user = u;
 
-	let graphQLUser = API.graphql(graphqlOperation(getUser))
+				const variables: ListUsersQueryVariables = {
+					filter: {
+						sub: {
+							eq: u.attributes.sub,
+						},
+					},
+				};
+
+				graphQLUser = (async () => {
+					const resolved = await (API.graphql(
+						graphqlOperation(listUsers, variables)
+					) as Promise<GraphQLResult<unknown>>);
+
+					if (resolved.errors !== undefined) {
+						toastStore.trigger({
+							message: `Error: ${resolved.errors}`,
+							background: 'variant-filled-error'
+						})
+						return Promise.reject<ListUsersQuery>(resolved.errors);
+					}
+
+					return resolved.data as ListUsersQuery;
+				})();
+			})
+			.catch((e) => console.error(e));
+	}
 
 	// let customProfileURL: string | undefined;
 	let uploadPercent: number | undefined;
@@ -132,7 +158,7 @@
 							} catch (error) {
 								toastStore.trigger({
 									message: `Could not upload profile picture: ${error}`,
-									background: "variant-error",
+									background: "variant-filled-error",
 								});
 							}
 						}
@@ -160,13 +186,17 @@
 			<div>
 				You are a
 				<span class="chip variant-filled">
-					{#await graphQLUser}
-						Loading...
-					{:then user}
-						{JSON.stringify(user)}
-					{:catch error}
-						{JSON.stringify(error)}
-					{/await}
+					{#if graphQLUser !== undefined}
+						{#await graphQLUser}
+							Loading...
+						{:then user}
+							{JSON.stringify(user)}
+						{:catch error}
+							{JSON.stringify(error)}
+						{/await}
+					{:else}
+						Not Logged In
+					{/if}
 				</span>
 			</div>
 
