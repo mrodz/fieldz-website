@@ -1,3 +1,8 @@
+
+<svelte:head>
+    <title>Fieldz</title> 
+</svelte:head>
+
 <h1 class="h1">Developer Map</h1>
 
 <h2>VERCEL DEPLOYMENT!</h2>

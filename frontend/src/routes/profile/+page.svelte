@@ -160,6 +160,10 @@
   let selectionCardEl: AccountTypeSignup;
 </script>
 
+<svelte:head>
+  <title>Profile</title>
+</svelte:head>
+
 {#await $currentUser}
   <ProgressRadial />
 {:then user}
@@ -185,13 +189,15 @@
               </p>
             </section>
           {:else}
-            <span class="block sm:inline text-center sm:mr-1">&#9888;&#65039; You have not assumed a role for this account yet!</span>
+            <span class="block sm:inline text-center sm:mr-1"
+              >&#9888;&#65039; You have not assumed a role for this account yet!</span
+            >
 
             <button
               class="btn variant-outline my-4 mx-auto block sm:inline text-center sm:text-start"
               on:click={() => {
                 roleSelectionMenuOpen = !roleSelectionMenuOpen;
-                if (roleSelectionMenuOpen) window.scrollBy(0,1000)
+                if (roleSelectionMenuOpen) window.scrollBy(0, 1000);
               }}
             >
               {#if roleSelectionMenuOpen}

@@ -5,7 +5,6 @@
 	import { currentUser } from '$lib';
 	// import { setContext} from 'svelte';
 	import { ProgressRadial } from '@skeletonlabs/skeleton';
-    import { redirect } from '@sveltejs/kit';
 
 	const err = (message: string) => {
 		toastStore.trigger({
@@ -28,7 +27,7 @@
 				toastId = undefined;
 
 				toastStore.trigger({
-					message: "Success!",
+					message: "Logged in!",
 					background: "variant-filled-success",
 				})
 			}

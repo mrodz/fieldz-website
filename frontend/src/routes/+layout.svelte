@@ -52,6 +52,8 @@
 			console.log("Polling user...");
 			pollUser();
 		});
+
+		pollUser();
 	});
 
 	import "../app.sass";
