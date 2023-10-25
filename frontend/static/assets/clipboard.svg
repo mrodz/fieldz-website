@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="svg2"
+   sodipodi:docname="clipboard-icon.svg"
+   viewBox="0 0 260.20388 312.46484"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   width="260.20389"
+   height="312.46484">
+  <defs
+     id="defs8876" />
+  <sodipodi:namedview
+     id="namedview4"
+     fit-margin-left="0"
+     inkscape:zoom="1.0040916"
+     borderopacity="1"
+     inkscape:current-layer="g9911"
+     inkscape:cx="300.13957"
+     inkscape:guide-bbox="true"
+     inkscape:window-maximized="1"
+     showgrid="false"
+     fit-margin-right="0"
+     showguides="true"
+     bordercolor="#666666"
+     inkscape:window-x="4"
+     guidetolerance="10"
+     objecttolerance="10"
+     inkscape:window-y="1"
+     fit-margin-bottom="0"
+     inkscape:window-width="1916"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     pagecolor="#ffffff"
+     gridtolerance="10"
+     inkscape:cy="121.01496"
+     inkscape:window-height="1035"
+     fit-margin-top="0" />
+  <metadata
+     id="metadata8874">
+    <rdf:RDF>
+      <cc:Work>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <cc:license
+           rdf:resource="http://creativecommons.org/publicdomain/zero/1.0/" />
+        <dc:publisher>
+          <cc:Agent
+             rdf:about="http://openclipart.org/">
+            <dc:title>Openclipart</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+        <dc:title></dc:title>
+        <dc:date></dc:date>
+        <dc:description>remix by j4p4n</dc:description>
+        <dc:source></dc:source>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>ben</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:subject>
+          <rdf:Bag />
+        </dc:subject>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/publicdomain/zero/1.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="g9911"
+     transform="translate(75.177761,73.735204)">
+    <path
+       d="m -67.61437,234.87555 -7.542,-229.9469981 c -0.68853,-20.9837999 15.3432,-33.3959999 33.795,-33.4829999 22.0098,-0.018 22.7943,-0.2727 27.7605,-9 3.5766,-6.2856 7.4034005,-8.9811 12.75000048,-8.9811 4.95630002,0 7.63950002,-1.66158 7.63950002,-4.7307 0,-2.60193 3.9461995,-8.6769 8.7692995,-13.5 15.0384,-15.0384 37.014,-10.6068 45.18,9.1113 2.35824,5.6934 5.9472,9.1194 9.5529,9.1194 3.2766,0 7.9869,3.8859 10.8861,8.9811 4.9662,8.7273 5.7507,8.9814 27.7605,9 13.5921,0.012 24.0897,1.4586 26.25,3.6189 2.43084,2.43084 3.6,16.2686999 3.6,42.609 l 0,39.009 11.3766,-11.109 c 6.2571,-6.1098 12.7545,-11.109 14.4387,-11.109 1.68423,0 6.9684,4.0773 11.7429,9.0606 l 8.6805,9.0606 -23.1192,23.2557 -23.1192,23.2557 0,66.083998 c 0,47.397 -1.0179,67.101 -3.6,69.684 -5.1528,5.1528 -197.646,5.1528 -202.8,0 z m 188.4,-65.745 0,-51.345 -19.785,18.5079 c -20.1804,18.8778 -50.91,35.688 -55.977,30.621 -1.5993,-1.5993 1.00428,-9.8805 6.3885,-20.3196 6.8109,-13.2051 16.6404,-24.3552 39.231,-44.502 l 30.141,-26.881498 0,-35.37 c 0,-32.9820001 -0.39189,-35.3700001 -5.8098,-35.3700001 -4.362,0 -6.0441,2.42994 -6.75,9.7500001 l -0.94008,9.75 -73.5,0 -73.5,0 -0.94008,-9.75 c -0.70578,-7.3200001 -2.38806,-9.7500001 -6.75,-9.7500001 -5.6391,0 -5.8098,3.1776 -5.8098,107.9999981 l 0,108 87,0 87,0 z m -51,-17.5935 c 3.9279,-2.48376 3.8187,-3.5268 -0.85848,-8.2041 -4.6773,-4.677 -5.7204,-4.7862 -8.2041,-0.85848 -1.56507,2.475 -2.86626,6.1875 -2.89152,8.25 -0.0543,4.428 5.6262,4.8141 11.9541,0.81255 z m 85.5,-90.062998 c -3.0048,-3.3201 -6.1383,-5.3619 -6.9633,-4.5369 -0.825,0.825 0.95844,4.2165 3.9633,7.5369 3.0048,3.3201 6.1383,5.3619 6.9633,4.5369 0.825,-0.825 -0.95844,-4.2165 -3.9633,-7.5369 z m -58.5,-51 c 0,-5.8095001 -2.00001,-6.0000001 -63,-6.0000001 -60.99999,0 -63,0.1905 -63,6.0000001 0,5.8095 2.00001,6 63,6 60.99999,0 63,-0.1905 63,-6 z m -0.54135,-21.75 c -0.77004,-5.4219 -3.1719,-6.9333 -12.2088,-7.6812 -9.6714,-0.80043 -11.25,-1.9581 -11.25,-8.25 0,-6.3645 -1.36929,-7.3188 -10.5,-7.3188 -9.5079,0 -10.5,-0.7962 -10.5,-8.4267 0,-11.5713 -6.4089,-19.3233 -15.9747,-19.3233 -10.8738,0 -16.4988,5.3445 -17.6019,16.7235 -0.83808,8.6463 -1.96296,9.6126 -12.1733995,10.4577 -9.5868,0.79344 -11.25,1.9863 -11.25,8.0688 0,6.0825 -1.66311,7.2756 -11.2500005,8.0688 -9.0366,0.74793 -11.4387,2.25912 -12.2088,7.6812 l -0.95865,6.7499999 63.417,0 63.417,0 z m -64.71,-28.443 c -4.3314,-1.55601 -5.0604,-11.6832 -1.02072,-14.1798 4.0344,-2.49339 12.2706,1.39047 12.2706,5.7864 0,5.1285 -6.6102,10.0605 -11.25,8.3934 z"
+       inkscape:connector-curvature="0"
+       style="fill:#000000"
+       sodipodi:nodetypes="cscssssssscsscssscccsscccsssscssscccsssccccssscsssssssssssssssssssssscccsssss"
+       id="path5774-5" />
+  </g>
+</svg>

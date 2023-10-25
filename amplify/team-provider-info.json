@@ -24,6 +24,10 @@
       },
       "storage": {
         "s3fieldzpfp": {}
+      },
+      "api": {
+        "backend": {},
+        "fieldzappfrontend": {}
       }
     }
   }

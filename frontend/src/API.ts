@@ -298,6 +298,22 @@ export type ModelUserConnection = {
   nextToken?: string | null,
 };
 
+export type ModelIDKeyConditionInput = {
+  eq?: string | null,
+  le?: string | null,
+  lt?: string | null,
+  ge?: string | null,
+  gt?: string | null,
+  between?: Array< string | null > | null,
+  beginsWith?: string | null,
+};
+
+export enum ModelSortDirection {
+  ASC = "ASC",
+  DESC = "DESC",
+}
+
+
 export type ModelReservationFilterInput = {
   id?: ModelIDInput | null,
   dateStart?: ModelStringInput | null,
@@ -324,12 +340,6 @@ export type ModelFieldFilterInput = {
   or?: Array< ModelFieldFilterInput | null > | null,
   not?: ModelFieldFilterInput | null,
 };
-
-export enum ModelSortDirection {
-  ASC = "ASC",
-  DESC = "DESC",
-}
-
 
 export type ModelRegionFilterInput = {
   id?: ModelIDInput | null,
@@ -1197,6 +1207,47 @@ export type ListUsersQueryVariables = {
 
 export type ListUsersQuery = {
   listUsers?:  {
+    __typename: "ModelUserConnection",
+    items:  Array< {
+      __typename: "User",
+      id: string,
+      sub: string,
+      type?: AccountType | null,
+      Regions?:  {
+        __typename: "ModelUserRegionConnection",
+        nextToken?: string | null,
+      } | null,
+      Reservation?:  {
+        __typename: "Reservation",
+        id: string,
+        dateStart?: string | null,
+        dateEnd?: string | null,
+        createdAt: string,
+        updatedAt: string,
+        reservationFieldId?: string | null,
+        reservationUserId?: string | null,
+      } | null,
+      bio?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      userReservationId?: string | null,
+      owner?: string | null,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type UserBySubQueryVariables = {
+  sub: string,
+  id?: ModelIDKeyConditionInput | null,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelUserFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type UserBySubQuery = {
+  userBySub?:  {
     __typename: "ModelUserConnection",
     items:  Array< {
       __typename: "User",

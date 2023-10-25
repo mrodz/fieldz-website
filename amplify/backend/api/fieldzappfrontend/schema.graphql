@@ -6,7 +6,7 @@ enum AccountType {
 
 type User @model @auth(rules: [{allow: public}, {allow: owner}, {allow: private}]) {
   id: ID!
-  sub: String!
+  sub: String! @index(name: "bySub", queryField: "userBySub", sortKeyFields: ["id"])
   type: AccountType
   Regions: [Region] @manyToMany(relationName: "UserRegion")
   Reservation: Reservation @hasOne

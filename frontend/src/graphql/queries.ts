@@ -97,6 +97,53 @@ export const listUsers = /* GraphQL */ `
     }
   }
 `;
+export const userBySub = /* GraphQL */ `
+  query UserBySub(
+    $sub: String!
+    $id: ModelIDKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelUserFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    userBySub(
+      sub: $sub
+      id: $id
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        sub
+        type
+        Regions {
+          nextToken
+          __typename
+        }
+        Reservation {
+          id
+          dateStart
+          dateEnd
+          createdAt
+          updatedAt
+          reservationFieldId
+          reservationUserId
+          __typename
+        }
+        bio
+        createdAt
+        updatedAt
+        userReservationId
+        owner
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
 export const getReservation = /* GraphQL */ `
   query GetReservation($id: ID!) {
     getReservation(id: $id) {

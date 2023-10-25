@@ -13,8 +13,6 @@ export type User = CognitoUser & {
 	},
 };
 
-// import { toastStore } from '@skeletonlabs/skeleton';
-
 export const currentUser = writable<Promise<User> | undefined>(undefined);
 export const pfp = writable<string>("/assets/pfpdefault.png");
 

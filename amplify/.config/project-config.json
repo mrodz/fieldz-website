@@ -9,9 +9,9 @@
     "framework": "none",
     "config": {
       "SourceDir": "frontend/src",
-      "DistributionDir": "dist",
-      "BuildCommand": "npm.cmd run-script --prefix /frontend build",
-      "StartCommand": "npm.cmd run-script --prefix /frontend preview"
+      "DistributionDir": "frontend/build",
+      "BuildCommand": "npm.cmd run-script build",
+      "StartCommand": "npm.cmd run-script preview"
     }
   }
 }
