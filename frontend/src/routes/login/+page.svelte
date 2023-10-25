@@ -32,7 +32,7 @@
 	let titleMessage: string;
 	$: titleMessage = isCreatingAccount ? "Sign Up" : "Sign In";
 	let buttonSwitchMessage: string;
-	$: buttonSwitchMessage = isCreatingAccount ? "signing in" : "creating an account";
+	$: buttonSwitchMessage = isCreatingAccount ? "Switch to signing in" : "Make new account";
 	let buttonSwitchLabel: string;
 	$: buttonSwitchLabel = isCreatingAccount ? "I already have an account!" : "New around these parts?"
 
@@ -304,7 +304,7 @@
 
 		<div class="ml-auto mr-auto md:mr-0 mt-auto">
 			<span class="hidden md:contents">{buttonSwitchLabel}&nbsp;</span>
-			<button on:click|preventDefault={switchFormType} class="btn variant-soft-primary">Switch to {buttonSwitchMessage}</button>
+			<button on:click|preventDefault={switchFormType} class="btn variant-soft-primary">{buttonSwitchMessage}</button>
 		</div>
 
 		<!-- <div class="relative md:absolute transform left-1/2 md:left-auto md:mt-4 mt-10 -translate-x-1/2 md:-translate-x-0 text-center md:text-right md:right-4 bottom-4">
