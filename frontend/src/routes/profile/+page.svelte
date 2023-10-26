@@ -157,7 +157,6 @@
   } // END onChangeHandler
 
   let roleSelectionMenuOpen = false;
-  let selectionCardEl: AccountTypeSignup;
 </script>
 
 <svelte:head>
@@ -180,12 +179,12 @@
       {#if graphQLUser !== undefined}
         {#await graphQLUser}
           <div class="placeholder" />
-        {:then user}
-          {#if typeof user.userBySub?.items?.[0] !== "undefined"}
+        {:then graphQLUser}
+          {#if typeof graphQLUser.userBySub?.items?.[0] !== "undefined"}
             <section>
               <h3 class="h3 sm:mt-8 text-center sm:text-start">Type</h3>
               <p class="my-4">
-                {user.userBySub?.items?.[0]}
+                {graphQLUser.userBySub?.items?.[0]}
               </p>
             </section>
           {:else}
@@ -209,13 +208,13 @@
 
             <hr class="mb-4" />
 
-            {#if roleSelectionMenuOpen}
+            {#if roleSelectionMenuOpen && typeof user != "undefined"}
               <div
                 class="bg-page my-4"
                 in:slide={{ axis: "y", duration: 800 }}
                 out:slide={{ axis: "y" }}
               >
-                <AccountTypeSignup bind:this={selectionCardEl} />
+                <AccountTypeSignup user={user} />
 
                 <hr />
               </div>

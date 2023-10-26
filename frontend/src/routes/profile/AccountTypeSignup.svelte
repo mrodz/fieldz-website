@@ -1,8 +1,22 @@
-<script>
-
+<script lang="ts">
+  import { goto } from "$app/navigation";
+  import type { User } from "$lib";
   import { popup } from "@skeletonlabs/skeleton";
 
+  export let user: User;
+
+  let newCoachCodeEl: HTMLInputElement;
+
+  function newCoach() {
+
+  }
+
+  function newRegion() {
+	goto("/profile/region")
+  }
+
 </script>
+
 <div>
   <h3 class="h3">Choose An Account Type</h3>
   <div class="grid grid-cols-1 grid-rows-2 md:grid-cols-2 md:grid-rows-1">
@@ -14,14 +28,14 @@
 	  <div class="account-option-description">
 		<label class="label">
 			<span>Enter a 4 digit region code</span> <span use:popup={{ event: 'hover', target: 'regionCodeInfo', placement: 'top' }}>&#x24D8;</span>
-			<input class="input variant-form-material w-1/3 text-center block mx-auto" placeholder="----" />
+			<input bind:this={newCoachCodeEl} class="input variant-form-material w-1/3 text-center block mx-auto" placeholder="----" />
 
 			<div class="card p-4 variant-filled-primary w-96" data-popup="regionCodeInfo">
 				<p>A unique identifier for your region. Ask your region administrator!</p>
 				<div class="arrow variant-filled-primary" />
 			</div>
 		</label>
-		<button class="btn variant-filled mt-4">Continue</button>
+		<button class="btn variant-filled mt-4" on:click={newCoach}>Continue</button>
 	  </div>
     </div>
 
@@ -33,7 +47,7 @@
 	  <div class="account-option-description">
 		<label class="label">
 			<span class="block mb-4">Register a new Region</span>
-			<input type="button" class="btn variant-filled" value="Next">
+			<input on:click={newRegion} type="button" class="btn variant-filled" value="Next">
 		</label>
 		<!-- <button class="btn variant-filled">Next</button> -->
 	  </div>

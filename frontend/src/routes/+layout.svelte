@@ -127,6 +127,10 @@
 		}
 	};
 
+	const viewProfile = () => {
+		goto("/profile")
+	}
+
 	$: if ($currentUser !== undefined) {
 		console.log($currentUser);
 		$currentUser.then(pollPFP);
@@ -170,8 +174,9 @@
 					<p>
 						Hi, {user?.attributes.name}!
 					</p>
-
-					<button class="btn variant-filled" on:click={logOut}>Log Out</button>
+					
+					<button class="block mx-auto my-4 btn variant-filled" on:click={viewProfile}>View Profile</button>
+					<button class="block mx-auto my-4 btn variant-filled" on:click={logOut}>Log Out</button>
 				{:catch error}
 					{error}
 
