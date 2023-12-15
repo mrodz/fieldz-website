@@ -1,22 +1,23 @@
 <script lang="ts">
   import { currentUser, type User } from "$lib";
 
-  import { ProgressRadial, toastStore } from "@skeletonlabs/skeleton";
-  import { userBySub, userRegionsByUserId } from "../../../graphql/queries";
+  import { modalStore, ProgressRadial, toastStore } from "@skeletonlabs/skeleton";
+  import { listRegions, userBySub, /*userRegionsByUserId*/ } from "../../../graphql/queries";
   import { API, graphqlOperation } from "aws-amplify";
   import type {
-    UserRegionsByUserIdQuery,
+    // UserRegionsByUserIdQuery,
     UserBySubQuery,
     User as GQLUser,
-    UserRegion,
+    Region,
+    CreateRegionInput,
+    ListRegionsQuery,
   } from "../../../API";
   import type { GraphQLResult } from "@aws-amplify/api";
-  import mapboxgl from "mapbox-gl";
-  import MapboxDraw from "@mapbox/mapbox-gl-draw";
+    import { createRegion } from "../../../graphql/mutations";
 
   let user: User;
   let graphqlUser: GQLUser | undefined;
-  let regions: UserRegion[] | undefined;
+  let regions: Region[] = [];
 
   $currentUser?.then((u) => {
     user = u;
@@ -41,12 +42,12 @@
 
       if (!result) {
         console.info("This user has not been added to the GQL backend.");
-        throw Promise.reject("no user in GQL query at index 0");
+        return Promise.reject("no user in GQL query at index 0");
       }
 
-      let queryRegions = API.graphql<UserRegionsByUserIdQuery>(
-        graphqlOperation(userRegionsByUserId, { userId: result.id })
-      ) as Promise<GraphQLResult<UserRegionsByUserIdQuery>>;
+      let queryRegions = API.graphql<ListRegionsQuery>(
+        graphqlOperation(listRegions, { userId: result.id })
+      ) as Promise<GraphQLResult<ListRegionsQuery>>;
 
       queryRegions.then((GQL) => {
         if (GQL.errors !== undefined) {
@@ -57,13 +58,64 @@
           throw GQL.errors;
         }
 
-        regions = GQL.data?.userRegionsByUserId?.items! as UserRegion[];
+        regions = GQL.data?.listRegions?.items! as Region[];
       });
+    }).catch((e) => {
+      toastStore.trigger({
+        message: `Uh Oh! Could not load regions: ${e}`,
+				background: 'variant-filled-error'
+      })
+      console.info(e);
     });
   });
 
-  const newRegion = async () => {
-    alert(1);
+  const promptNewRegionName = () => {
+    modalStore.trigger({
+      type: "prompt",
+      title: "Region Name",
+      body: "Use a descriptive name, 32 Characters Max",
+      valueAttr: { type: 'text', class: "variant-form-material w-full", minlength: 4, maxlength: 32, required: true },
+      response(input: string | boolean) {
+        if (typeof input == "string") {
+          promptNewRegionNameConfirm(input)
+        }
+      },
+    })
+  }
+
+  const promptNewRegionNameConfirm = (name: string) => {
+    const copied = name;
+    modalStore.trigger({
+      type: "confirm",
+      title: `Creating: ${copied}`,
+      body: "Are you sure you'd like to proceed?",
+      async response(input: boolean) {
+        if (input) {
+          await newRegion(copied)
+        }
+      }
+    })
+  }
+
+  const newRegion = async (regionName: string) => {
+    console.debug(regionName);
+    const GQL = await API.graphql(graphqlOperation(createRegion, {
+      input: {
+        name: regionName
+      }
+    })) as GraphQLResult<Region>
+
+    if (GQL.errors !== undefined) {
+      toastStore.trigger({
+        message: `Error: ${GQL.errors}`,
+          background: "variant-filled-error",
+        });
+        throw GQL.errors;
+    }
+
+    console.log(GQL.data!)
+
+    regions.push(GQL.data!)
   };
 </script>
 
@@ -77,7 +129,7 @@
   {#await $currentUser}
     <ProgressRadial />
   {:then user}
-    {#if typeof regions != "undefined" && regions.length > 0}
+    {#if regions.length > 0}
       <dl class="list-dl">
         {#each regions as region}
           <div>
@@ -92,6 +144,10 @@
     {:else}
       <div class="w-1/2 mx-auto p-8 card text-xl text-center mt-4">
         You are not part of any regions.
+        <button
+          class="btn block mx-auto mt-4 variant-filled-primary"
+          on:click={() => newRegion("idk")}>Register a new region as a manager</button
+        >
       </div>
     {/if}
 
