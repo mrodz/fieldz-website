@@ -14,11 +14,13 @@ export const createUser = /* GraphQL */ `
       Regions {
         items {
           id
-          userId
-          regionId
+          name
+          banner
+          bio
+          owner
           createdAt
           updatedAt
-          owner
+          userRegionsId
           __typename
         }
         nextToken
@@ -33,6 +35,7 @@ export const createUser = /* GraphQL */ `
           name
           address
           regionID
+          owner
           createdAt
           updatedAt
           __typename
@@ -42,12 +45,13 @@ export const createUser = /* GraphQL */ `
           sub
           type
           bio
+          owner
           createdAt
           updatedAt
           userReservationId
-          owner
           __typename
         }
+        owner
         createdAt
         updatedAt
         reservationFieldId
@@ -55,10 +59,10 @@ export const createUser = /* GraphQL */ `
         __typename
       }
       bio
+      owner
       createdAt
       updatedAt
       userReservationId
-      owner
       __typename
     }
   }
@@ -75,11 +79,13 @@ export const updateUser = /* GraphQL */ `
       Regions {
         items {
           id
-          userId
-          regionId
+          name
+          banner
+          bio
+          owner
           createdAt
           updatedAt
-          owner
+          userRegionsId
           __typename
         }
         nextToken
@@ -94,6 +100,7 @@ export const updateUser = /* GraphQL */ `
           name
           address
           regionID
+          owner
           createdAt
           updatedAt
           __typename
@@ -103,12 +110,13 @@ export const updateUser = /* GraphQL */ `
           sub
           type
           bio
+          owner
           createdAt
           updatedAt
           userReservationId
-          owner
           __typename
         }
+        owner
         createdAt
         updatedAt
         reservationFieldId
@@ -116,10 +124,10 @@ export const updateUser = /* GraphQL */ `
         __typename
       }
       bio
+      owner
       createdAt
       updatedAt
       userReservationId
-      owner
       __typename
     }
   }
@@ -136,11 +144,13 @@ export const deleteUser = /* GraphQL */ `
       Regions {
         items {
           id
-          userId
-          regionId
+          name
+          banner
+          bio
+          owner
           createdAt
           updatedAt
-          owner
+          userRegionsId
           __typename
         }
         nextToken
@@ -155,6 +165,7 @@ export const deleteUser = /* GraphQL */ `
           name
           address
           regionID
+          owner
           createdAt
           updatedAt
           __typename
@@ -164,12 +175,13 @@ export const deleteUser = /* GraphQL */ `
           sub
           type
           bio
+          owner
           createdAt
           updatedAt
           userReservationId
-          owner
           __typename
         }
+        owner
         createdAt
         updatedAt
         reservationFieldId
@@ -177,10 +189,10 @@ export const deleteUser = /* GraphQL */ `
         __typename
       }
       bio
+      owner
       createdAt
       updatedAt
       userReservationId
-      owner
       __typename
     }
   }
@@ -199,6 +211,7 @@ export const createReservation = /* GraphQL */ `
         name
         address
         regionID
+        owner
         createdAt
         updatedAt
         __typename
@@ -215,6 +228,7 @@ export const createReservation = /* GraphQL */ `
           id
           dateStart
           dateEnd
+          owner
           createdAt
           updatedAt
           reservationFieldId
@@ -222,12 +236,13 @@ export const createReservation = /* GraphQL */ `
           __typename
         }
         bio
+        owner
         createdAt
         updatedAt
         userReservationId
-        owner
         __typename
       }
+      owner
       createdAt
       updatedAt
       reservationFieldId
@@ -250,6 +265,7 @@ export const updateReservation = /* GraphQL */ `
         name
         address
         regionID
+        owner
         createdAt
         updatedAt
         __typename
@@ -266,6 +282,7 @@ export const updateReservation = /* GraphQL */ `
           id
           dateStart
           dateEnd
+          owner
           createdAt
           updatedAt
           reservationFieldId
@@ -273,12 +290,13 @@ export const updateReservation = /* GraphQL */ `
           __typename
         }
         bio
+        owner
         createdAt
         updatedAt
         userReservationId
-        owner
         __typename
       }
+      owner
       createdAt
       updatedAt
       reservationFieldId
@@ -301,6 +319,7 @@ export const deleteReservation = /* GraphQL */ `
         name
         address
         regionID
+        owner
         createdAt
         updatedAt
         __typename
@@ -317,6 +336,7 @@ export const deleteReservation = /* GraphQL */ `
           id
           dateStart
           dateEnd
+          owner
           createdAt
           updatedAt
           reservationFieldId
@@ -324,12 +344,13 @@ export const deleteReservation = /* GraphQL */ `
           __typename
         }
         bio
+        owner
         createdAt
         updatedAt
         userReservationId
-        owner
         __typename
       }
+      owner
       createdAt
       updatedAt
       reservationFieldId
@@ -348,6 +369,7 @@ export const createField = /* GraphQL */ `
       name
       address
       regionID
+      owner
       createdAt
       updatedAt
       __typename
@@ -364,6 +386,7 @@ export const updateField = /* GraphQL */ `
       name
       address
       regionID
+      owner
       createdAt
       updatedAt
       __typename
@@ -380,6 +403,7 @@ export const deleteField = /* GraphQL */ `
       name
       address
       regionID
+      owner
       createdAt
       updatedAt
       __typename
@@ -402,28 +426,44 @@ export const createRegion = /* GraphQL */ `
           name
           address
           regionID
-          createdAt
-          updatedAt
-          __typename
-        }
-        nextToken
-        __typename
-      }
-      users {
-        items {
-          id
-          userId
-          regionId
-          createdAt
-          updatedAt
           owner
+          createdAt
+          updatedAt
           __typename
         }
         nextToken
         __typename
       }
+      user {
+        id
+        sub
+        type
+        Regions {
+          nextToken
+          __typename
+        }
+        Reservation {
+          id
+          dateStart
+          dateEnd
+          owner
+          createdAt
+          updatedAt
+          reservationFieldId
+          reservationUserId
+          __typename
+        }
+        bio
+        owner
+        createdAt
+        updatedAt
+        userReservationId
+        __typename
+      }
+      owner
       createdAt
       updatedAt
+      userRegionsId
       __typename
     }
   }
@@ -444,28 +484,44 @@ export const updateRegion = /* GraphQL */ `
           name
           address
           regionID
-          createdAt
-          updatedAt
-          __typename
-        }
-        nextToken
-        __typename
-      }
-      users {
-        items {
-          id
-          userId
-          regionId
-          createdAt
-          updatedAt
           owner
+          createdAt
+          updatedAt
           __typename
         }
         nextToken
         __typename
       }
+      user {
+        id
+        sub
+        type
+        Regions {
+          nextToken
+          __typename
+        }
+        Reservation {
+          id
+          dateStart
+          dateEnd
+          owner
+          createdAt
+          updatedAt
+          reservationFieldId
+          reservationUserId
+          __typename
+        }
+        bio
+        owner
+        createdAt
+        updatedAt
+        userReservationId
+        __typename
+      }
+      owner
       createdAt
       updatedAt
+      userRegionsId
       __typename
     }
   }
@@ -486,41 +542,14 @@ export const deleteRegion = /* GraphQL */ `
           name
           address
           regionID
-          createdAt
-          updatedAt
-          __typename
-        }
-        nextToken
-        __typename
-      }
-      users {
-        items {
-          id
-          userId
-          regionId
-          createdAt
-          updatedAt
           owner
+          createdAt
+          updatedAt
           __typename
         }
         nextToken
         __typename
       }
-      createdAt
-      updatedAt
-      __typename
-    }
-  }
-`;
-export const createUserRegion = /* GraphQL */ `
-  mutation CreateUserRegion(
-    $input: CreateUserRegionInput!
-    $condition: ModelUserRegionConditionInput
-  ) {
-    createUserRegion(input: $input, condition: $condition) {
-      id
-      userId
-      regionId
       user {
         id
         sub
@@ -533,6 +562,7 @@ export const createUserRegion = /* GraphQL */ `
           id
           dateStart
           dateEnd
+          owner
           createdAt
           updatedAt
           reservationFieldId
@@ -540,148 +570,16 @@ export const createUserRegion = /* GraphQL */ `
           __typename
         }
         bio
+        owner
         createdAt
         updatedAt
         userReservationId
-        owner
         __typename
       }
-      region {
-        id
-        name
-        banner
-        bio
-        Fields {
-          nextToken
-          __typename
-        }
-        users {
-          nextToken
-          __typename
-        }
-        createdAt
-        updatedAt
-        __typename
-      }
+      owner
       createdAt
       updatedAt
-      owner
-      __typename
-    }
-  }
-`;
-export const updateUserRegion = /* GraphQL */ `
-  mutation UpdateUserRegion(
-    $input: UpdateUserRegionInput!
-    $condition: ModelUserRegionConditionInput
-  ) {
-    updateUserRegion(input: $input, condition: $condition) {
-      id
-      userId
-      regionId
-      user {
-        id
-        sub
-        type
-        Regions {
-          nextToken
-          __typename
-        }
-        Reservation {
-          id
-          dateStart
-          dateEnd
-          createdAt
-          updatedAt
-          reservationFieldId
-          reservationUserId
-          __typename
-        }
-        bio
-        createdAt
-        updatedAt
-        userReservationId
-        owner
-        __typename
-      }
-      region {
-        id
-        name
-        banner
-        bio
-        Fields {
-          nextToken
-          __typename
-        }
-        users {
-          nextToken
-          __typename
-        }
-        createdAt
-        updatedAt
-        __typename
-      }
-      createdAt
-      updatedAt
-      owner
-      __typename
-    }
-  }
-`;
-export const deleteUserRegion = /* GraphQL */ `
-  mutation DeleteUserRegion(
-    $input: DeleteUserRegionInput!
-    $condition: ModelUserRegionConditionInput
-  ) {
-    deleteUserRegion(input: $input, condition: $condition) {
-      id
-      userId
-      regionId
-      user {
-        id
-        sub
-        type
-        Regions {
-          nextToken
-          __typename
-        }
-        Reservation {
-          id
-          dateStart
-          dateEnd
-          createdAt
-          updatedAt
-          reservationFieldId
-          reservationUserId
-          __typename
-        }
-        bio
-        createdAt
-        updatedAt
-        userReservationId
-        owner
-        __typename
-      }
-      region {
-        id
-        name
-        banner
-        bio
-        Fields {
-          nextToken
-          __typename
-        }
-        users {
-          nextToken
-          __typename
-        }
-        createdAt
-        updatedAt
-        __typename
-      }
-      createdAt
-      updatedAt
-      owner
+      userRegionsId
       __typename
     }
   }

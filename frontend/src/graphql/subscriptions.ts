@@ -14,11 +14,13 @@ export const onCreateUser = /* GraphQL */ `
       Regions {
         items {
           id
-          userId
-          regionId
+          name
+          banner
+          bio
+          owner
           createdAt
           updatedAt
-          owner
+          userRegionsId
           __typename
         }
         nextToken
@@ -33,6 +35,7 @@ export const onCreateUser = /* GraphQL */ `
           name
           address
           regionID
+          owner
           createdAt
           updatedAt
           __typename
@@ -42,12 +45,13 @@ export const onCreateUser = /* GraphQL */ `
           sub
           type
           bio
+          owner
           createdAt
           updatedAt
           userReservationId
-          owner
           __typename
         }
+        owner
         createdAt
         updatedAt
         reservationFieldId
@@ -55,10 +59,10 @@ export const onCreateUser = /* GraphQL */ `
         __typename
       }
       bio
+      owner
       createdAt
       updatedAt
       userReservationId
-      owner
       __typename
     }
   }
@@ -75,11 +79,13 @@ export const onUpdateUser = /* GraphQL */ `
       Regions {
         items {
           id
-          userId
-          regionId
+          name
+          banner
+          bio
+          owner
           createdAt
           updatedAt
-          owner
+          userRegionsId
           __typename
         }
         nextToken
@@ -94,6 +100,7 @@ export const onUpdateUser = /* GraphQL */ `
           name
           address
           regionID
+          owner
           createdAt
           updatedAt
           __typename
@@ -103,12 +110,13 @@ export const onUpdateUser = /* GraphQL */ `
           sub
           type
           bio
+          owner
           createdAt
           updatedAt
           userReservationId
-          owner
           __typename
         }
+        owner
         createdAt
         updatedAt
         reservationFieldId
@@ -116,10 +124,10 @@ export const onUpdateUser = /* GraphQL */ `
         __typename
       }
       bio
+      owner
       createdAt
       updatedAt
       userReservationId
-      owner
       __typename
     }
   }
@@ -136,11 +144,13 @@ export const onDeleteUser = /* GraphQL */ `
       Regions {
         items {
           id
-          userId
-          regionId
+          name
+          banner
+          bio
+          owner
           createdAt
           updatedAt
-          owner
+          userRegionsId
           __typename
         }
         nextToken
@@ -155,6 +165,7 @@ export const onDeleteUser = /* GraphQL */ `
           name
           address
           regionID
+          owner
           createdAt
           updatedAt
           __typename
@@ -164,12 +175,13 @@ export const onDeleteUser = /* GraphQL */ `
           sub
           type
           bio
+          owner
           createdAt
           updatedAt
           userReservationId
-          owner
           __typename
         }
+        owner
         createdAt
         updatedAt
         reservationFieldId
@@ -177,10 +189,10 @@ export const onDeleteUser = /* GraphQL */ `
         __typename
       }
       bio
+      owner
       createdAt
       updatedAt
       userReservationId
-      owner
       __typename
     }
   }
@@ -188,8 +200,9 @@ export const onDeleteUser = /* GraphQL */ `
 export const onCreateReservation = /* GraphQL */ `
   subscription OnCreateReservation(
     $filter: ModelSubscriptionReservationFilterInput
+    $owner: String
   ) {
-    onCreateReservation(filter: $filter) {
+    onCreateReservation(filter: $filter, owner: $owner) {
       id
       dateStart
       dateEnd
@@ -198,6 +211,7 @@ export const onCreateReservation = /* GraphQL */ `
         name
         address
         regionID
+        owner
         createdAt
         updatedAt
         __typename
@@ -214,6 +228,7 @@ export const onCreateReservation = /* GraphQL */ `
           id
           dateStart
           dateEnd
+          owner
           createdAt
           updatedAt
           reservationFieldId
@@ -221,12 +236,13 @@ export const onCreateReservation = /* GraphQL */ `
           __typename
         }
         bio
+        owner
         createdAt
         updatedAt
         userReservationId
-        owner
         __typename
       }
+      owner
       createdAt
       updatedAt
       reservationFieldId
@@ -238,8 +254,9 @@ export const onCreateReservation = /* GraphQL */ `
 export const onUpdateReservation = /* GraphQL */ `
   subscription OnUpdateReservation(
     $filter: ModelSubscriptionReservationFilterInput
+    $owner: String
   ) {
-    onUpdateReservation(filter: $filter) {
+    onUpdateReservation(filter: $filter, owner: $owner) {
       id
       dateStart
       dateEnd
@@ -248,6 +265,7 @@ export const onUpdateReservation = /* GraphQL */ `
         name
         address
         regionID
+        owner
         createdAt
         updatedAt
         __typename
@@ -264,6 +282,7 @@ export const onUpdateReservation = /* GraphQL */ `
           id
           dateStart
           dateEnd
+          owner
           createdAt
           updatedAt
           reservationFieldId
@@ -271,12 +290,13 @@ export const onUpdateReservation = /* GraphQL */ `
           __typename
         }
         bio
+        owner
         createdAt
         updatedAt
         userReservationId
-        owner
         __typename
       }
+      owner
       createdAt
       updatedAt
       reservationFieldId
@@ -288,8 +308,9 @@ export const onUpdateReservation = /* GraphQL */ `
 export const onDeleteReservation = /* GraphQL */ `
   subscription OnDeleteReservation(
     $filter: ModelSubscriptionReservationFilterInput
+    $owner: String
   ) {
-    onDeleteReservation(filter: $filter) {
+    onDeleteReservation(filter: $filter, owner: $owner) {
       id
       dateStart
       dateEnd
@@ -298,6 +319,7 @@ export const onDeleteReservation = /* GraphQL */ `
         name
         address
         regionID
+        owner
         createdAt
         updatedAt
         __typename
@@ -314,6 +336,7 @@ export const onDeleteReservation = /* GraphQL */ `
           id
           dateStart
           dateEnd
+          owner
           createdAt
           updatedAt
           reservationFieldId
@@ -321,12 +344,13 @@ export const onDeleteReservation = /* GraphQL */ `
           __typename
         }
         bio
+        owner
         createdAt
         updatedAt
         userReservationId
-        owner
         __typename
       }
+      owner
       createdAt
       updatedAt
       reservationFieldId
@@ -336,12 +360,16 @@ export const onDeleteReservation = /* GraphQL */ `
   }
 `;
 export const onCreateField = /* GraphQL */ `
-  subscription OnCreateField($filter: ModelSubscriptionFieldFilterInput) {
-    onCreateField(filter: $filter) {
+  subscription OnCreateField(
+    $filter: ModelSubscriptionFieldFilterInput
+    $owner: String
+  ) {
+    onCreateField(filter: $filter, owner: $owner) {
       id
       name
       address
       regionID
+      owner
       createdAt
       updatedAt
       __typename
@@ -349,12 +377,16 @@ export const onCreateField = /* GraphQL */ `
   }
 `;
 export const onUpdateField = /* GraphQL */ `
-  subscription OnUpdateField($filter: ModelSubscriptionFieldFilterInput) {
-    onUpdateField(filter: $filter) {
+  subscription OnUpdateField(
+    $filter: ModelSubscriptionFieldFilterInput
+    $owner: String
+  ) {
+    onUpdateField(filter: $filter, owner: $owner) {
       id
       name
       address
       regionID
+      owner
       createdAt
       updatedAt
       __typename
@@ -362,12 +394,16 @@ export const onUpdateField = /* GraphQL */ `
   }
 `;
 export const onDeleteField = /* GraphQL */ `
-  subscription OnDeleteField($filter: ModelSubscriptionFieldFilterInput) {
-    onDeleteField(filter: $filter) {
+  subscription OnDeleteField(
+    $filter: ModelSubscriptionFieldFilterInput
+    $owner: String
+  ) {
+    onDeleteField(filter: $filter, owner: $owner) {
       id
       name
       address
       regionID
+      owner
       createdAt
       updatedAt
       __typename
@@ -375,8 +411,11 @@ export const onDeleteField = /* GraphQL */ `
   }
 `;
 export const onCreateRegion = /* GraphQL */ `
-  subscription OnCreateRegion($filter: ModelSubscriptionRegionFilterInput) {
-    onCreateRegion(filter: $filter) {
+  subscription OnCreateRegion(
+    $filter: ModelSubscriptionRegionFilterInput
+    $owner: String
+  ) {
+    onCreateRegion(filter: $filter, owner: $owner) {
       id
       name
       banner
@@ -387,35 +426,54 @@ export const onCreateRegion = /* GraphQL */ `
           name
           address
           regionID
-          createdAt
-          updatedAt
-          __typename
-        }
-        nextToken
-        __typename
-      }
-      users {
-        items {
-          id
-          userId
-          regionId
-          createdAt
-          updatedAt
           owner
+          createdAt
+          updatedAt
           __typename
         }
         nextToken
         __typename
       }
+      user {
+        id
+        sub
+        type
+        Regions {
+          nextToken
+          __typename
+        }
+        Reservation {
+          id
+          dateStart
+          dateEnd
+          owner
+          createdAt
+          updatedAt
+          reservationFieldId
+          reservationUserId
+          __typename
+        }
+        bio
+        owner
+        createdAt
+        updatedAt
+        userReservationId
+        __typename
+      }
+      owner
       createdAt
       updatedAt
+      userRegionsId
       __typename
     }
   }
 `;
 export const onUpdateRegion = /* GraphQL */ `
-  subscription OnUpdateRegion($filter: ModelSubscriptionRegionFilterInput) {
-    onUpdateRegion(filter: $filter) {
+  subscription OnUpdateRegion(
+    $filter: ModelSubscriptionRegionFilterInput
+    $owner: String
+  ) {
+    onUpdateRegion(filter: $filter, owner: $owner) {
       id
       name
       banner
@@ -426,35 +484,54 @@ export const onUpdateRegion = /* GraphQL */ `
           name
           address
           regionID
-          createdAt
-          updatedAt
-          __typename
-        }
-        nextToken
-        __typename
-      }
-      users {
-        items {
-          id
-          userId
-          regionId
-          createdAt
-          updatedAt
           owner
+          createdAt
+          updatedAt
           __typename
         }
         nextToken
         __typename
       }
+      user {
+        id
+        sub
+        type
+        Regions {
+          nextToken
+          __typename
+        }
+        Reservation {
+          id
+          dateStart
+          dateEnd
+          owner
+          createdAt
+          updatedAt
+          reservationFieldId
+          reservationUserId
+          __typename
+        }
+        bio
+        owner
+        createdAt
+        updatedAt
+        userReservationId
+        __typename
+      }
+      owner
       createdAt
       updatedAt
+      userRegionsId
       __typename
     }
   }
 `;
 export const onDeleteRegion = /* GraphQL */ `
-  subscription OnDeleteRegion($filter: ModelSubscriptionRegionFilterInput) {
-    onDeleteRegion(filter: $filter) {
+  subscription OnDeleteRegion(
+    $filter: ModelSubscriptionRegionFilterInput
+    $owner: String
+  ) {
+    onDeleteRegion(filter: $filter, owner: $owner) {
       id
       name
       banner
@@ -465,41 +542,14 @@ export const onDeleteRegion = /* GraphQL */ `
           name
           address
           regionID
-          createdAt
-          updatedAt
-          __typename
-        }
-        nextToken
-        __typename
-      }
-      users {
-        items {
-          id
-          userId
-          regionId
-          createdAt
-          updatedAt
           owner
+          createdAt
+          updatedAt
           __typename
         }
         nextToken
         __typename
       }
-      createdAt
-      updatedAt
-      __typename
-    }
-  }
-`;
-export const onCreateUserRegion = /* GraphQL */ `
-  subscription OnCreateUserRegion(
-    $filter: ModelSubscriptionUserRegionFilterInput
-    $owner: String
-  ) {
-    onCreateUserRegion(filter: $filter, owner: $owner) {
-      id
-      userId
-      regionId
       user {
         id
         sub
@@ -512,6 +562,7 @@ export const onCreateUserRegion = /* GraphQL */ `
           id
           dateStart
           dateEnd
+          owner
           createdAt
           updatedAt
           reservationFieldId
@@ -519,148 +570,16 @@ export const onCreateUserRegion = /* GraphQL */ `
           __typename
         }
         bio
+        owner
         createdAt
         updatedAt
         userReservationId
-        owner
         __typename
       }
-      region {
-        id
-        name
-        banner
-        bio
-        Fields {
-          nextToken
-          __typename
-        }
-        users {
-          nextToken
-          __typename
-        }
-        createdAt
-        updatedAt
-        __typename
-      }
+      owner
       createdAt
       updatedAt
-      owner
-      __typename
-    }
-  }
-`;
-export const onUpdateUserRegion = /* GraphQL */ `
-  subscription OnUpdateUserRegion(
-    $filter: ModelSubscriptionUserRegionFilterInput
-    $owner: String
-  ) {
-    onUpdateUserRegion(filter: $filter, owner: $owner) {
-      id
-      userId
-      regionId
-      user {
-        id
-        sub
-        type
-        Regions {
-          nextToken
-          __typename
-        }
-        Reservation {
-          id
-          dateStart
-          dateEnd
-          createdAt
-          updatedAt
-          reservationFieldId
-          reservationUserId
-          __typename
-        }
-        bio
-        createdAt
-        updatedAt
-        userReservationId
-        owner
-        __typename
-      }
-      region {
-        id
-        name
-        banner
-        bio
-        Fields {
-          nextToken
-          __typename
-        }
-        users {
-          nextToken
-          __typename
-        }
-        createdAt
-        updatedAt
-        __typename
-      }
-      createdAt
-      updatedAt
-      owner
-      __typename
-    }
-  }
-`;
-export const onDeleteUserRegion = /* GraphQL */ `
-  subscription OnDeleteUserRegion(
-    $filter: ModelSubscriptionUserRegionFilterInput
-    $owner: String
-  ) {
-    onDeleteUserRegion(filter: $filter, owner: $owner) {
-      id
-      userId
-      regionId
-      user {
-        id
-        sub
-        type
-        Regions {
-          nextToken
-          __typename
-        }
-        Reservation {
-          id
-          dateStart
-          dateEnd
-          createdAt
-          updatedAt
-          reservationFieldId
-          reservationUserId
-          __typename
-        }
-        bio
-        createdAt
-        updatedAt
-        userReservationId
-        owner
-        __typename
-      }
-      region {
-        id
-        name
-        banner
-        bio
-        Fields {
-          nextToken
-          __typename
-        }
-        users {
-          nextToken
-          __typename
-        }
-        createdAt
-        updatedAt
-        __typename
-      }
-      createdAt
-      updatedAt
-      owner
+      userRegionsId
       __typename
     }
   }

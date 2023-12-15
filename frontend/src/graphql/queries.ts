@@ -11,11 +11,13 @@ export const getUser = /* GraphQL */ `
       Regions {
         items {
           id
-          userId
-          regionId
+          name
+          banner
+          bio
+          owner
           createdAt
           updatedAt
-          owner
+          userRegionsId
           __typename
         }
         nextToken
@@ -30,6 +32,7 @@ export const getUser = /* GraphQL */ `
           name
           address
           regionID
+          owner
           createdAt
           updatedAt
           __typename
@@ -39,12 +42,13 @@ export const getUser = /* GraphQL */ `
           sub
           type
           bio
+          owner
           createdAt
           updatedAt
           userReservationId
-          owner
           __typename
         }
+        owner
         createdAt
         updatedAt
         reservationFieldId
@@ -52,10 +56,10 @@ export const getUser = /* GraphQL */ `
         __typename
       }
       bio
+      owner
       createdAt
       updatedAt
       userReservationId
-      owner
       __typename
     }
   }
@@ -79,6 +83,7 @@ export const listUsers = /* GraphQL */ `
           id
           dateStart
           dateEnd
+          owner
           createdAt
           updatedAt
           reservationFieldId
@@ -86,10 +91,10 @@ export const listUsers = /* GraphQL */ `
           __typename
         }
         bio
+        owner
         createdAt
         updatedAt
         userReservationId
-        owner
         __typename
       }
       nextToken
@@ -126,6 +131,7 @@ export const userBySub = /* GraphQL */ `
           id
           dateStart
           dateEnd
+          owner
           createdAt
           updatedAt
           reservationFieldId
@@ -133,10 +139,10 @@ export const userBySub = /* GraphQL */ `
           __typename
         }
         bio
+        owner
         createdAt
         updatedAt
         userReservationId
-        owner
         __typename
       }
       nextToken
@@ -155,6 +161,7 @@ export const getReservation = /* GraphQL */ `
         name
         address
         regionID
+        owner
         createdAt
         updatedAt
         __typename
@@ -171,6 +178,7 @@ export const getReservation = /* GraphQL */ `
           id
           dateStart
           dateEnd
+          owner
           createdAt
           updatedAt
           reservationFieldId
@@ -178,12 +186,13 @@ export const getReservation = /* GraphQL */ `
           __typename
         }
         bio
+        owner
         createdAt
         updatedAt
         userReservationId
-        owner
         __typename
       }
+      owner
       createdAt
       updatedAt
       reservationFieldId
@@ -208,6 +217,7 @@ export const listReservations = /* GraphQL */ `
           name
           address
           regionID
+          owner
           createdAt
           updatedAt
           __typename
@@ -217,12 +227,13 @@ export const listReservations = /* GraphQL */ `
           sub
           type
           bio
+          owner
           createdAt
           updatedAt
           userReservationId
-          owner
           __typename
         }
+        owner
         createdAt
         updatedAt
         reservationFieldId
@@ -241,6 +252,7 @@ export const getField = /* GraphQL */ `
       name
       address
       regionID
+      owner
       createdAt
       updatedAt
       __typename
@@ -259,6 +271,7 @@ export const listFields = /* GraphQL */ `
         name
         address
         regionID
+        owner
         createdAt
         updatedAt
         __typename
@@ -288,6 +301,7 @@ export const fieldsByRegionID = /* GraphQL */ `
         name
         address
         regionID
+        owner
         createdAt
         updatedAt
         __typename
@@ -310,28 +324,44 @@ export const getRegion = /* GraphQL */ `
           name
           address
           regionID
-          createdAt
-          updatedAt
-          __typename
-        }
-        nextToken
-        __typename
-      }
-      users {
-        items {
-          id
-          userId
-          regionId
-          createdAt
-          updatedAt
           owner
+          createdAt
+          updatedAt
           __typename
         }
         nextToken
         __typename
       }
+      user {
+        id
+        sub
+        type
+        Regions {
+          nextToken
+          __typename
+        }
+        Reservation {
+          id
+          dateStart
+          dateEnd
+          owner
+          createdAt
+          updatedAt
+          reservationFieldId
+          reservationUserId
+          __typename
+        }
+        bio
+        owner
+        createdAt
+        updatedAt
+        userReservationId
+        __typename
+      }
+      owner
       createdAt
       updatedAt
+      userRegionsId
       __typename
     }
   }
@@ -352,206 +382,21 @@ export const listRegions = /* GraphQL */ `
           nextToken
           __typename
         }
-        users {
-          nextToken
-          __typename
-        }
-        createdAt
-        updatedAt
-        __typename
-      }
-      nextToken
-      __typename
-    }
-  }
-`;
-export const getUserRegion = /* GraphQL */ `
-  query GetUserRegion($id: ID!) {
-    getUserRegion(id: $id) {
-      id
-      userId
-      regionId
-      user {
-        id
-        sub
-        type
-        Regions {
-          nextToken
-          __typename
-        }
-        Reservation {
-          id
-          dateStart
-          dateEnd
-          createdAt
-          updatedAt
-          reservationFieldId
-          reservationUserId
-          __typename
-        }
-        bio
-        createdAt
-        updatedAt
-        userReservationId
-        owner
-        __typename
-      }
-      region {
-        id
-        name
-        banner
-        bio
-        Fields {
-          nextToken
-          __typename
-        }
-        users {
-          nextToken
-          __typename
-        }
-        createdAt
-        updatedAt
-        __typename
-      }
-      createdAt
-      updatedAt
-      owner
-      __typename
-    }
-  }
-`;
-export const listUserRegions = /* GraphQL */ `
-  query ListUserRegions(
-    $filter: ModelUserRegionFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listUserRegions(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        userId
-        regionId
         user {
           id
           sub
           type
           bio
+          owner
           createdAt
           updatedAt
           userReservationId
-          owner
           __typename
         }
-        region {
-          id
-          name
-          banner
-          bio
-          createdAt
-          updatedAt
-          __typename
-        }
+        owner
         createdAt
         updatedAt
-        owner
-        __typename
-      }
-      nextToken
-      __typename
-    }
-  }
-`;
-export const userRegionsByUserId = /* GraphQL */ `
-  query UserRegionsByUserId(
-    $userId: ID!
-    $sortDirection: ModelSortDirection
-    $filter: ModelUserRegionFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    userRegionsByUserId(
-      userId: $userId
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        userId
-        regionId
-        user {
-          id
-          sub
-          type
-          bio
-          createdAt
-          updatedAt
-          userReservationId
-          owner
-          __typename
-        }
-        region {
-          id
-          name
-          banner
-          bio
-          createdAt
-          updatedAt
-          __typename
-        }
-        createdAt
-        updatedAt
-        owner
-        __typename
-      }
-      nextToken
-      __typename
-    }
-  }
-`;
-export const userRegionsByRegionId = /* GraphQL */ `
-  query UserRegionsByRegionId(
-    $regionId: ID!
-    $sortDirection: ModelSortDirection
-    $filter: ModelUserRegionFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    userRegionsByRegionId(
-      regionId: $regionId
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        userId
-        regionId
-        user {
-          id
-          sub
-          type
-          bio
-          createdAt
-          updatedAt
-          userReservationId
-          owner
-          __typename
-        }
-        region {
-          id
-          name
-          banner
-          bio
-          createdAt
-          updatedAt
-          __typename
-        }
-        createdAt
-        updatedAt
-        owner
+        userRegionsId
         __typename
       }
       nextToken

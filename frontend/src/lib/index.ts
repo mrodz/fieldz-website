@@ -20,7 +20,7 @@ export const pollPFP = (user: User) => {
 	const FILE_KEY = `pfp-${user.attributes.sub}`;
 
 	Storage.get(FILE_KEY, {
-		level: 'public',
+		level: 'protected',
 		validateObjectExistence: true,
 	}).then((url: string) => {
 		console.warn(url);

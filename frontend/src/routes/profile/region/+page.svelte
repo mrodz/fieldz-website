@@ -11,6 +11,8 @@
     UserRegion,
   } from "../../../API";
   import type { GraphQLResult } from "@aws-amplify/api";
+  import mapboxgl from "mapbox-gl";
+  import MapboxDraw from "@mapbox/mapbox-gl-draw";
 
   let user: User;
   let graphqlUser: GQLUser | undefined;
@@ -65,8 +67,12 @@
   };
 </script>
 
+<svelte:head>
+  <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.4.3/mapbox-gl-draw.css' type='text/css' />
+</svelte:head>
+
 <div class="m-4">
-  <h1 class="h1">Your Regions:</h1>
+  <h1 class="h1">Regions</h1>
 
   {#await $currentUser}
     <ProgressRadial />
@@ -84,17 +90,37 @@
         {/each}
       </dl>
     {:else}
-      <div class="text-xl text-center mt-4">
+      <div class="w-1/2 mx-auto p-8 card text-xl text-center mt-4">
         You are not part of any regions.
-        <button
-          class="btn block mx-auto mt-4 variant-filled-primary"
-          on:click={newRegion}>Register a new region as a manager</button
-        >
       </div>
     {/if}
+
+    <hr class="my-8" />
+
+    <h2 class="h2">New Region</h2>
+    <form class="card p-4 my-4">
+      <label class="label">
+        <span>Region Name</span>
+        <input
+          class="input variant-form-material"
+          title="Display Name"
+          type="text"
+          placeholder="eg. 'Shire Western Fields'"
+        />
+      </label>
+      <label class="label">
+        <span />
+        <input
+          class="input variant-form-material"
+          title="Display Name"
+          type="text"
+          placeholder="eg. 'Shire Western Fields'"
+        />
+      </label>
+      <button class="btn variant-filled">Register</button>
+    </form>
   {/await}
 </div>
 
 <style lang="sass">
-
 </style>

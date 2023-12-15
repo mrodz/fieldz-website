@@ -30,7 +30,9 @@
   "type": "module",
   "dependencies": {
     "@floating-ui/dom": "^1.5.3",
+    "@mapbox/mapbox-gl-draw": "^1.4.3",
     "aws-amplify": "^5.3.8",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "mapbox-gl": "^2.15.0"
   }
 }

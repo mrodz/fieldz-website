@@ -44,9 +44,21 @@
             sub: u.attributes.sub,
           };
 
-          const resolved = await (API.graphql<UserBySubQuery>(
-            graphqlOperation(userBySub, variables)
-          ) as Promise<GraphQLResult<UserBySubQuery>>);
+          let resolved;
+          try {
+            resolved = await (API.graphql<UserBySubQuery>(
+              graphqlOperation(userBySub, variables)
+            ) as Promise<GraphQLResult<UserBySubQuery>>);
+          } catch (error) {
+            (error as GraphQLResult).errors!.forEach((e) => {
+              toastStore.trigger({
+                message: `Error: ${e.message}`,
+                background: "variant-filled-error",
+              });
+            });
+
+            return Promise.reject<UserBySubQuery>(error);
+          }
 
           if (resolved.errors !== undefined) {
             toastStore.trigger({
@@ -123,7 +135,7 @@
               try {
                 Storage.put(FILE_KEY, blob!, {
                   resumable: true,
-                  level: "public",
+                  level: "protected",
                   contentType: MIME,
                   progressCallback(progress) {
                     uploadPercent = (progress.loaded / progress.total) * 100;
@@ -171,7 +183,7 @@
       {welcomeMessage}, {user?.attributes.name}
     </h1>
 
-    <div class="card p-4">
+    <div class="card p-4 mb-4">
       <h2 class="h2 text-center sm:text-start">Account Information</h2>
 
       <hr class="hr sm:!hidden my-4" />
@@ -214,7 +226,7 @@
                 in:slide={{ axis: "y", duration: 800 }}
                 out:slide={{ axis: "y" }}
               >
-                <AccountTypeSignup user={user} />
+                <AccountTypeSignup {user} />
 
                 <hr />
               </div>

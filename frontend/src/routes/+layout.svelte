@@ -254,7 +254,7 @@
 	</div>
 
 	<div
-		class="block absolute text-center bottom-4 sm:text-lg"
+		class="block absolute text-center bottom-4 sm:text-lg px-4"
 		style="width: inherit"
 	>
 		<hr class="hr mb-4" />
