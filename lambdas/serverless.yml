@@ -1,0 +1,37 @@
+service: fieldz-lambdas
+frameworkVersion: "3"
+
+# This is required because in future releases serverless will defacto-fail building on warnings,
+# and this config file will always complain that `rust` is not a default runtime.
+configValidationMode: warn
+
+provider:
+  name: aws
+  runtime: rust
+  memorySize: 128
+  region: us-west-1
+
+  deploymentBucket:
+    name: fieldz-lambda-stack-bucket
+
+package:
+  individually: true
+
+plugins:
+  - serverless-rust
+  - serverless-deployment-bucket
+
+functions:
+  post-signup:
+    handler: post-signup
+    events:
+      - cognitoUserPool:
+          pool: "fieldzappfrontend-staging"
+          trigger: PostConfirmation
+          existing: true
+
+custom:
+  rust:
+    # cargoFlags: '--features ...'
+    dockerless: true
+

@@ -1,0 +1,2 @@
+[workspace]
+members = ["lambdas\\signup-trigger\\post-signup"]
