@@ -5,6 +5,8 @@
 
   export let user: User;
 
+  let _x = user;
+
   let newCoachCodeEl: HTMLInputElement;
 
   function newCoach() {}

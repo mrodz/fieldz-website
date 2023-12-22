@@ -44,17 +44,12 @@
 				console.error(error);
 			});
 	} else {
-		/*
-		Server Side
-		*/
 		toastId = toastStore.trigger({
 			message: "Please sign in to continue",
 			background: "variant-filled-error",
 			hideDismiss: true,
 			timeout: 7_000,
 		});
-
-		console.log(`$currentUser is ${$currentUser} when testing for auth`);
 	}
 
 	let waiting = true;

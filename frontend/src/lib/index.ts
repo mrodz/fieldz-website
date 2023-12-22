@@ -23,10 +23,9 @@ export const pollPFP = (user: User) => {
 		level: 'protected',
 		validateObjectExistence: true,
 	}).then((url: string) => {
-		console.warn(url);
 		pfp.set(url);
 	}).catch((error: unknown) => {
-		console.error(error);
+		console.log(`Could not get custom pfp on first render, likely because it doesn't exist: ${JSON.stringify(error)}`);
 		pfp.set(user.attributes.picture);
 	})
 }
