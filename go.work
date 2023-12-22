@@ -1,5 +1,0 @@
-go 1.21.1
-
-use (
-	./frontend/amplify/backend/function/getProfileType/src
-)
