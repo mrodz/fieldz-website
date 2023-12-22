@@ -120,8 +120,8 @@
 				</p>
 
 				<p>
-					You will be redirected shortly. If not, click <button
-						class="btn variant-filled">here</button
+					You will be redirected shortly. If not, click <a href="/"
+						class="btn variant-filled">here</a
 					>
 				</p>
 
