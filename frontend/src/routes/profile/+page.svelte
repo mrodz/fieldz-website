@@ -10,9 +10,14 @@
   import { onDestroy } from "svelte";
   import { API, Storage, graphqlOperation } from "aws-amplify";
   import type { GraphQLResult } from "@aws-amplify/api";
-  // import type { GetUserQuery } from "../../API";
-  import { userBySub } from "../../graphql/queries";
-  import type { UserBySubQuery, UserBySubQueryVariables } from "../../API";
+  import { userBySub, listRegions } from "../../graphql/queries";
+  import type {
+    UserBySubQuery,
+    UserBySubQueryVariables,
+    ListRegionsQuery,
+    User as GQLUser,
+    Region,
+  } from "../../API";
   import AccountTypeSignup from "./AccountTypeSignup.svelte";
   import { slide } from "svelte/transition";
 
@@ -32,11 +37,12 @@
   const MIME = "image/jpeg";
 
   let user: User | undefined;
-  let graphQLUser: Promise<UserBySubQuery> | undefined;
+  let graphQLUser: Promise<GQLUser | undefined> | undefined;
+  let regions: Region[] = [];
 
   if ($currentUser !== undefined) {
     $currentUser
-      .then((u) => {
+      .then(async (u) => {
         user = u;
 
         graphQLUser = (async () => {
@@ -57,19 +63,55 @@
               });
             });
 
-            return Promise.reject<UserBySubQuery>(error);
+            return Promise.reject(error);
           }
 
-          if (resolved.errors !== undefined) {
+          if (
+            resolved.errors !== undefined ||
+            resolved.data === undefined ||
+            !resolved.data.userBySub
+          ) {
             toastStore.trigger({
               message: `Error: ${resolved.errors}`,
               background: "variant-filled-error",
             });
-            return Promise.reject<UserBySubQuery>(resolved.errors);
+            return Promise.reject(resolved.errors);
           }
 
-          return resolved.data!;
+          if (resolved.data.userBySub.items.length === 0) {
+            toastStore.trigger({
+              message: `This is really bad! User not found!`,
+              background: "variant-filled-error",
+            });
+            return Promise.reject(resolved);
+          }
+
+          return resolved.data!.userBySub.items[0]! as GQLUser;
         })();
+        return graphQLUser;
+      })
+      .then((graphQLUser) => {
+        if (graphQLUser === undefined) {
+          regions = [];
+          return regions;
+        }
+
+        const tryRegionsFetch = API.graphql<ListRegionsQuery>(
+          graphqlOperation(listRegions, { userId: graphQLUser.id })
+        ) as Promise<GraphQLResult<ListRegionsQuery>>;
+
+        tryRegionsFetch.then((GQL) => {
+          if (GQL.errors !== undefined) {
+            toastStore.trigger({
+              message: `Error: ${GQL.errors}`,
+              background: "variant-filled-error",
+            });
+            throw GQL.errors;
+          }
+
+          regions = GQL.data?.listRegions?.items! as Region[];
+          return regions;
+        });
       })
       .catch((e) => console.error(e));
   }
@@ -189,21 +231,9 @@
       <hr class="hr sm:!hidden my-4" />
 
       {#if graphQLUser !== undefined}
-        {#await graphQLUser}
-          <div class="placeholder" />
-        {:then graphQLUser}
-          {#if typeof graphQLUser.userBySub?.items?.[0] !== "undefined"}
-            <section>
-              <h3 class="h3 sm:mt-8 text-center sm:text-start">Type</h3>
-              <p class="my-4">
-                {graphQLUser.userBySub?.items?.[0]}
-              </p>
-            </section>
-          {:else}
-            <span class="block sm:inline text-center sm:mr-1"
-              >&#9888;&#65039; You have not assumed a role for this account yet!</span
-            >
-
+        <section>
+          <h3 class="h3 sm:mt-8 text-center sm:text-start">
+            Your Regions
             <button
               class="btn variant-outline my-4 mx-auto block sm:inline text-center sm:text-start"
               on:click={() => {
@@ -212,32 +242,73 @@
               }}
             >
               {#if roleSelectionMenuOpen}
-                Close this dialog
+                Close
               {:else}
-                Choose account type
+                Add Region
               {/if}
             </button>
+          </h3>
+          <div class="mb-20">
+            {#await regions}
+              <div class="placeholder" />
+            {:then regions}
+              {#if regions.length === 0}
+                <div
+                  class="card w-3/4 sm:w-2/5 md:w-1/2 p-4 lg:w-1/3 md:p-12 lg:p-20 mx-auto text-center bg-gray-400"
+                >
+                  You aren't a part of any regions &#9888;&#65039;
+                </div>
+              {:else}
+                {#each regions as region}
+                  <div>Region: {JSON.stringify(region)}</div>
+                {/each}
+              {/if}
+            {/await}
+          </div>
 
-            <hr class="mb-4" />
+          <hr class="mb-4" />
 
-            {#if roleSelectionMenuOpen && typeof user != "undefined"}
-              <div
-                class="bg-page my-4"
-                in:slide={{ axis: "y", duration: 800 }}
-                out:slide={{ axis: "y" }}
-              >
-                <AccountTypeSignup {user} />
+          {#if roleSelectionMenuOpen && typeof user != "undefined"}
+            <div
+              class="bg-page my-4"
+              in:slide={{ axis: "y", duration: 800 }}
+              out:slide={{ axis: "y" }}
+            >
+              <AccountTypeSignup {user} />
 
-                <hr />
-              </div>
-            {/if}
+              <hr />
+            </div>
           {/if}
+        </section>
+
+        <h3 class="h3 sm:mt-8 text-center sm:text-start">
+          Raw Data (For Developers)
+        </h3>
+
+        {#await graphQLUser}
+          <div class="placeholder h-200" />
+        {:then graphQLUser}
+          <section>
+            <div class="my-4 bg-gray-200 p-2">
+              {#if typeof graphQLUser !== "undefined"}
+                <tt class="break-all">
+                  {JSON.stringify(graphQLUser)}
+                </tt>
+              {:else}
+                <p class="my-4">
+                  Your account is new and has not been synced yet!
+                </p>
+              {/if}
+            </div>
+          </section>
         {:catch error}
           {JSON.stringify(error)}
         {/await}
       {:else}
         <div class="placeholder" />
       {/if}
+
+      <hr class="mb-4" />
 
       <div
         class="grid grid-rows-2 sm:grid-rows-1 sm:grid-cols-[1fr_20px_1fr] mb-4 sm:my-4"

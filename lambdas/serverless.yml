@@ -28,6 +28,10 @@ provider:
 
   deploymentBucket:
     name: fieldz-lambda-stack-bucket
+    
+  environment:
+    APPSYNC_ENDPOINT: https://r2mzfwifizcbvps3m4w6wdbrra.appsync-api.us-west-1.amazonaws.com/graphql
+
 
 # you can overwrite defaults here
 #  stage: dev
@@ -52,9 +56,6 @@ provider:
 #                - "/*"
 
 # you can define service wide environment variables here
-#  environment:
-#    variable1: value1
-
 package:
   individually: true
   patterns:
