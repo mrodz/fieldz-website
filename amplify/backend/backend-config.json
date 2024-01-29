@@ -1,19 +1,5 @@
 {
   "api": {
-    "backend": {
-      "dependsOn": [
-        {
-          "attributes": [
-            "Name",
-            "Arn"
-          ],
-          "category": "function",
-          "resourceName": "getProfileType"
-        }
-      ],
-      "providerPlugin": "awscloudformation",
-      "service": "API Gateway"
-    },
     "fieldzappfrontend": {
       "dependsOn": [
         {
@@ -80,31 +66,7 @@
       "service": "Cognito"
     }
   },
-  "function": {
-    "getProfileType": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
-    }
-  },
-  "parameters": {
-    "AMPLIFY_function_getProfileType_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "getProfileType"
-        }
-      ]
-    },
-    "AMPLIFY_function_getProfileType_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "getProfileType"
-        }
-      ]
-    }
-  },
+  "function": {},
   "storage": {
     "s3fieldzpfp": {
       "dependsOn": [],

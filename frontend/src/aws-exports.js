@@ -3,13 +3,6 @@
 
 const awsmobile = {
     "aws_project_region": "us-west-1",
-    "aws_cloud_logic_custom": [
-        {
-            "name": "backend",
-            "endpoint": "https://4a70f7pvp9.execute-api.us-west-1.amazonaws.com/staging",
-            "region": "us-west-1"
-        }
-    ],
     "aws_appsync_graphqlEndpoint": "https://r2mzfwifizcbvps3m4w6wdbrra.appsync-api.us-west-1.amazonaws.com/graphql",
     "aws_appsync_region": "us-west-1",
     "aws_appsync_authenticationType": "AMAZON_COGNITO_USER_POOLS",

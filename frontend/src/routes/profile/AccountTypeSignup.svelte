@@ -16,7 +16,7 @@
   }
 </script>
 
-<div>
+<div id="account-chooser">
   <h3 class="h3">Choose An Account Type</h3>
   <div class="grid grid-cols-1 grid-rows-2 md:grid-cols-2 md:grid-rows-1">
     <div class="account-option bg-rose-400 transition-all hover:bg-rose-500">

@@ -55,6 +55,11 @@
               input: {
                 sub: u.attributes.sub,
                 type: "COACH",
+                Regions: {
+                  __typename: "Region",
+                  items: [],
+                  nextToken: null,
+                }
               }
             })
           ) as Promise<GraphQLResult<CreateUserMutation>>;
@@ -182,10 +187,10 @@
       <dl class="list-dl">
         {#each regions as region}
           <div>
-            <span class="badge bg-primary-500">💀</span>
+            <span class="badge bg-primary-500">Region</span>
             <span class="flex-auto">
-              <dt>Title</dt>
-              <dd>{JSON.stringify(region)}</dd>
+              <dt>{region.name}</dt>
+              <dd>{region.id}</dd>
             </span>
           </div>
         {/each}

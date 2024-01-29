@@ -53,7 +53,7 @@
           let resolved;
           try {
             resolved = await (API.graphql<UserBySubQuery>(
-              graphqlOperation(userBySub, variables)
+              graphqlOperation(userBySub, variables),
             ) as Promise<GraphQLResult<UserBySubQuery>>);
           } catch (error) {
             (error as GraphQLResult).errors!.forEach((e) => {
@@ -80,8 +80,8 @@
 
           if (resolved.data.userBySub.items.length === 0) {
             toastStore.trigger({
-              message: `This is really bad! User not found!`,
-              background: "variant-filled-error",
+              message: `This account is not using any of Fieldz's services`,
+              background: "variant-filled-warning",
             });
             return Promise.reject(resolved);
           }
@@ -97,7 +97,7 @@
         }
 
         const tryRegionsFetch = API.graphql<ListRegionsQuery>(
-          graphqlOperation(listRegions, { userId: graphQLUser.id })
+          graphqlOperation(listRegions, { userId: graphQLUser.id }),
         ) as Promise<GraphQLResult<ListRegionsQuery>>;
 
         tryRegionsFetch.then((GQL) => {
@@ -238,7 +238,13 @@
               class="btn variant-outline my-4 mx-auto block sm:inline text-center sm:text-start"
               on:click={() => {
                 roleSelectionMenuOpen = !roleSelectionMenuOpen;
-                if (roleSelectionMenuOpen) window.scrollBy(0, 1000);
+                if (roleSelectionMenuOpen) {
+                  setTimeout(() => {
+                    document
+                      .getElementById("account-chooser")
+                      ?.scrollIntoView();
+                  }, 100);
+                }
               }}
             >
               {#if roleSelectionMenuOpen}

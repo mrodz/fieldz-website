@@ -16,10 +16,25 @@ type User
   id: ID!
   sub: String! @index(name: "bySub", queryField: "userBySub", sortKeyFields: ["id"])
   type: AccountType
-  Regions: [Region] @hasMany @auth(rules: [{ allow: owner, operations: [read, delete] }])
-  Reservation: Reservation @hasOne
-  bio: String
-  owner: String @auth(rules: [{ allow: owner, operations: [read, delete] }])
+  Regions: [Region] @hasMany @auth(
+    rules: [
+      { allow: owner, operations: [read, update, delete], provider: userPools },
+      { allow: private, operations: [read], provider: userPools }
+    ]
+  )
+  Reservation: Reservation @hasOne @auth(
+    rules: [
+      { allow: owner, operations: [read, update, delete], provider: userPools },
+      { allow: private, operations: [read], provider: userPools },
+    ]
+  )
+  bio: String @auth(
+    rules: [
+      { allow: owner, operations: [create, read, delete], provider: userPools },
+      { allow: private, operations: [read], provider: userPools }
+    ]
+  )
+  owner: String @auth(rules: [{ allow: owner, operations: [read, delete], provider: userPools }])
 }
 
 type Reservation 
@@ -36,7 +51,12 @@ type Reservation
   dateEnd: AWSDateTime
   Field: Field @hasOne
   User: User @belongsTo
-  owner: String @auth(rules: [{ allow: owner, operations: [read, delete] }])
+  owner: String @auth(
+    rules: [
+      { allow: owner, operations: [read, delete] },
+      { allow: private, operations: [read], provider: userPools }
+    ]
+  )
 }
 
 type Field
@@ -52,7 +72,12 @@ type Field
   name: String
   address: String
   regionID: ID! @index(name: "byRegion")
-  owner: String @auth(rules: [{ allow: owner, operations: [read, delete] }])
+  owner: String @auth(
+    rules: [
+      { allow: owner, operations: [read, delete] },
+      { allow: private, operations: [read], provider: userPools }
+    ]
+  )
 }
 
 type Region
@@ -71,6 +96,11 @@ type Region
   Fields: [Field] @hasMany(indexName: "byRegion", fields: ["id"])
   user: User @belongsTo #(relationName: "UserRegion") @auth(rules: [{ allow: owner, operations: [read, delete] }])
   # userOwners: [String]
-  owner: String @auth(rules: [{ allow: owner, operations: [read, delete] }])
+  owner: String @auth(
+    rules: [
+      { allow: owner, operations: [read, delete] },
+      { allow: private, operations: [read], provider: userPools }
+    ]
+  )
 }
  
