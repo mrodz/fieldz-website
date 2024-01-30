@@ -53,7 +53,7 @@
           let resolved;
           try {
             resolved = await (API.graphql<UserBySubQuery>(
-              graphqlOperation(userBySub, variables),
+              graphqlOperation(userBySub, variables)
             ) as Promise<GraphQLResult<UserBySubQuery>>);
           } catch (error) {
             (error as GraphQLResult).errors!.forEach((e) => {
@@ -97,7 +97,7 @@
         }
 
         const tryRegionsFetch = API.graphql<ListRegionsQuery>(
-          graphqlOperation(listRegions, { userId: graphQLUser.id }),
+          graphqlOperation(listRegions, { userId: graphQLUser.id })
         ) as Promise<GraphQLResult<ListRegionsQuery>>;
 
         tryRegionsFetch.then((GQL) => {
@@ -125,7 +125,7 @@
     clearTimeout(timeout);
   });
 
-  function onChangeHandler(e: Event) {
+  const onChangeHandler = (e: Event) => {
     const files: FileList = (e.target! as HTMLInputElement).files!;
 
     const pfp = files.item(0);
@@ -208,7 +208,44 @@
         }); // END modal
       }); // END blob work
     }; // END img.onLoad
-  } // END onChangeHandler
+  }; // END onChangeHandler
+
+  const MONTHS = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
+  const dateFmt = (input: string): string => {
+    const date = new Date(input);
+    return `${
+      MONTHS[date.getMonth()]
+    } ${date.getDay()} ${date.getFullYear()}, ${date.getHours()}:${date.getMinutes()}`;
+  };
+
+  const leaveRegion = (input: Region) => {
+    modalStore.trigger({
+      type: "confirm",
+      // Data
+      title: `You are requesting to leave "${input.name}"`,
+      body: "If you confirm, you will have to request another invitation. Are you sure you wish to proceed?",
+      // TRUE if confirm pressed, FALSE if cancel pressed
+      response(r: boolean) {
+        if (r) {
+          console.log(input)
+        }
+      },
+    });
+  };
 
   let roleSelectionMenuOpen = false;
 </script>
@@ -240,9 +277,9 @@
                 roleSelectionMenuOpen = !roleSelectionMenuOpen;
                 if (roleSelectionMenuOpen) {
                   setTimeout(() => {
-                    document
-                      .getElementById("account-chooser")
-                      ?.scrollIntoView();
+                    document.getElementById("account-chooser")?.scrollIntoView({
+                      behavior: "smooth",
+                    });
                   }, 100);
                 }
               }}
@@ -265,9 +302,41 @@
                   You aren't a part of any regions &#9888;&#65039;
                 </div>
               {:else}
-                <div class="flex flex-wrap">
-                  {#each regions as region}
-                    <div class="card bg-gray-300 my-4 w-1/5">{region.name}</div>
+                <div class="flex flex-wrap justify-center">
+                  {#each regions
+                    .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()) as region}
+                    <div
+                      class="card m-4 w-2/3 sm:w-2/5 md:w-1/4 xl:w-1/5 bg-gray-300 p-2"
+                    >
+                      <h4 class="h4 font-bold">{region.name}</h4>
+                      Created {dateFmt(region.createdAt)}
+
+                      <div>
+                        {#if !!region.banner}
+                          <img
+                            src={region.banner}
+                            alt={`${region.name}'s regional profile picture`}
+                          />
+                        {:else}
+                          <img
+                            src={"/assets/image-not-found-icon.svg"}
+                            class="w-3/4 mx-auto my-4"
+                            alt={`this region, named ${region.name}, has not uploaded a picture`}
+                          />
+                        {/if}
+                      </div>
+
+                      <div class="mt-2 grid grid-cols-2 align-center">
+                        <button class="btn variant-filled-primary !rounded-none"
+                          >Manage</button
+                        >
+                        <button
+                          on:click={() => leaveRegion(region)}
+                          class="btn variant-ghost-error !rounded-none"
+                          >Leave</button
+                        >
+                      </div>
+                    </div>
                   {/each}
                 </div>
               {/if}
