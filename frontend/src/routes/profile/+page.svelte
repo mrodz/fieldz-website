@@ -265,9 +265,11 @@
                   You aren't a part of any regions &#9888;&#65039;
                 </div>
               {:else}
-                {#each regions as region}
-                  <div>Region: {JSON.stringify(region)}</div>
-                {/each}
+                <div class="flex flex-wrap">
+                  {#each regions as region}
+                    <div class="card bg-gray-300 my-4 w-1/5">{region.name}</div>
+                  {/each}
+                </div>
               {/if}
             {/await}
           </div>

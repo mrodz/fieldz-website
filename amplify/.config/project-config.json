@@ -8,10 +8,10 @@
   "javascript": {
     "framework": "none",
     "config": {
-      "SourceDir": "frontend/src",
-      "DistributionDir": "frontend/build",
+      "SourceDir": "./frontend/src",
+      "DistributionDir": "./frontend/build",
       "BuildCommand": "npm.cmd run-script build",
-      "StartCommand": "npm.cmd run-script preview"
+      "StartCommand": "npm.cmd run-script run dev"
     }
   }
 }
