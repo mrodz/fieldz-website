@@ -54,7 +54,7 @@
           </div>
         </label>
         <button class="btn variant-filled mt-4" on:click={newCoach}
-          >Continue</button
+          >Join</button
         >
       </div>
     </div>
@@ -73,7 +73,7 @@
             on:click={newRegion}
             type="button"
             class="btn variant-filled"
-            value="Next"
+            value="Create"
           />
         </label>
         <!-- <button class="btn variant-filled">Next</button> -->

@@ -17,9 +17,11 @@
     ListRegionsQuery,
     User as GQLUser,
     Region,
+    DeleteRegionMutation,
   } from "../../API";
   import AccountTypeSignup from "./AccountTypeSignup.svelte";
   import { slide } from "svelte/transition";
+  import { deleteRegion } from "../../graphql/mutations";
 
   let welcomeMessage: string;
 
@@ -53,7 +55,7 @@
           let resolved;
           try {
             resolved = await (API.graphql<UserBySubQuery>(
-              graphqlOperation(userBySub, variables)
+              graphqlOperation(userBySub, variables),
             ) as Promise<GraphQLResult<UserBySubQuery>>);
           } catch (error) {
             (error as GraphQLResult).errors!.forEach((e) => {
@@ -97,7 +99,7 @@
         }
 
         const tryRegionsFetch = API.graphql<ListRegionsQuery>(
-          graphqlOperation(listRegions, { userId: graphQLUser.id })
+          graphqlOperation(listRegions, { userId: graphQLUser.id }),
         ) as Promise<GraphQLResult<ListRegionsQuery>>;
 
         tryRegionsFetch.then((GQL) => {
@@ -110,6 +112,8 @@
           }
 
           regions = GQL.data?.listRegions?.items! as Region[];
+          regions.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
+
           return regions;
         });
       })
@@ -232,16 +236,40 @@
     } ${date.getDay()} ${date.getFullYear()}, ${date.getHours()}:${date.getMinutes()}`;
   };
 
-  const leaveRegion = (input: Region) => {
+  const leaveRegion = (input: Region, index: number) => {
     modalStore.trigger({
       type: "confirm",
       // Data
       title: `You are requesting to leave "${input.name}"`,
-      body: "If you confirm, you will have to request another invitation. Are you sure you wish to proceed?",
+      body: "This action will DELETE this region for all managers and coaches. If you confirm, this data will be lost forever. Are you sure you wish to proceed?",
       // TRUE if confirm pressed, FALSE if cancel pressed
-      response(r: boolean) {
+      async response(r: boolean) {
         if (r) {
-          console.log(input)
+          console.log("Deleting", input, "at index", index)
+          const GQL = (await API.graphql(
+            graphqlOperation(deleteRegion, {
+              input: {
+                id: input.id,
+              }
+            }),
+          )) as GraphQLResult<DeleteRegionMutation>;
+
+          if (GQL.errors !== undefined) {
+            console.error(GQL.errors);
+
+            GQL.errors.forEach((error) => {
+              toastStore.trigger({
+                message: `Error: ${error}`,
+                background: "variant-filled-error",
+              })
+            })
+          } else {
+            toastStore.trigger({
+              message: `Deleted "${input.name}"`
+            })
+            regions.splice(index, 1);
+            regions = regions
+          }
         }
       },
     });
@@ -303,13 +331,16 @@
                 </div>
               {:else}
                 <div class="flex flex-wrap justify-center">
-                  {#each regions
-                    .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()) as region}
+                  {#each regions as region, index}
                     <div
                       class="card m-4 w-2/3 sm:w-2/5 md:w-1/4 xl:w-1/5 bg-gray-300 p-2"
                     >
                       <h4 class="h4 font-bold">{region.name}</h4>
                       Created {dateFmt(region.createdAt)}
+
+                      <tt style="word-break:break-all">
+                        {JSON.stringify(region)}
+                      </tt>
 
                       <div>
                         {#if !!region.banner}
@@ -331,9 +362,9 @@
                           >Manage</button
                         >
                         <button
-                          on:click={() => leaveRegion(region)}
+                          on:click={() => leaveRegion(region, index)}
                           class="btn variant-ghost-error !rounded-none"
-                          >Leave</button
+                          >Delete</button
                         >
                       </div>
                     </div>
