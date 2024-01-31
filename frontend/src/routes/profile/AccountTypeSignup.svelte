@@ -38,6 +38,7 @@
           >
           <input
             bind:this={newCoachCodeEl}
+            inputmode="numeric"
             class="input variant-form-material w-1/3 text-center block mx-auto"
             placeholder="----"
           />
@@ -53,7 +54,7 @@
             <div class="arrow variant-filled-primary" />
           </div>
         </label>
-        <button class="btn variant-filled mt-4" on:click={newCoach}
+        <button class="btn variant-filled mt-4" disabled on:click={newCoach}
           >Join</button
         >
       </div>

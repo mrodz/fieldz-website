@@ -23,8 +23,8 @@ export type ModelUserConditionInput = {
   type?: ModelAccountTypeInput | null,
   bio?: ModelStringInput | null,
   owner?: ModelStringInput | null,
-  and?: Array< ModelUserConditionInput | null > | null,
-  or?: Array< ModelUserConditionInput | null > | null,
+  and?: Array<ModelUserConditionInput | null> | null,
+  or?: Array<ModelUserConditionInput | null> | null,
   not?: ModelUserConditionInput | null,
   userReservationId?: ModelIDInput | null,
 };
@@ -38,7 +38,7 @@ export type ModelStringInput = {
   gt?: string | null,
   contains?: string | null,
   notContains?: string | null,
-  between?: Array< string | null > | null,
+  between?: Array<string | null> | null,
   beginsWith?: string | null,
   attributeExists?: boolean | null,
   attributeType?: ModelAttributeTypes | null,
@@ -66,7 +66,7 @@ export type ModelSizeInput = {
   lt?: number | null,
   ge?: number | null,
   gt?: number | null,
-  between?: Array< number | null > | null,
+  between?: Array<number | null> | null,
 };
 
 export type ModelAccountTypeInput = {
@@ -83,7 +83,7 @@ export type ModelIDInput = {
   gt?: string | null,
   contains?: string | null,
   notContains?: string | null,
-  between?: Array< string | null > | null,
+  between?: Array<string | null> | null,
   beginsWith?: string | null,
   attributeExists?: boolean | null,
   attributeType?: ModelAttributeTypes | null,
@@ -106,7 +106,7 @@ export type User = {
 
 export type ModelRegionConnection = {
   __typename: "ModelRegionConnection",
-  items:  Array<Region | null >,
+  items: Array<Region | null>,
   nextToken?: string | null,
 };
 
@@ -126,7 +126,7 @@ export type Region = {
 
 export type ModelFieldConnection = {
   __typename: "ModelFieldConnection",
-  items:  Array<Field | null >,
+  items: Array<Field | null>,
   nextToken?: string | null,
 };
 
@@ -181,8 +181,8 @@ export type ModelReservationConditionInput = {
   dateStart?: ModelStringInput | null,
   dateEnd?: ModelStringInput | null,
   owner?: ModelStringInput | null,
-  and?: Array< ModelReservationConditionInput | null > | null,
-  or?: Array< ModelReservationConditionInput | null > | null,
+  and?: Array<ModelReservationConditionInput | null> | null,
+  or?: Array<ModelReservationConditionInput | null> | null,
   not?: ModelReservationConditionInput | null,
   reservationFieldId?: ModelIDInput | null,
   reservationUserId?: ModelIDInput | null,
@@ -214,8 +214,8 @@ export type ModelFieldConditionInput = {
   address?: ModelStringInput | null,
   regionID?: ModelIDInput | null,
   owner?: ModelStringInput | null,
-  and?: Array< ModelFieldConditionInput | null > | null,
-  or?: Array< ModelFieldConditionInput | null > | null,
+  and?: Array<ModelFieldConditionInput | null> | null,
+  or?: Array<ModelFieldConditionInput | null> | null,
   not?: ModelFieldConditionInput | null,
 };
 
@@ -245,8 +245,8 @@ export type ModelRegionConditionInput = {
   banner?: ModelStringInput | null,
   bio?: ModelStringInput | null,
   owner?: ModelStringInput | null,
-  and?: Array< ModelRegionConditionInput | null > | null,
-  or?: Array< ModelRegionConditionInput | null > | null,
+  and?: Array<ModelRegionConditionInput | null> | null,
+  or?: Array<ModelRegionConditionInput | null> | null,
   not?: ModelRegionConditionInput | null,
   userRegionsId?: ModelIDInput | null,
 };
@@ -270,15 +270,15 @@ export type ModelUserFilterInput = {
   type?: ModelAccountTypeInput | null,
   bio?: ModelStringInput | null,
   owner?: ModelStringInput | null,
-  and?: Array< ModelUserFilterInput | null > | null,
-  or?: Array< ModelUserFilterInput | null > | null,
+  and?: Array<ModelUserFilterInput | null> | null,
+  or?: Array<ModelUserFilterInput | null> | null,
   not?: ModelUserFilterInput | null,
   userReservationId?: ModelIDInput | null,
 };
 
 export type ModelUserConnection = {
   __typename: "ModelUserConnection",
-  items:  Array<User | null >,
+  items: Array<User | null>,
   nextToken?: string | null,
 };
 
@@ -288,7 +288,7 @@ export type ModelIDKeyConditionInput = {
   lt?: string | null,
   ge?: string | null,
   gt?: string | null,
-  between?: Array< string | null > | null,
+  between?: Array<string | null> | null,
   beginsWith?: string | null,
 };
 
@@ -303,8 +303,8 @@ export type ModelReservationFilterInput = {
   dateStart?: ModelStringInput | null,
   dateEnd?: ModelStringInput | null,
   owner?: ModelStringInput | null,
-  and?: Array< ModelReservationFilterInput | null > | null,
-  or?: Array< ModelReservationFilterInput | null > | null,
+  and?: Array<ModelReservationFilterInput | null> | null,
+  or?: Array<ModelReservationFilterInput | null> | null,
   not?: ModelReservationFilterInput | null,
   reservationFieldId?: ModelIDInput | null,
   reservationUserId?: ModelIDInput | null,
@@ -312,7 +312,7 @@ export type ModelReservationFilterInput = {
 
 export type ModelReservationConnection = {
   __typename: "ModelReservationConnection",
-  items:  Array<Reservation | null >,
+  items: Array<Reservation | null>,
   nextToken?: string | null,
 };
 
@@ -322,8 +322,8 @@ export type ModelFieldFilterInput = {
   address?: ModelStringInput | null,
   regionID?: ModelIDInput | null,
   owner?: ModelStringInput | null,
-  and?: Array< ModelFieldFilterInput | null > | null,
-  or?: Array< ModelFieldFilterInput | null > | null,
+  and?: Array<ModelFieldFilterInput | null> | null,
+  or?: Array<ModelFieldFilterInput | null> | null,
   not?: ModelFieldFilterInput | null,
 };
 
@@ -333,8 +333,8 @@ export type ModelRegionFilterInput = {
   banner?: ModelStringInput | null,
   bio?: ModelStringInput | null,
   owner?: ModelStringInput | null,
-  and?: Array< ModelRegionFilterInput | null > | null,
-  or?: Array< ModelRegionFilterInput | null > | null,
+  and?: Array<ModelRegionFilterInput | null> | null,
+  or?: Array<ModelRegionFilterInput | null> | null,
   not?: ModelRegionFilterInput | null,
   userRegionsId?: ModelIDInput | null,
 };
@@ -344,8 +344,8 @@ export type ModelSubscriptionUserFilterInput = {
   sub?: ModelSubscriptionStringInput | null,
   type?: ModelSubscriptionStringInput | null,
   bio?: ModelSubscriptionStringInput | null,
-  and?: Array< ModelSubscriptionUserFilterInput | null > | null,
-  or?: Array< ModelSubscriptionUserFilterInput | null > | null,
+  and?: Array<ModelSubscriptionUserFilterInput | null> | null,
+  or?: Array<ModelSubscriptionUserFilterInput | null> | null,
 };
 
 export type ModelSubscriptionIDInput = {
@@ -357,10 +357,10 @@ export type ModelSubscriptionIDInput = {
   gt?: string | null,
   contains?: string | null,
   notContains?: string | null,
-  between?: Array< string | null > | null,
+  between?: Array<string | null> | null,
   beginsWith?: string | null,
-  in?: Array< string | null > | null,
-  notIn?: Array< string | null > | null,
+  in?: Array<string | null> | null,
+  notIn?: Array<string | null> | null,
 };
 
 export type ModelSubscriptionStringInput = {
@@ -372,18 +372,18 @@ export type ModelSubscriptionStringInput = {
   gt?: string | null,
   contains?: string | null,
   notContains?: string | null,
-  between?: Array< string | null > | null,
+  between?: Array<string | null> | null,
   beginsWith?: string | null,
-  in?: Array< string | null > | null,
-  notIn?: Array< string | null > | null,
+  in?: Array<string | null> | null,
+  notIn?: Array<string | null> | null,
 };
 
 export type ModelSubscriptionReservationFilterInput = {
   id?: ModelSubscriptionIDInput | null,
   dateStart?: ModelSubscriptionStringInput | null,
   dateEnd?: ModelSubscriptionStringInput | null,
-  and?: Array< ModelSubscriptionReservationFilterInput | null > | null,
-  or?: Array< ModelSubscriptionReservationFilterInput | null > | null,
+  and?: Array<ModelSubscriptionReservationFilterInput | null> | null,
+  or?: Array<ModelSubscriptionReservationFilterInput | null> | null,
 };
 
 export type ModelSubscriptionFieldFilterInput = {
@@ -391,8 +391,8 @@ export type ModelSubscriptionFieldFilterInput = {
   name?: ModelSubscriptionStringInput | null,
   address?: ModelSubscriptionStringInput | null,
   regionID?: ModelSubscriptionIDInput | null,
-  and?: Array< ModelSubscriptionFieldFilterInput | null > | null,
-  or?: Array< ModelSubscriptionFieldFilterInput | null > | null,
+  and?: Array<ModelSubscriptionFieldFilterInput | null> | null,
+  or?: Array<ModelSubscriptionFieldFilterInput | null> | null,
 };
 
 export type ModelSubscriptionRegionFilterInput = {
@@ -400,8 +400,8 @@ export type ModelSubscriptionRegionFilterInput = {
   name?: ModelSubscriptionStringInput | null,
   banner?: ModelSubscriptionStringInput | null,
   bio?: ModelSubscriptionStringInput | null,
-  and?: Array< ModelSubscriptionRegionFilterInput | null > | null,
-  or?: Array< ModelSubscriptionRegionFilterInput | null > | null,
+  and?: Array<ModelSubscriptionRegionFilterInput | null> | null,
+  or?: Array<ModelSubscriptionRegionFilterInput | null> | null,
 };
 
 export type CreateUserMutationVariables = {
@@ -410,14 +410,14 @@ export type CreateUserMutationVariables = {
 };
 
 export type CreateUserMutation = {
-  createUser?:  {
+  createUser?: {
     __typename: "User",
     id: string,
     sub: string,
     type?: AccountType | null,
-    Regions?:  {
+    Regions?: {
       __typename: "ModelRegionConnection",
-      items:  Array< {
+      items: Array<{
         __typename: "Region",
         id: string,
         name: string,
@@ -427,15 +427,15 @@ export type CreateUserMutation = {
         createdAt: string,
         updatedAt: string,
         userRegionsId?: string | null,
-      } | null >,
+      } | null>,
       nextToken?: string | null,
     } | null,
-    Reservation?:  {
+    Reservation?: {
       __typename: "Reservation",
       id: string,
       dateStart?: string | null,
       dateEnd?: string | null,
-      Field?:  {
+      Field?: {
         __typename: "Field",
         id: string,
         name?: string | null,
@@ -445,7 +445,7 @@ export type CreateUserMutation = {
         createdAt: string,
         updatedAt: string,
       } | null,
-      User?:  {
+      User?: {
         __typename: "User",
         id: string,
         sub: string,
@@ -476,14 +476,14 @@ export type UpdateUserMutationVariables = {
 };
 
 export type UpdateUserMutation = {
-  updateUser?:  {
+  updateUser?: {
     __typename: "User",
     id: string,
     sub: string,
     type?: AccountType | null,
-    Regions?:  {
+    Regions?: {
       __typename: "ModelRegionConnection",
-      items:  Array< {
+      items: Array<{
         __typename: "Region",
         id: string,
         name: string,
@@ -493,15 +493,15 @@ export type UpdateUserMutation = {
         createdAt: string,
         updatedAt: string,
         userRegionsId?: string | null,
-      } | null >,
+      } | null>,
       nextToken?: string | null,
     } | null,
-    Reservation?:  {
+    Reservation?: {
       __typename: "Reservation",
       id: string,
       dateStart?: string | null,
       dateEnd?: string | null,
-      Field?:  {
+      Field?: {
         __typename: "Field",
         id: string,
         name?: string | null,
@@ -511,7 +511,7 @@ export type UpdateUserMutation = {
         createdAt: string,
         updatedAt: string,
       } | null,
-      User?:  {
+      User?: {
         __typename: "User",
         id: string,
         sub: string,
@@ -542,14 +542,14 @@ export type DeleteUserMutationVariables = {
 };
 
 export type DeleteUserMutation = {
-  deleteUser?:  {
+  deleteUser?: {
     __typename: "User",
     id: string,
     sub: string,
     type?: AccountType | null,
-    Regions?:  {
+    Regions?: {
       __typename: "ModelRegionConnection",
-      items:  Array< {
+      items: Array<{
         __typename: "Region",
         id: string,
         name: string,
@@ -559,15 +559,15 @@ export type DeleteUserMutation = {
         createdAt: string,
         updatedAt: string,
         userRegionsId?: string | null,
-      } | null >,
+      } | null>,
       nextToken?: string | null,
     } | null,
-    Reservation?:  {
+    Reservation?: {
       __typename: "Reservation",
       id: string,
       dateStart?: string | null,
       dateEnd?: string | null,
-      Field?:  {
+      Field?: {
         __typename: "Field",
         id: string,
         name?: string | null,
@@ -577,7 +577,7 @@ export type DeleteUserMutation = {
         createdAt: string,
         updatedAt: string,
       } | null,
-      User?:  {
+      User?: {
         __typename: "User",
         id: string,
         sub: string,
@@ -608,12 +608,12 @@ export type CreateReservationMutationVariables = {
 };
 
 export type CreateReservationMutation = {
-  createReservation?:  {
+  createReservation?: {
     __typename: "Reservation",
     id: string,
     dateStart?: string | null,
     dateEnd?: string | null,
-    Field?:  {
+    Field?: {
       __typename: "Field",
       id: string,
       name?: string | null,
@@ -623,16 +623,16 @@ export type CreateReservationMutation = {
       createdAt: string,
       updatedAt: string,
     } | null,
-    User?:  {
+    User?: {
       __typename: "User",
       id: string,
       sub: string,
       type?: AccountType | null,
-      Regions?:  {
+      Regions?: {
         __typename: "ModelRegionConnection",
         nextToken?: string | null,
       } | null,
-      Reservation?:  {
+      Reservation?: {
         __typename: "Reservation",
         id: string,
         dateStart?: string | null,
@@ -663,12 +663,12 @@ export type UpdateReservationMutationVariables = {
 };
 
 export type UpdateReservationMutation = {
-  updateReservation?:  {
+  updateReservation?: {
     __typename: "Reservation",
     id: string,
     dateStart?: string | null,
     dateEnd?: string | null,
-    Field?:  {
+    Field?: {
       __typename: "Field",
       id: string,
       name?: string | null,
@@ -678,16 +678,16 @@ export type UpdateReservationMutation = {
       createdAt: string,
       updatedAt: string,
     } | null,
-    User?:  {
+    User?: {
       __typename: "User",
       id: string,
       sub: string,
       type?: AccountType | null,
-      Regions?:  {
+      Regions?: {
         __typename: "ModelRegionConnection",
         nextToken?: string | null,
       } | null,
-      Reservation?:  {
+      Reservation?: {
         __typename: "Reservation",
         id: string,
         dateStart?: string | null,
@@ -718,12 +718,12 @@ export type DeleteReservationMutationVariables = {
 };
 
 export type DeleteReservationMutation = {
-  deleteReservation?:  {
+  deleteReservation?: {
     __typename: "Reservation",
     id: string,
     dateStart?: string | null,
     dateEnd?: string | null,
-    Field?:  {
+    Field?: {
       __typename: "Field",
       id: string,
       name?: string | null,
@@ -733,16 +733,16 @@ export type DeleteReservationMutation = {
       createdAt: string,
       updatedAt: string,
     } | null,
-    User?:  {
+    User?: {
       __typename: "User",
       id: string,
       sub: string,
       type?: AccountType | null,
-      Regions?:  {
+      Regions?: {
         __typename: "ModelRegionConnection",
         nextToken?: string | null,
       } | null,
-      Reservation?:  {
+      Reservation?: {
         __typename: "Reservation",
         id: string,
         dateStart?: string | null,
@@ -773,7 +773,7 @@ export type CreateFieldMutationVariables = {
 };
 
 export type CreateFieldMutation = {
-  createField?:  {
+  createField?: {
     __typename: "Field",
     id: string,
     name?: string | null,
@@ -791,7 +791,7 @@ export type UpdateFieldMutationVariables = {
 };
 
 export type UpdateFieldMutation = {
-  updateField?:  {
+  updateField?: {
     __typename: "Field",
     id: string,
     name?: string | null,
@@ -809,7 +809,7 @@ export type DeleteFieldMutationVariables = {
 };
 
 export type DeleteFieldMutation = {
-  deleteField?:  {
+  deleteField?: {
     __typename: "Field",
     id: string,
     name?: string | null,
@@ -827,15 +827,15 @@ export type CreateRegionMutationVariables = {
 };
 
 export type CreateRegionMutation = {
-  createRegion?:  {
+  createRegion?: {
     __typename: "Region",
     id: string,
     name: string,
     banner?: string | null,
     bio?: string | null,
-    Fields?:  {
+    Fields?: {
       __typename: "ModelFieldConnection",
-      items:  Array< {
+      items: Array<{
         __typename: "Field",
         id: string,
         name?: string | null,
@@ -844,19 +844,19 @@ export type CreateRegionMutation = {
         owner?: string | null,
         createdAt: string,
         updatedAt: string,
-      } | null >,
+      } | null>,
       nextToken?: string | null,
     } | null,
-    user?:  {
+    user?: {
       __typename: "User",
       id: string,
       sub: string,
       type?: AccountType | null,
-      Regions?:  {
+      Regions?: {
         __typename: "ModelRegionConnection",
         nextToken?: string | null,
       } | null,
-      Reservation?:  {
+      Reservation?: {
         __typename: "Reservation",
         id: string,
         dateStart?: string | null,
@@ -886,15 +886,15 @@ export type UpdateRegionMutationVariables = {
 };
 
 export type UpdateRegionMutation = {
-  updateRegion?:  {
+  updateRegion?: {
     __typename: "Region",
     id: string,
     name: string,
     banner?: string | null,
     bio?: string | null,
-    Fields?:  {
+    Fields?: {
       __typename: "ModelFieldConnection",
-      items:  Array< {
+      items: Array<{
         __typename: "Field",
         id: string,
         name?: string | null,
@@ -903,19 +903,19 @@ export type UpdateRegionMutation = {
         owner?: string | null,
         createdAt: string,
         updatedAt: string,
-      } | null >,
+      } | null>,
       nextToken?: string | null,
     } | null,
-    user?:  {
+    user?: {
       __typename: "User",
       id: string,
       sub: string,
       type?: AccountType | null,
-      Regions?:  {
+      Regions?: {
         __typename: "ModelRegionConnection",
         nextToken?: string | null,
       } | null,
-      Reservation?:  {
+      Reservation?: {
         __typename: "Reservation",
         id: string,
         dateStart?: string | null,
@@ -945,15 +945,15 @@ export type DeleteRegionMutationVariables = {
 };
 
 export type DeleteRegionMutation = {
-  deleteRegion?:  {
+  deleteRegion?: {
     __typename: "Region",
     id: string,
     name: string,
     banner?: string | null,
     bio?: string | null,
-    Fields?:  {
+    Fields?: {
       __typename: "ModelFieldConnection",
-      items:  Array< {
+      items: Array<{
         __typename: "Field",
         id: string,
         name?: string | null,
@@ -962,19 +962,19 @@ export type DeleteRegionMutation = {
         owner?: string | null,
         createdAt: string,
         updatedAt: string,
-      } | null >,
+      } | null>,
       nextToken?: string | null,
     } | null,
-    user?:  {
+    user?: {
       __typename: "User",
       id: string,
       sub: string,
       type?: AccountType | null,
-      Regions?:  {
+      Regions?: {
         __typename: "ModelRegionConnection",
         nextToken?: string | null,
       } | null,
-      Reservation?:  {
+      Reservation?: {
         __typename: "Reservation",
         id: string,
         dateStart?: string | null,
@@ -1003,14 +1003,14 @@ export type GetUserQueryVariables = {
 };
 
 export type GetUserQuery = {
-  getUser?:  {
+  getUser?: {
     __typename: "User",
     id: string,
     sub: string,
     type?: AccountType | null,
-    Regions?:  {
+    Regions?: {
       __typename: "ModelRegionConnection",
-      items:  Array< {
+      items: Array<{
         __typename: "Region",
         id: string,
         name: string,
@@ -1020,15 +1020,15 @@ export type GetUserQuery = {
         createdAt: string,
         updatedAt: string,
         userRegionsId?: string | null,
-      } | null >,
+      } | null>,
       nextToken?: string | null,
     } | null,
-    Reservation?:  {
+    Reservation?: {
       __typename: "Reservation",
       id: string,
       dateStart?: string | null,
       dateEnd?: string | null,
-      Field?:  {
+      Field?: {
         __typename: "Field",
         id: string,
         name?: string | null,
@@ -1038,7 +1038,7 @@ export type GetUserQuery = {
         createdAt: string,
         updatedAt: string,
       } | null,
-      User?:  {
+      User?: {
         __typename: "User",
         id: string,
         sub: string,
@@ -1070,18 +1070,18 @@ export type ListUsersQueryVariables = {
 };
 
 export type ListUsersQuery = {
-  listUsers?:  {
+  listUsers?: {
     __typename: "ModelUserConnection",
-    items:  Array< {
+    items: Array<{
       __typename: "User",
       id: string,
       sub: string,
       type?: AccountType | null,
-      Regions?:  {
+      Regions?: {
         __typename: "ModelRegionConnection",
         nextToken?: string | null,
       } | null,
-      Reservation?:  {
+      Reservation?: {
         __typename: "Reservation",
         id: string,
         dateStart?: string | null,
@@ -1097,7 +1097,7 @@ export type ListUsersQuery = {
       createdAt: string,
       updatedAt: string,
       userReservationId?: string | null,
-    } | null >,
+    } | null>,
     nextToken?: string | null,
   } | null,
 };
@@ -1112,18 +1112,18 @@ export type UserBySubQueryVariables = {
 };
 
 export type UserBySubQuery = {
-  userBySub?:  {
+  userBySub?: {
     __typename: "ModelUserConnection",
-    items:  Array< {
+    items: Array<{
       __typename: "User",
       id: string,
       sub: string,
       type?: AccountType | null,
-      Regions?:  {
+      Regions?: {
         __typename: "ModelRegionConnection",
         nextToken?: string | null,
       } | null,
-      Reservation?:  {
+      Reservation?: {
         __typename: "Reservation",
         id: string,
         dateStart?: string | null,
@@ -1139,7 +1139,7 @@ export type UserBySubQuery = {
       createdAt: string,
       updatedAt: string,
       userReservationId?: string | null,
-    } | null >,
+    } | null>,
     nextToken?: string | null,
   } | null,
 };
@@ -1149,12 +1149,12 @@ export type GetReservationQueryVariables = {
 };
 
 export type GetReservationQuery = {
-  getReservation?:  {
+  getReservation?: {
     __typename: "Reservation",
     id: string,
     dateStart?: string | null,
     dateEnd?: string | null,
-    Field?:  {
+    Field?: {
       __typename: "Field",
       id: string,
       name?: string | null,
@@ -1164,16 +1164,16 @@ export type GetReservationQuery = {
       createdAt: string,
       updatedAt: string,
     } | null,
-    User?:  {
+    User?: {
       __typename: "User",
       id: string,
       sub: string,
       type?: AccountType | null,
-      Regions?:  {
+      Regions?: {
         __typename: "ModelRegionConnection",
         nextToken?: string | null,
       } | null,
-      Reservation?:  {
+      Reservation?: {
         __typename: "Reservation",
         id: string,
         dateStart?: string | null,
@@ -1205,14 +1205,14 @@ export type ListReservationsQueryVariables = {
 };
 
 export type ListReservationsQuery = {
-  listReservations?:  {
+  listReservations?: {
     __typename: "ModelReservationConnection",
-    items:  Array< {
+    items: Array<{
       __typename: "Reservation",
       id: string,
       dateStart?: string | null,
       dateEnd?: string | null,
-      Field?:  {
+      Field?: {
         __typename: "Field",
         id: string,
         name?: string | null,
@@ -1222,7 +1222,7 @@ export type ListReservationsQuery = {
         createdAt: string,
         updatedAt: string,
       } | null,
-      User?:  {
+      User?: {
         __typename: "User",
         id: string,
         sub: string,
@@ -1238,7 +1238,7 @@ export type ListReservationsQuery = {
       updatedAt: string,
       reservationFieldId?: string | null,
       reservationUserId?: string | null,
-    } | null >,
+    } | null>,
     nextToken?: string | null,
   } | null,
 };
@@ -1248,7 +1248,7 @@ export type GetFieldQueryVariables = {
 };
 
 export type GetFieldQuery = {
-  getField?:  {
+  getField?: {
     __typename: "Field",
     id: string,
     name?: string | null,
@@ -1267,9 +1267,9 @@ export type ListFieldsQueryVariables = {
 };
 
 export type ListFieldsQuery = {
-  listFields?:  {
+  listFields?: {
     __typename: "ModelFieldConnection",
-    items:  Array< {
+    items: Array<{
       __typename: "Field",
       id: string,
       name?: string | null,
@@ -1278,7 +1278,7 @@ export type ListFieldsQuery = {
       owner?: string | null,
       createdAt: string,
       updatedAt: string,
-    } | null >,
+    } | null>,
     nextToken?: string | null,
   } | null,
 };
@@ -1292,9 +1292,9 @@ export type FieldsByRegionIDQueryVariables = {
 };
 
 export type FieldsByRegionIDQuery = {
-  fieldsByRegionID?:  {
+  fieldsByRegionID?: {
     __typename: "ModelFieldConnection",
-    items:  Array< {
+    items: Array<{
       __typename: "Field",
       id: string,
       name?: string | null,
@@ -1303,7 +1303,7 @@ export type FieldsByRegionIDQuery = {
       owner?: string | null,
       createdAt: string,
       updatedAt: string,
-    } | null >,
+    } | null>,
     nextToken?: string | null,
   } | null,
 };
@@ -1313,15 +1313,15 @@ export type GetRegionQueryVariables = {
 };
 
 export type GetRegionQuery = {
-  getRegion?:  {
+  getRegion?: {
     __typename: "Region",
     id: string,
     name: string,
     banner?: string | null,
     bio?: string | null,
-    Fields?:  {
+    Fields?: {
       __typename: "ModelFieldConnection",
-      items:  Array< {
+      items: Array<{
         __typename: "Field",
         id: string,
         name?: string | null,
@@ -1330,19 +1330,19 @@ export type GetRegionQuery = {
         owner?: string | null,
         createdAt: string,
         updatedAt: string,
-      } | null >,
+      } | null>,
       nextToken?: string | null,
     } | null,
-    user?:  {
+    user?: {
       __typename: "User",
       id: string,
       sub: string,
       type?: AccountType | null,
-      Regions?:  {
+      Regions?: {
         __typename: "ModelRegionConnection",
         nextToken?: string | null,
       } | null,
-      Reservation?:  {
+      Reservation?: {
         __typename: "Reservation",
         id: string,
         dateStart?: string | null,
@@ -1373,19 +1373,19 @@ export type ListRegionsQueryVariables = {
 };
 
 export type ListRegionsQuery = {
-  listRegions?:  {
+  listRegions?: {
     __typename: "ModelRegionConnection",
-    items:  Array< {
+    items: Array<{
       __typename: "Region",
       id: string,
       name: string,
       banner?: string | null,
       bio?: string | null,
-      Fields?:  {
+      Fields?: {
         __typename: "ModelFieldConnection",
         nextToken?: string | null,
       } | null,
-      user?:  {
+      user?: {
         __typename: "User",
         id: string,
         sub: string,
@@ -1400,7 +1400,7 @@ export type ListRegionsQuery = {
       createdAt: string,
       updatedAt: string,
       userRegionsId?: string | null,
-    } | null >,
+    } | null>,
     nextToken?: string | null,
   } | null,
 };
@@ -1411,14 +1411,14 @@ export type OnCreateUserSubscriptionVariables = {
 };
 
 export type OnCreateUserSubscription = {
-  onCreateUser?:  {
+  onCreateUser?: {
     __typename: "User",
     id: string,
     sub: string,
     type?: AccountType | null,
-    Regions?:  {
+    Regions?: {
       __typename: "ModelRegionConnection",
-      items:  Array< {
+      items: Array<{
         __typename: "Region",
         id: string,
         name: string,
@@ -1428,15 +1428,15 @@ export type OnCreateUserSubscription = {
         createdAt: string,
         updatedAt: string,
         userRegionsId?: string | null,
-      } | null >,
+      } | null>,
       nextToken?: string | null,
     } | null,
-    Reservation?:  {
+    Reservation?: {
       __typename: "Reservation",
       id: string,
       dateStart?: string | null,
       dateEnd?: string | null,
-      Field?:  {
+      Field?: {
         __typename: "Field",
         id: string,
         name?: string | null,
@@ -1446,7 +1446,7 @@ export type OnCreateUserSubscription = {
         createdAt: string,
         updatedAt: string,
       } | null,
-      User?:  {
+      User?: {
         __typename: "User",
         id: string,
         sub: string,
@@ -1477,14 +1477,14 @@ export type OnUpdateUserSubscriptionVariables = {
 };
 
 export type OnUpdateUserSubscription = {
-  onUpdateUser?:  {
+  onUpdateUser?: {
     __typename: "User",
     id: string,
     sub: string,
     type?: AccountType | null,
-    Regions?:  {
+    Regions?: {
       __typename: "ModelRegionConnection",
-      items:  Array< {
+      items: Array<{
         __typename: "Region",
         id: string,
         name: string,
@@ -1494,15 +1494,15 @@ export type OnUpdateUserSubscription = {
         createdAt: string,
         updatedAt: string,
         userRegionsId?: string | null,
-      } | null >,
+      } | null>,
       nextToken?: string | null,
     } | null,
-    Reservation?:  {
+    Reservation?: {
       __typename: "Reservation",
       id: string,
       dateStart?: string | null,
       dateEnd?: string | null,
-      Field?:  {
+      Field?: {
         __typename: "Field",
         id: string,
         name?: string | null,
@@ -1512,7 +1512,7 @@ export type OnUpdateUserSubscription = {
         createdAt: string,
         updatedAt: string,
       } | null,
-      User?:  {
+      User?: {
         __typename: "User",
         id: string,
         sub: string,
@@ -1543,14 +1543,14 @@ export type OnDeleteUserSubscriptionVariables = {
 };
 
 export type OnDeleteUserSubscription = {
-  onDeleteUser?:  {
+  onDeleteUser?: {
     __typename: "User",
     id: string,
     sub: string,
     type?: AccountType | null,
-    Regions?:  {
+    Regions?: {
       __typename: "ModelRegionConnection",
-      items:  Array< {
+      items: Array<{
         __typename: "Region",
         id: string,
         name: string,
@@ -1560,15 +1560,15 @@ export type OnDeleteUserSubscription = {
         createdAt: string,
         updatedAt: string,
         userRegionsId?: string | null,
-      } | null >,
+      } | null>,
       nextToken?: string | null,
     } | null,
-    Reservation?:  {
+    Reservation?: {
       __typename: "Reservation",
       id: string,
       dateStart?: string | null,
       dateEnd?: string | null,
-      Field?:  {
+      Field?: {
         __typename: "Field",
         id: string,
         name?: string | null,
@@ -1578,7 +1578,7 @@ export type OnDeleteUserSubscription = {
         createdAt: string,
         updatedAt: string,
       } | null,
-      User?:  {
+      User?: {
         __typename: "User",
         id: string,
         sub: string,
@@ -1609,12 +1609,12 @@ export type OnCreateReservationSubscriptionVariables = {
 };
 
 export type OnCreateReservationSubscription = {
-  onCreateReservation?:  {
+  onCreateReservation?: {
     __typename: "Reservation",
     id: string,
     dateStart?: string | null,
     dateEnd?: string | null,
-    Field?:  {
+    Field?: {
       __typename: "Field",
       id: string,
       name?: string | null,
@@ -1624,16 +1624,16 @@ export type OnCreateReservationSubscription = {
       createdAt: string,
       updatedAt: string,
     } | null,
-    User?:  {
+    User?: {
       __typename: "User",
       id: string,
       sub: string,
       type?: AccountType | null,
-      Regions?:  {
+      Regions?: {
         __typename: "ModelRegionConnection",
         nextToken?: string | null,
       } | null,
-      Reservation?:  {
+      Reservation?: {
         __typename: "Reservation",
         id: string,
         dateStart?: string | null,
@@ -1664,12 +1664,12 @@ export type OnUpdateReservationSubscriptionVariables = {
 };
 
 export type OnUpdateReservationSubscription = {
-  onUpdateReservation?:  {
+  onUpdateReservation?: {
     __typename: "Reservation",
     id: string,
     dateStart?: string | null,
     dateEnd?: string | null,
-    Field?:  {
+    Field?: {
       __typename: "Field",
       id: string,
       name?: string | null,
@@ -1679,16 +1679,16 @@ export type OnUpdateReservationSubscription = {
       createdAt: string,
       updatedAt: string,
     } | null,
-    User?:  {
+    User?: {
       __typename: "User",
       id: string,
       sub: string,
       type?: AccountType | null,
-      Regions?:  {
+      Regions?: {
         __typename: "ModelRegionConnection",
         nextToken?: string | null,
       } | null,
-      Reservation?:  {
+      Reservation?: {
         __typename: "Reservation",
         id: string,
         dateStart?: string | null,
@@ -1719,12 +1719,12 @@ export type OnDeleteReservationSubscriptionVariables = {
 };
 
 export type OnDeleteReservationSubscription = {
-  onDeleteReservation?:  {
+  onDeleteReservation?: {
     __typename: "Reservation",
     id: string,
     dateStart?: string | null,
     dateEnd?: string | null,
-    Field?:  {
+    Field?: {
       __typename: "Field",
       id: string,
       name?: string | null,
@@ -1734,16 +1734,16 @@ export type OnDeleteReservationSubscription = {
       createdAt: string,
       updatedAt: string,
     } | null,
-    User?:  {
+    User?: {
       __typename: "User",
       id: string,
       sub: string,
       type?: AccountType | null,
-      Regions?:  {
+      Regions?: {
         __typename: "ModelRegionConnection",
         nextToken?: string | null,
       } | null,
-      Reservation?:  {
+      Reservation?: {
         __typename: "Reservation",
         id: string,
         dateStart?: string | null,
@@ -1774,7 +1774,7 @@ export type OnCreateFieldSubscriptionVariables = {
 };
 
 export type OnCreateFieldSubscription = {
-  onCreateField?:  {
+  onCreateField?: {
     __typename: "Field",
     id: string,
     name?: string | null,
@@ -1792,7 +1792,7 @@ export type OnUpdateFieldSubscriptionVariables = {
 };
 
 export type OnUpdateFieldSubscription = {
-  onUpdateField?:  {
+  onUpdateField?: {
     __typename: "Field",
     id: string,
     name?: string | null,
@@ -1810,7 +1810,7 @@ export type OnDeleteFieldSubscriptionVariables = {
 };
 
 export type OnDeleteFieldSubscription = {
-  onDeleteField?:  {
+  onDeleteField?: {
     __typename: "Field",
     id: string,
     name?: string | null,
@@ -1828,15 +1828,15 @@ export type OnCreateRegionSubscriptionVariables = {
 };
 
 export type OnCreateRegionSubscription = {
-  onCreateRegion?:  {
+  onCreateRegion?: {
     __typename: "Region",
     id: string,
     name: string,
     banner?: string | null,
     bio?: string | null,
-    Fields?:  {
+    Fields?: {
       __typename: "ModelFieldConnection",
-      items:  Array< {
+      items: Array<{
         __typename: "Field",
         id: string,
         name?: string | null,
@@ -1845,19 +1845,19 @@ export type OnCreateRegionSubscription = {
         owner?: string | null,
         createdAt: string,
         updatedAt: string,
-      } | null >,
+      } | null>,
       nextToken?: string | null,
     } | null,
-    user?:  {
+    user?: {
       __typename: "User",
       id: string,
       sub: string,
       type?: AccountType | null,
-      Regions?:  {
+      Regions?: {
         __typename: "ModelRegionConnection",
         nextToken?: string | null,
       } | null,
-      Reservation?:  {
+      Reservation?: {
         __typename: "Reservation",
         id: string,
         dateStart?: string | null,
@@ -1887,15 +1887,15 @@ export type OnUpdateRegionSubscriptionVariables = {
 };
 
 export type OnUpdateRegionSubscription = {
-  onUpdateRegion?:  {
+  onUpdateRegion?: {
     __typename: "Region",
     id: string,
     name: string,
     banner?: string | null,
     bio?: string | null,
-    Fields?:  {
+    Fields?: {
       __typename: "ModelFieldConnection",
-      items:  Array< {
+      items: Array<{
         __typename: "Field",
         id: string,
         name?: string | null,
@@ -1904,19 +1904,19 @@ export type OnUpdateRegionSubscription = {
         owner?: string | null,
         createdAt: string,
         updatedAt: string,
-      } | null >,
+      } | null>,
       nextToken?: string | null,
     } | null,
-    user?:  {
+    user?: {
       __typename: "User",
       id: string,
       sub: string,
       type?: AccountType | null,
-      Regions?:  {
+      Regions?: {
         __typename: "ModelRegionConnection",
         nextToken?: string | null,
       } | null,
-      Reservation?:  {
+      Reservation?: {
         __typename: "Reservation",
         id: string,
         dateStart?: string | null,
@@ -1946,15 +1946,15 @@ export type OnDeleteRegionSubscriptionVariables = {
 };
 
 export type OnDeleteRegionSubscription = {
-  onDeleteRegion?:  {
+  onDeleteRegion?: {
     __typename: "Region",
     id: string,
     name: string,
     banner?: string | null,
     bio?: string | null,
-    Fields?:  {
+    Fields?: {
       __typename: "ModelFieldConnection",
-      items:  Array< {
+      items: Array<{
         __typename: "Field",
         id: string,
         name?: string | null,
@@ -1963,19 +1963,19 @@ export type OnDeleteRegionSubscription = {
         owner?: string | null,
         createdAt: string,
         updatedAt: string,
-      } | null >,
+      } | null>,
       nextToken?: string | null,
     } | null,
-    user?:  {
+    user?: {
       __typename: "User",
       id: string,
       sub: string,
       type?: AccountType | null,
-      Regions?:  {
+      Regions?: {
         __typename: "ModelRegionConnection",
         nextToken?: string | null,
       } | null,
-      Reservation?:  {
+      Reservation?: {
         __typename: "Reservation",
         id: string,
         dateStart?: string | null,

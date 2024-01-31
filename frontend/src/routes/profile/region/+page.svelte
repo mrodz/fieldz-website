@@ -1,5 +1,6 @@
 <script lang="ts">
   import { currentUser, type User } from "$lib";
+  import { slide } from "svelte/transition";
 
   import {
     modalStore,
@@ -20,6 +21,7 @@
     Region,
     ListRegionsQuery,
   } from "../../../API";
+  import Form from "./Form.svelte";
   import type { GraphQLResult } from "@aws-amplify/api";
 
   let user: User;
@@ -30,7 +32,7 @@
     user = u;
 
     let queryUser = API.graphql<UserBySubQuery>(
-      graphqlOperation(userBySub, { sub: u.attributes.sub }),
+      graphqlOperation(userBySub, { sub: u.attributes.sub })
     ) as Promise<GraphQLResult<UserBySubQuery>>;
 
     graphqlUser = queryUser
@@ -61,7 +63,7 @@
           console.log(mut);
 
           const rawQueryResponse = API.graphql<CreateUserMutation>(
-            graphqlOperation(createUser, mut),
+            graphqlOperation(createUser, mut)
           ) as Promise<GraphQLResult<CreateUserMutation>>;
 
           const triedRawQueryResponse = await rawQueryResponse;
@@ -76,7 +78,7 @@
               background: "variant-filled-error",
             });
             return Promise.reject(
-              `Could not sync your account, this is bad! (${triedRawQueryResponse.errors})`,
+              `Could not sync your account, this is bad! (${triedRawQueryResponse.errors})`
             );
           }
 
@@ -89,7 +91,7 @@
         }
 
         let queryRegions = API.graphql<ListRegionsQuery>(
-          graphqlOperation(listRegions, { userId: result.id }),
+          graphqlOperation(listRegions, { userId: result.id })
         ) as Promise<GraphQLResult<ListRegionsQuery>>;
 
         regions = queryRegions.then((GQL) => {
@@ -139,7 +141,7 @@
   const promptNewRegionNameConfirm = (
     name: string,
     address: string,
-    zip: string,
+    zip: string
   ) => {
     modalStore.trigger({
       type: "confirm",
@@ -156,7 +158,7 @@
   const newRegion = async (
     regionName: string,
     address: string,
-    zip: string,
+    zip: string
   ) => {
     if (graphqlUser === undefined) {
       toastStore.trigger({
@@ -182,7 +184,7 @@
           name: regionName,
           user: resolvedUser,
         },
-      }),
+      })
     )) as GraphQLResult<Region>;
 
     if (GQL.errors !== undefined) {
@@ -197,6 +199,8 @@
 
     (await regions!).push(GQL.data!);
   };
+
+  let formOpen: boolean = false;
 </script>
 
 <svelte:head>
@@ -211,10 +215,10 @@
   <h1 class="h1">Regions</h1>
 
   {#if regions === undefined}
-    <ProgressRadial />
+    <ProgressRadial class="mx-auto" />
   {:else}
     {#await regions}
-      <ProgressRadial />
+      <ProgressRadial class="mx-auto" />
     {:then regions}
       {#if regions.length > 0}
         <dl class="list-dl">
@@ -227,76 +231,33 @@
               </span>
             </div>
           {/each}
-          <!-- {#if regions.length > 8}
-            <div>
-              Plus {regions.length - 8} more
-            </div>
-          {/if} -->
         </dl>
       {:else}
         <div
           class="w-5/6 xs:w-2/3 md:w-1/2 p-4 md:p-8 mx-auto card text-xl text-center mt-4"
         >
           You are not part of any regions.
-          <!-- <button
-            class="btn block mx-auto mt-4 variant-filled-primary"
-            on:click={newRegion}
-            >Register a new region<span class="hidden md:inline"
-              >&nbsp;as a manager</span
-            ></button
-          > -->
         </div>
       {/if}
-
-      <hr class="my-8" />
-
-      <h2 class="h2">New Region</h2>
-      <form
-        class="card p-4 my-4"
-        on:submit={(event) => {
-          console.log(event);
-        }}
-      >
-        <label class="label my-4">
-          <span>Region Name</span>
-          <input
-            class="input variant-form-material"
-            title="Display Name"
-            type="text"
-            placeholder="eg. 'Shire Western Fields'"
-          />
-        </label>
-        <label class="label my-4">
-          <span>Address</span>
-          <input
-            class="input variant-form-material"
-            title="Display Name"
-            type="text"
-            placeholder="eg. '1 Bagshot Row, Hobbiton'"
-          />
-        </label>
-        <label class="label my-4">
-          <span>Zip Code</span>
-          <input
-            class="input variant-form-material"
-            title="Display Name"
-            type="text"
-            placeholder="eg. '20500'"
-          />
-        </label>
-        <button
-          class="mx-auto block sm:inline sm:mx-0 btn variant-filled"
-          disabled>Register</button
-        >
-        <i class="block sm:inline mt-4 sm:mt-0">
-          The ability to register regions is still being developed! Check back
-          later.
-        </i>
-      </form>
     {/await}
   {/if}
+
+  <hr class="my-8" />
+
+  <button
+    class={`btn text-lg md:text-3xl mx-auto block ${
+      formOpen ? "variant-ghost" : "variant-ghost-primary"
+    }`}
+    on:click={() => (formOpen = !formOpen)}
+    >{formOpen ? "Quit Creation" : "Create New Region"}</button
+  >
+
+  {#if formOpen}
+    <div
+      in:slide={{ axis: "y", duration: 200 }}
+      out:slide={{ axis: "y" }}
+    >
+      <Form />
+    </div>
+  {/if}
 </div>
-
-<style lang="sass">
-
-</style>

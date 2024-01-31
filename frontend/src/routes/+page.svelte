@@ -1,6 +1,6 @@
 <script>
   import { onMount } from "svelte";
-  import { blur, fade, slide } from "svelte/transition";
+  import { blur } from "svelte/transition";
 
   let ready = false;
 

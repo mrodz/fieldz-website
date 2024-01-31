@@ -40,10 +40,10 @@
 
   let user: User | undefined;
   let graphQLUser: Promise<GQLUser | undefined> | undefined;
-  let regions: Region[] = [];
+  let regions: Promise<Region[]> | undefined;
 
   if ($currentUser !== undefined) {
-    $currentUser
+    regions = $currentUser
       .then(async (u) => {
         user = u;
 
@@ -55,7 +55,7 @@
           let resolved;
           try {
             resolved = await (API.graphql<UserBySubQuery>(
-              graphqlOperation(userBySub, variables),
+              graphqlOperation(userBySub, variables)
             ) as Promise<GraphQLResult<UserBySubQuery>>);
           } catch (error) {
             (error as GraphQLResult).errors!.forEach((e) => {
@@ -94,15 +94,15 @@
       })
       .then((graphQLUser) => {
         if (graphQLUser === undefined) {
-          regions = [];
+          regions = new Promise((resolve) => resolve([]));
           return regions;
         }
 
         const tryRegionsFetch = API.graphql<ListRegionsQuery>(
-          graphqlOperation(listRegions, { userId: graphQLUser.id }),
+          graphqlOperation(listRegions, { userId: graphQLUser.id })
         ) as Promise<GraphQLResult<ListRegionsQuery>>;
 
-        tryRegionsFetch.then((GQL) => {
+        return tryRegionsFetch.then((GQL) => {
           if (GQL.errors !== undefined) {
             toastStore.trigger({
               message: `Error: ${GQL.errors}`,
@@ -111,13 +111,19 @@
             throw GQL.errors;
           }
 
-          regions = GQL.data?.listRegions?.items! as Region[];
-          regions.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
+          const regionsFetched = GQL.data?.listRegions?.items! as Region[];
+          regionsFetched.sort(
+            (a, b) =>
+              new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+          );
 
-          return regions;
+          return regionsFetched;
         });
       })
-      .catch((e) => console.error(e));
+      .catch((e) => {
+        console.error(e);
+        return [];
+      });
   }
 
   // let customProfileURL: string | undefined;
@@ -245,13 +251,13 @@
       // TRUE if confirm pressed, FALSE if cancel pressed
       async response(r: boolean) {
         if (r) {
-          console.log("Deleting", input, "at index", index)
+          console.log("Deleting", input, "at index", index);
           const GQL = (await API.graphql(
             graphqlOperation(deleteRegion, {
               input: {
                 id: input.id,
-              }
-            }),
+              },
+            })
           )) as GraphQLResult<DeleteRegionMutation>;
 
           if (GQL.errors !== undefined) {
@@ -261,14 +267,14 @@
               toastStore.trigger({
                 message: `Error: ${error}`,
                 background: "variant-filled-error",
-              })
-            })
+              });
+            });
           } else {
             toastStore.trigger({
-              message: `Deleted "${input.name}"`
-            })
-            regions.splice(index, 1);
-            regions = regions
+              message: `Deleted "${input.name}"`,
+            });
+            (await regions!).splice(index, 1);
+            regions = regions;
           }
         }
       },
@@ -320,58 +326,63 @@
             </button>
           </h3>
           <div class="mb-20">
-            {#await regions}
-              <div class="placeholder" />
-            {:then regions}
-              {#if regions.length === 0}
-                <div
-                  class="card w-3/4 sm:w-2/5 md:w-1/2 p-4 lg:w-1/3 md:p-12 lg:p-20 mx-auto text-center bg-gray-400"
-                >
-                  You aren't a part of any regions &#9888;&#65039;
-                </div>
-              {:else}
-                <div class="flex flex-wrap justify-center">
-                  {#each regions as region, index}
-                    <div
-                      class="card m-4 w-2/3 sm:w-2/5 md:w-1/4 xl:w-1/5 bg-gray-300 p-2"
-                    >
-                      <h4 class="h4 font-bold">{region.name}</h4>
-                      Created {dateFmt(region.createdAt)}
+            {#if regions === undefined}
+              <ProgressRadial class="mx-auto" />
+            {:else}
+              {#await regions}
+                <ProgressRadial class="mx-auto" />
+              {:then regions}
+                {#if regions.length === 0}
+                  <div
+                    class="card w-3/4 sm:w-2/5 md:w-1/2 p-4 lg:w-1/3 md:p-12 lg:p-20 mx-auto text-center bg-gray-400"
+                  >
+                    You aren't a part of any regions &#9888;&#65039;
+                  </div>
+                {:else}
+                  <div class="flex flex-wrap justify-center">
+                    {#each regions as region, index}
+                      <div
+                        class="card m-4 w-2/3 sm:w-2/5 md:w-1/4 xl:w-1/5 bg-gray-300 p-2"
+                      >
+                        <h4 class="h4 font-bold">{region.name}</h4>
+                        Created {dateFmt(region.createdAt)}
 
-                      <tt style="word-break:break-all">
-                        {JSON.stringify(region)}
-                      </tt>
+                        <tt style="word-break:break-all">
+                          {JSON.stringify(region)}
+                        </tt>
 
-                      <div>
-                        {#if !!region.banner}
-                          <img
-                            src={region.banner}
-                            alt={`${region.name}'s regional profile picture`}
-                          />
-                        {:else}
-                          <img
-                            src={"/assets/image-not-found-icon.svg"}
-                            class="w-3/4 mx-auto my-4"
-                            alt={`this region, named ${region.name}, has not uploaded a picture`}
-                          />
-                        {/if}
+                        <div>
+                          {#if !!region.banner}
+                            <img
+                              src={region.banner}
+                              alt={`${region.name}'s regional profile picture`}
+                            />
+                          {:else}
+                            <img
+                              src={"/assets/image-not-found-icon.svg"}
+                              class="w-3/4 mx-auto my-4"
+                              alt={`this region, named ${region.name}, has not uploaded a picture`}
+                            />
+                          {/if}
+                        </div>
+
+                        <div class="mt-2 grid grid-cols-2 align-center">
+                          <button
+                            class="btn variant-filled-primary !rounded-none"
+                            >Manage</button
+                          >
+                          <button
+                            on:click={() => leaveRegion(region, index)}
+                            class="btn variant-ghost-error !rounded-none"
+                            >Delete</button
+                          >
+                        </div>
                       </div>
-
-                      <div class="mt-2 grid grid-cols-2 align-center">
-                        <button class="btn variant-filled-primary !rounded-none"
-                          >Manage</button
-                        >
-                        <button
-                          on:click={() => leaveRegion(region, index)}
-                          class="btn variant-ghost-error !rounded-none"
-                          >Delete</button
-                        >
-                      </div>
-                    </div>
-                  {/each}
-                </div>
-              {/if}
-            {/await}
+                    {/each}
+                  </div>
+                {/if}
+              {/await}
+            {/if}
           </div>
 
           <hr class="mb-4" />
