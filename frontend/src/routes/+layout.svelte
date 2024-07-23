@@ -3,51 +3,6 @@
   import { dev } from "$app/environment";
   import { currentUser, removeUser, pollUser, pfp, pollPFP } from "$lib";
 
-  import { Amplify, Auth, Hub } from "aws-amplify";
-  import awsconfig from "../aws-exports.js";
-
-  /*
-	DO NOT DELETE THIS LINE; otherwise, it will use the Cognito-issued URL
-	instead of our own auth domain.
-	*/
-  awsconfig.oauth.domain = "login.fieldz.app";
-
-  const [localRedirectSignIn, productionRedirectSignIn] =
-    awsconfig.oauth.redirectSignIn.split(",");
-
-  const [localRedirectSignOut, productionRedirectSignOut] =
-    awsconfig.oauth.redirectSignOut.split(",");
-
-  const updatedAwsConfig = {
-    ...awsconfig,
-    oauth: {
-      ...awsconfig.oauth,
-      redirectSignIn: dev ? localRedirectSignIn : productionRedirectSignIn,
-      redirectSignOut: dev ? localRedirectSignOut : productionRedirectSignOut,
-    },
-  };
-
-  Amplify.configure(updatedAwsConfig);
-
-  onMount(async () => {
-    Hub.listen("auth", (param) => {
-      switch (param.payload.event) {
-        case "signOut":
-          removeUser();
-        case "signIn_failure":
-        case "cognitoHostedUI_failure":
-          console.info("sign out or error!");
-          console.info(param ?? "no payload for auth event");
-          return; // EXIT early
-      }
-
-      console.info("Polling user...");
-      pollUser();
-    });
-
-    pollUser();
-  });
-
   import "../app.sass";
 
   // Your selected Skeleton theme:
@@ -87,54 +42,6 @@
 
   import { goto } from "$app/navigation";
 
-  const logOut = async () => {
-    console.log("START logout");
-    if ($currentUser === undefined) {
-      toastStore.trigger({
-        message: "You're not signed in!",
-        background: "variant-filled-error",
-      });
-
-      console.log("not a promise, undefined logout");
-
-      // still try to sign out, just in case.
-      await Auth.signOut();
-      goto("/");
-
-      return;
-    }
-
-    try {
-      await Auth.signOut();
-      toastStore.trigger({
-        message: "You signed out! See you later",
-        background: "variant-filled-success",
-      });
-      goto("/");
-    } catch (error) {
-      toastStore.trigger({
-        message: `Error signing out: ${error}`,
-        background: "variant-filled-error",
-      });
-    }
-  };
-
-  const viewProfile = () => {
-    goto("/profile");
-  };
-
-  $: if ($currentUser !== undefined) {
-    console.log($currentUser);
-    $currentUser.then(pollPFP).catch((e) => {
-      toastStore.trigger({
-        message: `Welcome, Guest!`,
-        timeout: 2000,
-        hideDismiss: true,
-        background: "variant-glass-success",
-      });
-    });
-  }
-
   const openHamburger = () => {
     drawerStore.open();
   };
@@ -152,48 +59,6 @@
     placement: "bottom",
   };
 </script>
-
-<div
-  class="card bg-white p-4 w-72 shadow-xl text-center"
-  style="z-index: 100;"
-  data-popup="popupFeatured"
->
-  {#if $currentUser === undefined}
-    <p>You're not signed in!</p>
-
-    <a class="btn variant-filled bg-primary-500" href="/login">Sign In</a>
-  {:else}
-    <div>
-      <span>
-        {#await $currentUser}
-          <ProgressRadial />
-        {:then user}
-          <p>
-            Hi, {user?.attributes.name}!
-          </p>
-
-          <button
-            class="block mx-auto my-4 btn variant-filled"
-            on:click={viewProfile}>View Profile</button
-          >
-          <button
-            class="block mx-auto my-4 btn variant-filled"
-            on:click={logOut}>Log Out</button
-          >
-        {:catch error}
-          <p>You're not signed in!</p>
-		  
-		  <!-- For debug purposes -->
-		  <span class="hidden">{error}</span>
-
-          <a class="btn variant-filled bg-primary-500" href="/login">Sign In</a>
-        {/await}
-      </span>
-    </div>
-  {/if}
-
-  <div class="arrow bg-white" />
-</div>
 
 <Toast />
 
@@ -319,17 +184,6 @@
             </li>
           </ul>
         </nav>
-      </svelte:fragment>
-      <svelte:fragment slot="trail">
-        <span use:popup={popupFeatured}>
-          <Avatar
-            src={$pfp}
-            border="border-4 border-primary-500"
-            cursor="cursor-pointer"
-            background="bg-primary-500"
-            width="w-16"
-          />
-        </span>
       </svelte:fragment>
     </AppBar>
   </svelte:fragment>
