@@ -12,29 +12,29 @@
   onMount(() => {
     ready = true;
 
-    // releaseData = fetch(
-    //   "https://api.github.com/repos/mrodz/fieldz-desktop/releases/latest"
-    // )
-    //   .then((response) => {
-    //     return response.json().then((response) => {
-    //       if (
-    //         response !== null &&
-    //         typeof response === "object" &&
-    //         "message" in response &&
-    //         typeof response.message === "string" &&
-    //         response.message.includes("API rate limit")
-    //       ) {
-    //         return Promise.reject(
-    //           "You've loaded the release data too many times, please come back later"
-    //         );
-    //       }
+    releaseData = fetch(
+      "https://api.github.com/repos/mrodz/fieldz-desktop/releases/latest"
+    )
+      .then((response) => {
+        return response.json().then((response) => {
+          if (
+            response !== null &&
+            typeof response === "object" &&
+            "message" in response &&
+            typeof response.message === "string" &&
+            response.message.includes("API rate limit")
+          ) {
+            return Promise.reject(
+              "You've loaded the release data too many times, please come back later"
+            );
+          }
 
-    //       return response;
-    //     });
-    //   })
-    //   .catch((e) => {
-    //     console.error(e);
-    //   });
+          return response;
+        });
+      })
+      .catch((e) => {
+        console.error(e);
+      });
   });
 
   const screenshots = [
