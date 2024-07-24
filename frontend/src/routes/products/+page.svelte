@@ -34,7 +34,7 @@
       <li>
         <strong>Automated Scheduling:</strong>
         Save time and reduce errors with automated scheduling algorithms that consider
-        factors such as team availability, travel distances, and venue constraints.
+        factors such as team availability, coaching conflicts, and venue constraints.
       </li>
       <li>
         <strong> Conflict Resolution: </strong>
@@ -74,8 +74,8 @@
         Instead of paying for a license or subscription to use our servers, you will
         be charged only for the schedules you create on our backend. Given that our
         app is open source, you can run the backend yourself and skip paying for
-        credits entirely. We ask for you understanding as using the cloud is not
-        free, and credits act as a medium for your region to enjoy the speed and
+        credits entirely. We ask for your understanding as using the cloud is not
+        free, and credits act as a vessel for your region to enjoy the speed and
         efficacy of cloud computing without the hassle of setting up the backend
         yourself.
       </li>
@@ -87,7 +87,7 @@
       </li>
     </ul>
 
-    <div class="grid grid-cols-[1fr_auto] gap-2">
+    <div class="grid grid-cols-[auto_1fr] gap-2">
       <span class="text-red-500">*</span>
       <p>
         The price of scheduling credits is subject to change. Any Fieldz

@@ -12,29 +12,29 @@
   onMount(() => {
     ready = true;
 
-    releaseData = fetch(
-      "https://api.github.com/repos/mrodz/fieldz-desktop/releases/latest"
-    )
-      .then((response) => {
-        return response.json().then((response) => {
-          if (
-            response !== null &&
-            typeof response === "object" &&
-            "message" in response &&
-            typeof response.message === "string" &&
-            response.message.includes("API rate limit")
-          ) {
-            return Promise.reject(
-              "You've loaded the release data too many times, please come back later"
-            );
-          }
+    // releaseData = fetch(
+    //   "https://api.github.com/repos/mrodz/fieldz-desktop/releases/latest"
+    // )
+    //   .then((response) => {
+    //     return response.json().then((response) => {
+    //       if (
+    //         response !== null &&
+    //         typeof response === "object" &&
+    //         "message" in response &&
+    //         typeof response.message === "string" &&
+    //         response.message.includes("API rate limit")
+    //       ) {
+    //         return Promise.reject(
+    //           "You've loaded the release data too many times, please come back later"
+    //         );
+    //       }
 
-          return response;
-        });
-      })
-      .catch((e) => {
-        console.error(e);
-      });
+    //       return response;
+    //     });
+    //   })
+    //   .catch((e) => {
+    //     console.error(e);
+    //   });
   });
 
   const screenshots = [
@@ -58,13 +58,22 @@
 </svelte:head>
 
 <main>
-  <section id="landing-graphic">
+  <section id="landing-graphic" class="relative">
     <div class="my-auto flex flex-col items-center box-border">
       {#if ready}
         <h1 in:blur={{ duration: 1000 }} class="h1">Fieldz</h1>
       {/if}
       <span class="typewriter">Youth Sports' Best Friend</span>
     </div>
+    <a
+      class="absolute bottom-[-49px] text-[4rem] bg-red-500 rounded-3xl px-6"
+      href="https://github.com/mrodz/fieldz-desktop/releases/latest"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      Install
+      <span class="max-[400px]:hidden">Today</span>
+    </a>
   </section>
 
   <section in:fade={{}}>
@@ -87,7 +96,7 @@
               Welcome to a New Era of Sports Management
             </h2>
             <p class="my-4 xl:text-2xl text-center md:text-left">
-              Fieldz is a web app that aims to help managers of youth sports
+              Fieldz is an app that aims to help managers of youth sports
               leagues efficiently manage their coaches, referee bookings, and
               team drafting.
             </p>
@@ -203,6 +212,9 @@
     display: flex
     justify-content: center
 
+    & a
+      background-color: #fcc603
+
   h1
     font-family: 'Rubik Doodle Triangles'
     font-size: 82pt
@@ -258,6 +270,10 @@
     #screenshots div
       @include grid-setup(5, 3, 2, 2)
 
+    #landing-graphic a
+      font-size: 3rem
+      bottom: -36px
+
   @media screen and (max-width: 1100px)
     #landing-graphic
       height: min(max(60vh, 200px), 350px)
@@ -273,6 +289,10 @@
     
     #screenshots div
       @include grid-setup(6, 6, 3, 1)
+
+    #landing-graphic a
+      font-size: 2rem
+      bottom: -24px
 
 
   @media screen and (max-width: 800px)
@@ -315,6 +335,9 @@
       & section
         padding: 1rem
 
+    #landing-graphic
+      margin-bottom: 5rem
+
     #expected-release-text
       display: none
 
@@ -336,4 +359,6 @@
       margin-bottom: 2rem
       @include grid-setup(2, 9, 1, 1)
 
+    #landing-graphic
+      margin-bottom: 0
 </style>
