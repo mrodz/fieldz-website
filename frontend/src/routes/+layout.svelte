@@ -129,7 +129,7 @@
     style="width: inherit"
   >
     <hr class="hr mb-4" />
-    &copy; 2023 Fieldz App, Los Angeles, California
+    &copy; 2024 Fieldz App, Los Angeles, California
   </div>
 </Drawer>
 
